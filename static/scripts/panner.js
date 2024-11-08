@@ -95,16 +95,19 @@ function zoom(el, zoom_value, x, y) {
     if (el.zoom_lock) return;
     el.style.width = `${Math.floor(el.pixel_width*zoom_value)}px`;
     const interface_elements = el.interface.querySelectorAll('*');
+    const pixel_size = el.offsetWidth/el.pixel_width;
+    el.pixelSize = pixel_size;
     interface_elements.forEach(element => {
         if (element.interfacePos !== undefined || element.interfacePos !== null) {
-            const pixel_size = el.offsetWidth/el.pixel_width;
             const x = element.interfacePos[0];
             const y = element.interfacePos[1];
+            if (element.scaleWithZoom) element.style.width = `${element.naturalWidth*zoom_value}px`;
             element.style.translate = `${x*pixel_size}px ${y*pixel_size}px`;
         }
     });
     el.zoom = zoom_value;
     center(el, x, y);
+    el.onZoom(pixel_size, zoom_value)
 }
 export function pannerInit(el, options) {
     if (!el.parentElement.classList.contains("panner-container")) {console.error("Failed to initialize panner: element not inside panner container")};
@@ -116,6 +119,8 @@ export function pannerInit(el, options) {
         el.pixel_width = el.img.width;
         el.pixel_height = el.img.height;
         el.style.width = `${el.pixel_width * el.zoom}px`;
+        const pixel_size = el.offsetWidth/el.pixel_width;
+        el.pixelSize = pixel_size;
     }
     el.updateSize();
     el.center = (x, y) => {
@@ -126,6 +131,7 @@ export function pannerInit(el, options) {
     el.zoom = options.zoom.value || 1;
     el.zoom_lock = options.zoom.lock || false;
     el.style.width = `${el.pixel_width * el.zoom}px`;
+    el.pixelSize = el.offsetWidth/el.pixel_width;
     dragElement(el, options.onDragStart, options.onDrag, options.onDragEnd, options.zoom);
     const pos = options.pos;
     if (pos !== undefined && pos !== null) {
@@ -133,6 +139,7 @@ export function pannerInit(el, options) {
     } else {
         center(el)
     }
+    el.onZoom = options.onZoom;
     el.onclickFunc = (cursor) => {
         var rect = el.getBoundingClientRect();
         var x = cursor.clientX - rect.left;

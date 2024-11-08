@@ -9,12 +9,9 @@ pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {console.log(x,y,clientX,clientY)},
     zoom: {
         value: 10,
-        allow: true,
         min: 1,
         max: 40,
-        step: 0.4,
-        center: null
-    },
-    pos: "center"
+        step: 0.1
+    }
 })
 loadCanvas(target.querySelector('.image'))

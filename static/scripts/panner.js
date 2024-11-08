@@ -10,22 +10,23 @@ function dragElement(el, onDragStart, onDrag, onDragEnd, zoom_options) {
     el.panner_container.addEventListener('DOMMouseScroll', (e) => handleScroll(e, el, zoom_options), false);
     el.panner_container.addEventListener('mousewheel',(e) => handleScroll(e, el, zoom_options), false);
 }
-function dragStart(e, el, touch, callback, onDrag, onDragEnd) {
+function dragStart(e, el, touch, onDragStart, onDrag, onDragEnd) {
     e = e || el.panner_container.event;
     e.preventDefault();
     var cursor = (touch)?e.touches[0]:e
     iPosX = cursor.clientX;
     iPosY = cursor.clientY;
-    el.panner_container.onmouseleave = () => {onDragEnd(); last_click.date=null; dragEnd(cursor, el)};
-    el.panner_container.onmouseup = () => {onDragEnd(); dragEnd(cursor, el)};
-    el.panner_container.ontouchend = () => {onDragEnd(); dragEnd(cursor, el)};
+    el.panner_container.onmouseleave = () => {last_click.date=null; dragEnd(cursor, el, onDragEnd)};
+    el.panner_container.onmouseup = () => {dragEnd(cursor, el, onDragEnd)};
+    el.panner_container.ontouchend = () => {dragEnd(cursor, el, onDragEnd)};
     el.panner_container.onmousemove = (e) => elementDrag(e, el, touch, onDrag);
     el.panner_container.ontouchmove = (e) => elementDrag(e, el, touch, onDrag);
-    if (callback) callback(); // OpenNav(false)
+    if (onDragStart) onDragStart();
     last_click.date = new Date();
     el.moved = false;
 }
-function dragEnd(cursor, el) {
+function dragEnd(cursor, el, onDragEnd) {
+    if (onDragEnd) onDragEnd();
     var rect = el.getBoundingClientRect();
     var x = (el.panner_container.offsetWidth/2)-rect.left;
     var y = (el.panner_container.offsetHeight/2)-rect.top;
@@ -48,8 +49,8 @@ function dragEnd(cursor, el) {
         }
     }
 }
-function elementDrag(e, el, touch, callback) {
-    if (callback) callback();
+function elementDrag(e, el, touch, onDrag) {
+    if (onDrag) onDrag();
     e.preventDefault();
     var cursor = (touch)?e.touches[0]:e;
     // calculate the new cursor position:
@@ -107,7 +108,7 @@ function zoom(el, zoom_value, x, y) {
     });
     el.zoom = zoom_value;
     center(el, x, y);
-    el.onZoom(pixel_size, zoom_value)
+    if (el.onZoom) el.onZoom(pixel_size, zoom_value)
 }
 export function pannerInit(el, options) {
     if (!el.parentElement.classList.contains("panner-container")) {console.error("Failed to initialize panner: element not inside panner container")};

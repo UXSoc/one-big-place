@@ -1,0 +1,21 @@
+.panner-target {
+    position: absolute;
+    display: grid;
+    grid-template-areas: 'a';
+    user-select: none;
+}
+.panner-target > .panner_interface, .panner-target > .image {
+    grid-area: a;
+    width: 100%;
+}
+.panner_interface {
+    position: relative;
+}
+.panner-target > .image {
+    touch-action: none;
+    will-change: width;
+}
+.panner-container {
+    position: relative;
+    overflow: hidden;
+}

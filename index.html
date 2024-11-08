@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>One Big Place</title>
+    <link rel="stylesheet" href="./static/styles/panner.css">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        .map-pin {
+            transform: translate(-25px, -50px);
+        }
+        .panner-target > .image {
+            box-shadow: 0px 0px 50px rgba(0,0,0,0.8);
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+        .panner-container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="panner-container">
+        <div class="panner-target" id="canvas">
+            <canvas class="image"></canvas>
+            <div class="panner_interface"></div>
+        </div>
+    </div>
+    <script type="module" src="./static/scripts/client.js"></script>
+</body>
+</html>

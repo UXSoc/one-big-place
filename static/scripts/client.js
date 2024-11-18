@@ -1,14 +1,13 @@
 import { pannerInit } from "./panner.js"
 import { loadCanvas } from "./canvas.js";
+import { PixelSelector } from "./selector.js";
 
-export let pixelX = 0
-export let pixelY = 0
+let pixelSelector = new PixelSelector()
 
-export var target = document.getElementById('canvas')
+var target = document.getElementById('canvas')
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
-      pixelX = x
-      pixelY = y
+      pixelSelector.displayCoordinates(x, y)
       console.log(x,y,clientX,clientY)
     },
     zoom: {

@@ -7,7 +7,7 @@ let pixelSelector = new PixelSelector()
 var target = document.getElementById('canvas')
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
-      pixelSelector.setCoordinates(target, x, y)
+      pixelSelector.setPixelSelector(target, x, y)
     },
     zoom: {
         value: 10,

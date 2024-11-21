@@ -13,14 +13,19 @@ class PixelSelector {
     this.selector.naturalWidth = 1
     this.selector.scaleWithZoom = true
   }
-  getCoordinates() {
+  getPixelSelector() {
     return [this.coordinatesX, this.coordinatesY]
   }
-  setCoordinates(target, x, y) {
+  setPixelSelector(target, x, y) {  
+    this.changeCoordinates(x, y)
+    this.changeSelector(target, x, y)
+  }
+  changeCoordinates(x, y) {
     this.coordinatesX = x
     this.coordinatesY = y
     this.coordinates.textContent = `${x}, ${y}`
-
+  }
+  changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y]
     this.selector.style = `
     position: absolute;

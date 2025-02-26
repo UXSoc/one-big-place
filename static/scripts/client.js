@@ -8,9 +8,12 @@ let pixelSelector = new PixelSelector()
 var target = document.getElementById('canvas')
 var colorButton = document.getElementById("color-button"); // placeholder
 
+var coords = null;
+
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
       pixelSelector.setPixelSelector(target, x, y)
+      coords = pixelSelector.getPixelSelector();
     },
     zoom: {
         value: 10,
@@ -22,8 +25,11 @@ pannerInit(target, {
 
 colorButton.addEventListener("click", (e) => {
   e.preventDefault();
-  paintPixel("#123456", {"x": 0, "y": 0});
+  if (coords != null) {
+    paintPixel("#123456", {"x": coords[0], "y": coords[1]});
+  }
 })
+
 
 // pixelsize and coords should be passed to palette here ?
 // nvm let it be called t

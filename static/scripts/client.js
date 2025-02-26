@@ -1,18 +1,20 @@
-import { pannerInit } from "./panner.js"
+import { pannerInit } from "./panner.js";
 import { loadCanvas } from "./canvas.js";
 import { PixelSelector } from "./selector.js";
 import { paintPixel } from "./paint.js";
 
-let pixelSelector = new PixelSelector()
+let pixelSelector = new PixelSelector();
 
 var target = document.getElementById('canvas')
 var colorButton = document.getElementById("color-button"); // placeholder
+var body = document.querySelector("body");
+var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
 var coords = null;
 
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
-      pixelSelector.setPixelSelector(target, x, y)
+      pixelSelector.setPixelSelector(target, x, y);
       coords = pixelSelector.getPixelSelector();
     },
     zoom: {
@@ -21,6 +23,15 @@ pannerInit(target, {
         max: 40,
         step: 0.1
     }
+})
+
+body.addEventListener("wheel", (e) => {
+  console.log(target.zoom);
+  if (target.zoom < 2) {
+    pixelSelectorDisplay.style.display = "none";
+  } else {
+    pixelSelectorDisplay.style.display = "block";
+  }
 })
 
 colorButton.addEventListener("click", (e) => {

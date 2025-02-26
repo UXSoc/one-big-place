@@ -1,9 +1,3 @@
-/*
- * TODO:
- * 1. Make selector prettier
- * 2. Make coordinates prettier
- * 3. Make coordinates mobile-friendly
- */
 class PixelSelector {
   constructor() {
     this.coordinates = document.querySelector(".canvas-coordinates");
@@ -34,25 +28,31 @@ class PixelSelector {
   }
   changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y];
-    this.selector.animate(
-      [
+    
+    if (target.zoom < 2) {
+      this.selector.style.display = "none";
+    } else {
+      this.selector.style.display = "block";
+      this.selector.animate(
+        [
+          {
+            translate: `${this.initCoordinatesX * target.pixelSize}px ${this.initCoordinatesY * target.pixelSize}px`,
+          },
+          { translate: `${x * target.pixelSize}px ${y * target.pixelSize}px` },
+        ],
         {
-          translate: `${this.initCoordinatesX * target.pixelSize}px ${this.initCoordinatesY * target.pixelSize}px`,
+          duration: 150,
+          iterations: 1,
         },
-        { translate: `${x * target.pixelSize}px ${y * target.pixelSize}px` },
-      ],
-      {
-        duration: 150,
-        iterations: 1,
-      },
-    );
-    this.selector.style = `
-    position: absolute;
-    translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-    outline: 6px dashed rgb(119, 118, 123);
-    width: ${this.selector.naturalWidth * target.pixelSize}px;
-    aspect-ratio: 1;
-    `;
+      );
+      this.selector.style = `
+      position: absolute;
+      translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+      outline: 6px dashed rgb(119, 118, 123);
+      width: ${this.selector.naturalWidth * target.pixelSize}px;
+      aspect-ratio: 1;
+      `;
+    }
   }
 }
 

@@ -1,0 +1,13 @@
+.color-container {
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 20px;
+  bottom: 0;
+  width: 100vw;
+  height: 80px;
+  background: black;
+}

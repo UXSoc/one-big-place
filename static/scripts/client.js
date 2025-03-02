@@ -2,11 +2,11 @@ import { pannerInit } from "./panner.js";
 import { loadCanvas } from "./canvas.js";
 import { PixelSelector } from "./selector.js";
 import { paintPixel } from "./paint.js";
+import { showPalette, hidePalette } from "./palette.js";
 
 let pixelSelector = new PixelSelector();
 
 var target = document.getElementById('canvas')
-var colorButton = document.getElementById("color-button"); // placeholder
 var body = document.querySelector("body");
 var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
@@ -16,6 +16,22 @@ pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
       pixelSelector.setPixelSelector(target, x, y);
       coords = pixelSelector.getPixelSelector();
+      showPalette();
+    },
+    onDrag: () => {
+      hidePalette();
+    },
+    onDragEnd: () => {
+      showPalette();
+    },
+    onZoom: () => {
+      hidePalette();
+      clearTimeout(window.zoomTimeout); 
+      window.zoomTimeout = setTimeout(() => {
+        if (coords != null) {
+          showPalette();
+        }
+      }, 300); 
     },
     zoom: {
         value: 10,
@@ -34,13 +50,11 @@ body.addEventListener("wheel", (e) => {
   }
 })
 
-colorButton.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (coords != null) {
-    paintPixel("#123456", {"x": coords[0], "y": coords[1]});
-  }
-})
-
+document.addEventListener("colorSelected", (e) => {
+  const selectedColor = e.detail.color;
+  const [x, y] = coords;
+  paintPixel(selectedColor, { x, y }); 
+});
 
 // pixelsize and coords should be passed to palette here ?
 // nvm let it be called t

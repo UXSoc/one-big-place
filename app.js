@@ -17,7 +17,6 @@ app.use(express.static("static"));
 
 app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
-  console.log(`postgres://${dbuser}:${dbpass}@${dbhost}:${dbport}/${dbname}`);
 })
 
 app.listen(port, () => {

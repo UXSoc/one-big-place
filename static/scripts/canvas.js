@@ -2,7 +2,7 @@ export function loadCanvas(canvas) {
     // sample load canvas function
     canvas.ctx = canvas.getContext("2d");
     var img = new Image();
-    img.src = './static/images/sample.png';
+    img.src = 'images/sample.png';
     img.onload = function() {
         canvas.width = img.width;
         canvas.height = img.height;

@@ -4,6 +4,8 @@ import { PixelSelector } from "./selector.js";
 import { paintPixel } from "./paint.js";
 import { showPalette, hidePalette } from "./palette.js";
 
+const ZOOM_THRESHOLD = 2;
+
 let pixelSelector = new PixelSelector();
 
 var target = document.getElementById('canvas')
@@ -42,8 +44,7 @@ pannerInit(target, {
 })
 
 body.addEventListener("wheel", (e) => {
-  console.log(target.zoom);
-  if (target.zoom < 2) {
+  if (target.zoom < ZOOM_THRESHOLD) {
     pixelSelectorDisplay.style.display = "none";
   } else {
     pixelSelectorDisplay.style.display = "block";

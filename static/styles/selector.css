@@ -23,7 +23,6 @@
   margin: 0;
 }
 
-/* ----------- Non-Retina Screens ----------- */
 @media screen 
   and (max-device-width: 1200px) 
   and ((-webkit-min-device-pixel-ratio: 1) or ((-webkit-min-device-pixel-ratio: 2)

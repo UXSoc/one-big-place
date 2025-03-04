@@ -24,11 +24,8 @@
   margin: 0;
 }
 
-@media screen 
-  and (max-device-width: 1200px) 
-  and ((-webkit-min-device-pixel-ratio: 1) or ((-webkit-min-device-pixel-ratio: 2)
-  and (min-resolution: 192dpi))) {
-    .canvas-coordinates {
-      display: none;
-    }
+@media screen and (max-device-width: 1200px) {
+  .canvas-coordinates {
+    display: none;
+  }
 }

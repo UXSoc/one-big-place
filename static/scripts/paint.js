@@ -1,5 +1,19 @@
-let timerLength = 5000; // in ms
-let isTimerRunning = false;
+let generationTimer = undefined;
+let slotCapacity = 6;
+let slotCount = 6;
+let slotGenerationCooldown = 15*1000; // in ms
+
+function generatePixl() {
+  return setTimeout(() => {
+    slotCount++;
+    console.log(`Generated Pixel ${slotCount}/${slotCapacity}`)
+    if (slotCount<slotCapacity) {
+      generatePixl();
+    } else {
+      generationTimer = undefined
+    }
+  }, slotGenerationCooldown)
+}
 
 export function paintPixel(color, coords) {
   // get current canvas
@@ -8,13 +22,12 @@ export function paintPixel(color, coords) {
 
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
-  if (isTimerRunning == false) {
+  if (slotCount>0) {
     ctx.fillStyle = color;
     ctx.fillRect(coords.x, coords.y, 1, 1);
-    isTimerRunning = true;
-    setTimeout(() => {
-      isTimerRunning = false;
-    }, timerLength);
+    slotCount--;
+    if (!generationTimer) {
+      generationTimer = generatePixl();
+    }
   }
-
 }

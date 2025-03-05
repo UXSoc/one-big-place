@@ -44,6 +44,8 @@ pannerInit(target, {
 })
 
 body.addEventListener("wheel", (e) => {
+  pixelSelectorDisplay.style.width = `${target.pixelSize}px`;
+  
   if (target.zoom < ZOOM_THRESHOLD) {
     pixelSelectorDisplay.style.display = "none";
   } else {

@@ -2,19 +2,19 @@
   display: flex;
   font-family: Arial, sans-serif;
   font-weight: bold;
-  font-size: 2.1rem;
+  font-size: 1rem;
   justify-content: center;
   align-items: center;
   position: absolute;
   z-index: 99;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 10rem;
+  top: 1rem;
+  right: 1rem;
   height: fit-content;
-  background: rgb(30, 30, 30);
-  border-radius: 10px;
-  color: #fff;
-  padding: 1.25rem;
+  background: white;
+  border-radius: 5px;
+  color: black;
+  padding: .5rem 2rem;
+  box-shadow: 0px 0px 31px 0px rgba(0,0,0,0.4);
 }
 
 .pixel-selector {

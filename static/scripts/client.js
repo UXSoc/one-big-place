@@ -26,7 +26,7 @@ pannerInit(target, {
     onDragEnd: () => {
       showPalette();
     },
-    onZoom: () => {
+    onZoom: (pixelSize, zoomValue) => {
       hidePalette();
       clearTimeout(window.zoomTimeout); 
       window.zoomTimeout = setTimeout(() => {
@@ -34,6 +34,12 @@ pannerInit(target, {
           showPalette();
         }
       }, 300); 
+      pixelSelectorDisplay.style.width = `${pixelSize}px`;
+      if (zoomValue < ZOOM_THRESHOLD) {
+        pixelSelectorDisplay.style.display = "none";
+      } else {
+        pixelSelectorDisplay.style.display = "block";
+      }
     },
     zoom: {
         value: 10,
@@ -41,16 +47,6 @@ pannerInit(target, {
         max: 40,
         step: 0.1
     }
-})
-
-body.addEventListener("wheel", (e) => {
-  pixelSelectorDisplay.style.width = `${target.pixelSize}px`;
-  
-  if (target.zoom < ZOOM_THRESHOLD) {
-    pixelSelectorDisplay.style.display = "none";
-  } else {
-    pixelSelectorDisplay.style.display = "block";
-  }
 })
 
 document.addEventListener("colorSelected", (e) => {

@@ -1,0 +1,32 @@
+nav {
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    background: white;
+    box-shadow: 0px 0px 31px 0px rgba(0,0,0,0.4);
+}
+nav > ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0;
+    margin: 0.5rem;
+}
+@media only screen and (min-width: 1200px) {
+    nav {
+        width: auto;
+        height: 50vh;
+        box-shadow: 0px 0px 31px 0px rgba(0,0,0,0.4);
+        top: 50%;
+        transform: translateY(-60%);
+        border-radius: 0 8px 8px 0;
+    }
+    nav > ul {
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+}
+  

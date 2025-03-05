@@ -4,7 +4,7 @@ import { PixelSelector } from "./selector.js";
 import { paintPixel } from "./paint.js";
 import { showPalette, hidePalette } from "./palette.js";
 
-const ZOOM_THRESHOLD = 2;
+const ZOOM_THRESHOLD = 5;
 
 let pixelSelector = new PixelSelector();
 
@@ -54,8 +54,5 @@ document.addEventListener("colorSelected", (e) => {
   const [x, y] = coords;
   paintPixel(selectedColor, { x, y }); 
 });
-
-// pixelsize and coords should be passed to palette here ?
-// nvm let it be called t
 
 loadCanvas(target.querySelector('.image'))

@@ -1,0 +1,133 @@
+#bits-display {
+    display: grid;
+    box-sizing: border-box;
+    gap: 16px;
+    grid-template-columns: 1fr minmax(0px, 50px);
+
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 99;
+    top: 12rem;
+    left: 0;
+    height: fit-content;
+    background: white;
+    border-radius: 0 15px 15px 0;
+    color: black;
+    padding: .25rem 1.6rem;
+    filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
+    overflow: hidden;
+    width: 72px;
+    transition: width 0.3s ease-in-out;
+}
+#bits-display > div > p > span {
+    font-size: 6rem;
+    font-weight: bold;
+}
+#bits-display > div:last-child {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s linear;
+}
+#bits-display:hover > div:last-child {
+    display: flex;
+}
+#bits-display:hover {
+    width: 138px;
+}
+#bits-display > div > p {
+    font-family: BlockCraft;
+    margin: 0;
+    translate: 0 -10%;
+    line-height: 1.5rem;
+    font-size: 1.5rem;
+}
+#bits-counter {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-evenly;
+    gap: 12px;
+    margin: .6rem 0;
+}
+#bits-counter > div {
+    width: 20px;
+    aspect-ratio: 1;
+    outline: 2px solid black;
+}
+#bits-counter > div.filled {
+    background-color: black;
+    animation: popIn .3s cubic-bezier(.04,1.7,.68,1.02);
+}
+
+@keyframes popIn {
+    from {scale: 0}
+    to {scale: 1}
+}
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@media only screen and (min-width: 1200px) {
+    #bits-display {
+        gap: 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 2rem;
+        left: 0;
+        height: fit-content;
+        background: white;
+        border-radius: 0 15px 15px 0;
+        color: black;
+        padding: .25rem 1.6rem;
+        filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
+        overflow: hidden;
+        width: auto;
+        height: 48px;
+        transition: height 0.3s ease-in-out;
+    }
+    #bits-display:hover {
+        width: auto;
+        height: 72px;
+    }
+    #bits-display > div:last-child {
+        display: flex;
+        justify-content: left;
+        animation: fadeIn 0.3s linear;
+        visibility: hidden;
+    }
+    #bits-display:hover > div:last-child {
+        visibility: visible;
+    }
+    #bits-display > div {
+        justify-content: flex-start;
+        align-items: left;
+    }
+    #bits-display > div > p > span {
+        font-size: 1em;
+        font-weight: normal
+    }
+    #bits-display > div > p {
+        font-family: BlockCraft;
+        margin: 0;
+        translate: 0 -40%;
+        line-height: 1.5rem;
+        font-size: 1.5rem;
+    }
+    #bits-counter {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        gap: 12px;
+        margin: .6rem 0;
+    }
+    #bits-counter > div.filled {
+        background-color: black;
+        animation: popIn .3s cubic-bezier(.04,1.7,.68,1.02);
+    }
+}

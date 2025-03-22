@@ -35,3 +35,41 @@ app.get("/modals/:filename", (req, res) => {
 app.listen(port, () => {
   console.log(`listening on port ${port} ( http://localhost:${port}/ )`);
 })
+
+
+// Setup Socket.io
+const SOCKETPORT = process.env.SOCKETPORT;
+const fs = require('fs');
+const { createCanvas, loadImage } = require('canvas')
+
+try {
+    var options = {
+      key: fs.readFileSync('/etc/letsencrypt/live/www.gemplo.com/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/www.gemplo.com/cert.pem'),
+      ca: fs.readFileSync('/etc/letsencrypt/live/www.gemplo.com/chain.pem')
+    };
+} catch {
+}
+
+var socket_app = express()
+if (options !== undefined) {
+    const https = require('https');
+    var server = https.createServer(options, socket_app)
+} else {
+    const https = require('http');
+    var server = https.createServer(socket_app)
+}
+var io = require('socket.io')(server, {
+    cors: {
+      origin: '*',
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+  });
+server.listen(SOCKETPORT);
+console.log(`SocketIO Server Started on port ${SOCKETPORT}`)
+
+const canvas = require('./server_scripts/canvas'); // Import the module
+
+canvas.loadCanvas()

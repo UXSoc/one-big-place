@@ -1,26 +1,43 @@
-.color-palette {
+#color-palette {
     box-sizing: border-box;
+    filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
     position: fixed;
-    bottom: -100px;
+    bottom: 0px;
     width: 100%;
-    height: 95px;
-    background-color: #fff;
-    box-shadow: 0px -2px 4px 0px #333;
-    display: flex;
-    overflow-x: scroll; 
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding: 10px 5px 0px 5px; 
+    background-color: white;
+    padding: 20px;
     transition: bottom 0.3s ease-in-out;
+    border-radius: 25px 0 0 0;
+}
+
+#color-tab {
+    position: absolute;
+    background-color: white;
+    border-radius: 25px 25px 0 0;
+    padding: 20px;
+    top: 0;
+    right: 0;
+    translate: 0 -90%;
+}
+
+#color-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(8, calc((100vw - 40px - 9vw) / 8));
+    grid-template-rows: repeat(4, calc((100vw - 40px - 9vw) / 8));
+    grid-gap: 1vw;
+    justify-content: center; /* Centers the grid when it's not full width */
 }
 
 .colors {
-    flex: 0 0 60px;
-    height: 60px;
-    margin: 0 5px;
-    box-shadow: inset 0px 0px 3px 0px #333;
+    width: 100%;
+    aspect-ratio: 1;
     transition: transform 0.3s ease;
     cursor: pointer;
+}
+
+.colors:last-child {
+    outline: 1px solid black;
 }
 
 .colors:hover {
@@ -30,3 +47,36 @@
 .color-palette.active {
     bottom: 0;
 }
+
+
+@media only screen and (min-width: 1200px) {
+    #color-palette {
+        position: fixed;
+        right: 0;
+        top: 15%;
+
+        height: fit-content;
+        width: auto;
+        background-color: white;
+        padding: 20px;
+        transition: bottom 0.3s ease-in-out;
+        border-radius: 25px 0 0 25px;
+    }
+    #color-container {
+        width: 100%;
+        display: grid;
+        grid-template-rows: repeat(8, 50px);
+        grid-template-columns: repeat(4, 50px);
+        grid-gap: 10px;
+        justify-content: center;
+    }
+    #color-tab {
+        width: fit-content;
+        border-radius: 25px 0 0 25px;
+        padding: 20px;
+        top: 8%;
+        left: 0;
+        translate: -90% 0;
+    }
+}
+  

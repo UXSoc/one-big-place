@@ -1,10 +1,14 @@
+@font-face {
+    font-family: BlockCraft;
+    src: url("BlockCraft.otf") format("opentype");
+}
 nav {
     position: fixed;
     z-index: 99;
     width: 100%;
     background: white;
-    filter: drop-shadow(0 0 0.5rem rgba(0,0,0,0.8));
-    border-radius: 0 0 15px 15px;
+    filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
+    border-radius: 0 0 25px 25px;
     padding: 1rem 0;
 }
 nav > ul {
@@ -14,21 +18,60 @@ nav > ul {
     align-items: center;
     padding: 0;
     margin: 0.5rem;
+    font-family: BlockCraft;
+    font-size: 1.4rem;
+}
+nav > ul > li > p {
+    display: none;
 }
 @media only screen and (min-width: 1200px) {
     nav {
-        width: auto;
-        height: 50vh;
-        box-shadow: 0px 0px 31px 0px rgba(0,0,0,0.4);
-        top: 50%;
-        transform: translateY(-60%);
-        border-radius: 0 8px 8px 0;
+        box-sizing: border-box;
+        width: 116px;
+        padding: 2rem 1.5rem;
+        height: 40vh;
+        top: 15%;
+        border-radius: 0 25px 25px 0;
+        height: fit-content;
+        transition: width 0.3s ease-in-out;
+        overflow: hidden;
     }
     nav > ul {
         height: 100%;
         flex-direction: column;
         justify-content: space-evenly;
-        align-items: center;
+        align-items: flex-start;
+        gap: 1.2rem;
+    }
+    nav > ul > li {
+        padding: .6rem;
+        display: flex;
+        border-radius: 12px;
+        width: 100%;
+        cursor: pointer;
+    }
+    nav > ul > li:hover {
+        background-color: #f0e4ff;
+    }
+    nav > ul > li > img {
+        vertical-align: middle;
+    }
+    nav > ul > li > p {
+        line-height: 1rem;
+        margin: 0 1rem;
+        vertical-align: middle;
+        display: inline-block;
+        opacity: 0;
+        visibility: hidden;
+        text-wrap: nowrap;
+        transition: opacity 0.3s ease-in-out;
+    }
+    nav:hover {
+        width: 331px;
+    }
+    nav:hover > ul > li > p {
+        opacity: 1;
+        visibility: visible;
     }
 }
   

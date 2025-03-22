@@ -4,10 +4,11 @@
     position: fixed;
     bottom: 0px;
     width: 100%;
-    background-color: white;
     padding: 20px;
-    transition: bottom 0.3s ease-in-out;
     border-radius: 25px 0 0 0;
+    translate: 0 100%;
+    background-color: rgba(255,255,255,0);
+    transition: translate 0.3s ease-in-out, background-color 0.3s cubic-bezier(.53,.83,.71,.96);
 }
 
 #color-tab {
@@ -18,6 +19,7 @@
     top: 0;
     right: 0;
     translate: 0 -90%;
+    cursor: pointer;
 }
 
 #color-container {
@@ -27,6 +29,12 @@
     grid-template-rows: repeat(4, calc((100vw - 40px - 9vw) / 8));
     grid-gap: 1vw;
     justify-content: center; /* Centers the grid when it's not full width */
+    opacity: 0;
+    transition: opacity 0.3s cubic-bezier(.2,.93,.71,.96);
+}
+
+#color-palette.active > #color-container {
+    opacity: 1;
 }
 
 .colors {
@@ -44,8 +52,10 @@
     transform: scale(1.1);
 }
 
-.color-palette.active {
-    bottom: 0;
+#color-palette.active {
+    translate: 0 0;
+    opacity: 1;
+    background-color: rgba(255,255,255,1);
 }
 
 
@@ -57,10 +67,9 @@
 
         height: fit-content;
         width: auto;
-        background-color: white;
         padding: 2rem;
-        transition: bottom 0.3s ease-in-out;
         border-radius: 20px 0 0 20px;
+        translate: 100% 0;
     }
     #color-container {
         width: 100%;

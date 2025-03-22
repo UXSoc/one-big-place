@@ -20,6 +20,21 @@ nav > ul {
 nav > ul > li > p {
     display: none;
 }
+nav > ul > li > img {
+    filter: brightness(0);
+}
+nav > ul > li:hover > img {
+    filter: brightness(1);
+}
+nav > ul > li {
+    border-radius: 12px;
+    padding: 0.4rem .8rem .2rem .8rem;
+    cursor: pointer;
+    height: fit-content;
+}
+nav > ul > li:hover {
+    background-color: #f0e4ff;
+}
 @media only screen and (min-width: 1200px) {
     nav {
         box-sizing: border-box;
@@ -45,15 +60,6 @@ nav > ul > li > p {
         border-radius: 12px;
         width: 100%;
         cursor: pointer;
-    }
-    nav > ul > li > img {
-        filter: brightness(0);
-    }
-    nav > ul > li:hover > img {
-        filter: brightness(1);
-    }
-    nav > ul > li:hover {
-        background-color: #f0e4ff;
     }
     nav > ul > li:hover > p {
         color: #9747FF;

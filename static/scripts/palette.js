@@ -34,3 +34,11 @@ for (let i = 0; i < colorsArray.length; i++) {
 
     colorContainer.appendChild(colorElement);
 }
+
+document.querySelector("#color-tab").addEventListener("click", function() {
+    if (colorPalette.classList.contains("active")) {
+        hidePalette();
+    } else {
+        showPalette();
+    }
+})

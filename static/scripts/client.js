@@ -24,16 +24,9 @@ pannerInit(target, {
       hidePalette();
     },
     onDragEnd: () => {
-      showPalette();
     },
     onZoom: (pixelSize, zoomValue) => {
       hidePalette();
-      clearTimeout(window.zoomTimeout); 
-      window.zoomTimeout = setTimeout(() => {
-        if (coords != null) {
-          showPalette();
-        }
-      }, 300); 
       pixelSelectorDisplay.style.width = `${pixelSize}px`;
       if (zoomValue < ZOOM_THRESHOLD) {
         pixelSelectorDisplay.style.display = "none";

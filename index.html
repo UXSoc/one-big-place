@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>One Big Place</title>
-    <link rel="stylesheet" href="styles/panner.css">
-    <link rel="stylesheet" href="styles/selector.css">
-    <link rel="stylesheet" href="styles/palette.css">
-    <link rel="stylesheet" href="styles/nav.css">
     <style>
         body {
             padding: 0;
@@ -26,7 +22,15 @@
             width: 100vw;
             height: 100vh;
         }
+        @font-face {
+            font-family: BlockCraft;
+            src: url("fonts/BlockCraft.otf") format("opentype");
+        }
     </style>
+    <link rel="stylesheet" href="styles/panner.css">
+    <link rel="stylesheet" href="styles/selector.css">
+    <link rel="stylesheet" href="styles/palette.css">
+    <link rel="stylesheet" href="styles/nav.css">
 </head>
 <body>
     <nav>
@@ -46,7 +50,9 @@
             </div>
         </div>
     </div>
-    <div class="canvas-coordinates"></div>
+    <div class="canvas-coordinates">
+        <p></p>
+    </div>
     <div id="color-palette">
         <div id="color-tab"><img src="images/palette.png"></div>
         <div id="color-container"></div>

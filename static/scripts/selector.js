@@ -1,6 +1,6 @@
 class PixelSelector {
   constructor() {
-    this.coordinates = document.querySelector(".canvas-coordinates");
+    this.coordinates = document.querySelector(".canvas-coordinates > p");
     this.initCoordinatesX = 0;
     this.initCoordinatesY = 0;
     this.coordinatesX = 0;

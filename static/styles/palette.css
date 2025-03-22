@@ -58,9 +58,9 @@
         height: fit-content;
         width: auto;
         background-color: white;
-        padding: 20px;
+        padding: 2rem;
         transition: bottom 0.3s ease-in-out;
-        border-radius: 25px 0 0 25px;
+        border-radius: 20px 0 0 20px;
     }
     #color-container {
         width: 100%;
@@ -72,11 +72,11 @@
     }
     #color-tab {
         width: fit-content;
-        border-radius: 25px 0 0 25px;
+        border-radius: 20px 0 0 20px;
         padding: 20px;
         top: 8%;
         left: 0;
-        translate: -90% 0;
+        translate: -95% 0;
     }
 }
   

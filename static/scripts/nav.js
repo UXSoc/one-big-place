@@ -35,7 +35,9 @@ for (let i = 0; i < NAV_ITEMS.length; i++) {
         .then(html => { 
             var modal = document.createElement("div")
             modal.className = "modal"
-            modal.style.maxHeight = `${NAV.offsetHeight}px`;
+            if (window.matchMedia('only screen and (min-width: 1200px)').matches) {
+                modal.style.maxHeight = `${NAV.offsetHeight}px`;
+            }
             modal.innerHTML = html
             NAV.appendChild(modal);
         }) 

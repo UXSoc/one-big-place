@@ -36,7 +36,6 @@ nav > ul > li {
 nav > ul > li:hover, nav > ul > li.active {
     background-color: #f0e4ff;
 }
-nav > ul > 
 .modal {
     position: fixed;
     background-color: white;

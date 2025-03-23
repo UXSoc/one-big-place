@@ -3,12 +3,46 @@ var last_click = {
     y: 0,
     date: null
 }
-var iPosX, iPosY
+var iPosX, iPosY;
+let initialDistance = null;
+
+function getDistance(touch1, touch2) {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
 function dragElement(el, onDragStart, onDrag, onDragEnd, zoom_options) {
     el.panner_container.onmousedown = (e) => dragStart(e, el, false, onDragStart, onDrag, onDragEnd);
-    el.panner_container.ontouchstart = (e) => dragStart(e, el, true, onDragStart, onDrag, onDragEnd);
+    el.panner_container.ontouchstart = (e) => {
+        if (e.touches.length === 2) {
+            initialDistance = getDistance(e.touches[0], e.touches[1]);
+            pinchStart(e, el, onDragEnd)
+        } else {
+            dragStart(e, el, true, onDragStart, onDrag, onDragEnd)
+        }
+    };
     el.panner_container.addEventListener('DOMMouseScroll', (e) => handleScroll(e, el, zoom_options), false);
     el.panner_container.addEventListener('mousewheel',(e) => handleScroll(e, el, zoom_options), false);
+}
+function pinchStart(e, el, onDragEnd) {
+    e = e || el.panner_container.event;
+    e.preventDefault();
+    el.panner_container.ontouchmove = (e) => {
+        if (e.touches.length === 2 && initialDistance !== null) {
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
+            const zoomFactor = currentDistance / initialDistance;
+            zoom(el, Math.max(el.min_zoom, Math.min(el.max_zoom, el.zoom*zoomFactor)), last_click.x, last_click.y);
+            initialDistance = currentDistance;
+        }
+    };
+    el.panner_container.ontouchend = () => {pinchEnd(el, onDragEnd)};
+}
+function pinchEnd(el, onDragEnd) {
+    if (onDragEnd) onDragEnd();
+    el.panner_container.onmouseup = null;
+    el.panner_container.onmousemove = null;
+    el.panner_container.ontouchend = null;
+    el.panner_container.ontouchmove = null;
 }
 function dragStart(e, el, touch, onDragStart, onDrag, onDragEnd) {
     e = e || el.panner_container.event;
@@ -63,7 +97,9 @@ function elementDrag(e, el, touch, onDrag) {
     if (cur_transl == '') el.style.translate = '0px 0px';
     var cur_x = parseFloat(cur_transl[0]) || 0;
     var cur_y = parseFloat(cur_transl[1]) || 0;
-    el.moved = true;
+    if (!(pos1 == 0 && pos2 == 0)) {
+        el.moved = true;
+    }
     setPos(el, cur_x-pos1, cur_y-pos2);
 }
 var handleScroll = function(e, el, zoom_options) {

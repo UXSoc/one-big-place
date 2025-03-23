@@ -27,6 +27,7 @@ nav > ul > li:hover > img {
     filter: brightness(1);
 }
 nav > ul > li {
+    position: relative;
     border-radius: 12px;
     padding: 0.4rem .8rem .2rem .8rem;
     cursor: pointer;
@@ -34,6 +35,17 @@ nav > ul > li {
 }
 nav > ul > li:hover {
     background-color: #f0e4ff;
+}
+.modal {
+    position: fixed;
+    background-color: white;
+    border-radius: 20px;
+    top: 110px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 90vw;
+    text-align: center;
 }
 @media only screen and (min-width: 1200px) {
     nav {
@@ -45,7 +57,7 @@ nav > ul > li:hover {
         border-radius: 0 20px 20px 0;
         height: fit-content;
         transition: width 0.3s ease-in-out;
-        overflow: hidden;
+        overflow: visible;
     }
     nav > ul {
         height: 100%;
@@ -75,7 +87,7 @@ nav > ul > li:hover {
         opacity: 0;
         visibility: hidden;
         text-wrap: nowrap;
-        transition: opacity 0.3s ease-in-out;
+        transition: opacity 0.3s ease-in-out .1s;
     }
     nav:hover {
         width: 331px;
@@ -83,6 +95,20 @@ nav > ul > li:hover {
     nav:hover > ul > li > p {
         opacity: 1;
         visibility: visible;
+    }
+    .modal {
+        position: absolute;
+        display: block;
+        background-color: white;
+        border-radius: 20px;
+        right: -530px;
+        top: 0;
+        left: auto;
+        width: 500px;
+        text-align: center;
+        z-index: 99;
+        margin: 0;
+        overflow-y: auto;
     }
 }
   

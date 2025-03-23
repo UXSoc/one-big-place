@@ -48,7 +48,6 @@ loadBits()
 
 function updateBits() {
   var bits = bits_container.querySelectorAll("div");
-  console.log(bits)
   for (let i = 0; i < bits.length; i++) {
     if (i > slotCount-1) {
       bits[i].classList.remove("filled");

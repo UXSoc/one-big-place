@@ -19,6 +19,19 @@ app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
 })
 
+app.get("/modals/:filename", (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, "modals", filename);
+  if (path.extname(filename) !== ".html") {
+    return res.status(403).send("Forbidden");
+  }
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(404).send("File not found");
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`listening on port ${port} ( http://localhost:${port}/ )`);
 })

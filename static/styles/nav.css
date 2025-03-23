@@ -23,7 +23,7 @@ nav > ul > li > p {
 nav > ul > li > img {
     filter: brightness(0);
 }
-nav > ul > li:hover > img {
+nav > ul > li:hover > img, nav > ul > li.active > img {
     filter: brightness(1);
 }
 nav > ul > li {
@@ -33,9 +33,10 @@ nav > ul > li {
     cursor: pointer;
     height: fit-content;
 }
-nav > ul > li:hover {
+nav > ul > li:hover, nav > ul > li.active {
     background-color: #f0e4ff;
 }
+nav > ul > 
 .modal {
     position: fixed;
     background-color: white;
@@ -73,7 +74,7 @@ nav > ul > li:hover {
         width: 100%;
         cursor: pointer;
     }
-    nav > ul > li:hover > p {
+    nav > ul > li:hover > p, nav > ul > li.active > p {
         color: #9747FF;
     }
     nav > ul > li > img {
@@ -89,10 +90,10 @@ nav > ul > li:hover {
         text-wrap: nowrap;
         transition: opacity 0.3s ease-in-out .1s;
     }
-    nav:hover {
+    nav:hover, nav.active {
         width: 331px;
     }
-    nav:hover > ul > li > p {
+    nav:hover > ul > li > p, nav.active > ul > li > p {
         opacity: 1;
         visibility: visible;
     }

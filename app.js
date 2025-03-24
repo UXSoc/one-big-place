@@ -48,7 +48,6 @@ app.listen(port, () => {
 // Setup Socket.io
 const SOCKETPORT = process.env.SOCKETPORT;
 const fs = require('fs');
-const { createCanvas, loadImage } = require('canvas')
 
 try {
     var options = {
@@ -83,5 +82,6 @@ function newConnection(socket) {
   // socket.on('PlacePixel', PlacePixel);
 }
 const canvas = require('./modules/canvas'); // Import the module
+const paint = require('./modules/paint'); // Import the module
 
 canvas.load_canvas()

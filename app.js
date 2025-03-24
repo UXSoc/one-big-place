@@ -79,12 +79,12 @@ console.log(`SocketIO Server Started on port ${SOCKETPORT}`)
 
 const canvas = require('./modules/canvas');
 
-io.sockets.on('connection', newConnection);
-function newConnection(socket) {
+io.sockets.on('connection', (socket) => {
   console.log(`${socket.request.connection.remoteAddress} connected`);
   socket.on('PaintPixel', (data) => {
-    canvas.placePixel(data.x, data.y, data.id)
+    canvas.paintPixel(data.x, data.y, data.id)
+    io.emit("PaintPixel", data)
   });
-}
+});
 
 canvas.load_canvas()

@@ -58,3 +58,6 @@ document.addEventListener("colorSelected", (e) => {
 loadPalette(colorsArray)
 loadCanvas(target.querySelector('.image'))
 var socket = io.connect("localhost:2345");
+socket.on("PaintPixel", (data) => {
+  paintPixel(colorsArray[data.id], {"x":data.x, "y":data.y}); 
+})

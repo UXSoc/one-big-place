@@ -97,7 +97,7 @@ async function saveFrame() {
     })
 }
 
-function placePixel(x,y,id) {
+function paintPixel(x,y,id) {
     canvas.canvas[y][x] = id
     console.log(`placed pixel: ${x} ${y} ${id}`)
 }
@@ -114,5 +114,5 @@ module.exports = {
     load_canvas: load_canvas,
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
-    placePixel: placePixel,
+    paintPixel: paintPixel,
 };

@@ -1,0 +1,20 @@
+def hex_to_rgb(hex_colors):
+    rgb_colors = []
+    for hex_color in hex_colors:
+        hex_color = hex_color.lstrip('#')  # Remove '#' if present
+        if len(hex_color) == 6:
+            rgb = tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+            rgb_colors.append(list(rgb))
+        else:
+            print(f"Invalid hex color: {hex_color}")
+    return rgb_colors
+
+# Example usage
+hex_colors = [
+    '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
+    '#7EEC57', '#02756D', '#009DAA', '#00CCBE', '#277FA4', '#3790EA', '#52E8F3', '#4839BF',
+    '#695BFF', '#94B3FF', '#801D9F', '#B449BF', '#E4ABFD', '#DD117E', '#FE3781', '#FE99A9',
+    '#6D462F', '#9B6926', '#FEB470', '#000000', '#525252', '#888D90', '#D5D6D8', '#FFFFFF',
+]
+rgb_colors = hex_to_rgb(hex_colors)
+print(rgb_colors)

@@ -1,4 +1,4 @@
-const init_canvas_size = [512,512]
+const init_canvas_size = [64,64]
 const fs = require('fs');
 
 function parseFile(path) {
@@ -16,8 +16,7 @@ function writeJSONFile(filename, data) {
 function initialize_empty_canvas() {
     var [width, height] = init_canvas_size
     console.log(`Initializing empty ${width} x ${height} canvas`)
-    var canvas = {"width": width, "height": height, "canvas": []}
-    var user_grid = {"width": width, "height":height, "user_grid": []}
+    var canvas = {"width": width, "height": height, "canvas": [], "user_grid": []}
     for (let i = 0; i<height; i++) {
         var row = []
         var user_row = []
@@ -26,10 +25,9 @@ function initialize_empty_canvas() {
             user_row.push(null)
         }
         canvas["canvas"].push(row)
-        user_grid["user_grid"].push(user_row)
+        canvas["user_grid"].push(user_row)
     }
     writeJSONFile("canvas", canvas)
-    writeJSONFile("canvas_users", user_grid)
 }
 
 var canvas = {
@@ -42,8 +40,9 @@ function load_canvas() {
         console.log('json directory created');
         initialize_empty_canvas();
     }
-    canvas.canvas = parseFile("./json/canvas.json")["canvas"]
-    canvas.user_grid = parseFile("./json/canvas_users.json")["user_grid"]
+    var parsedCanvas = parseFile("./json/canvas.json")
+    canvas.canvas = parsedCanvas["canvas"]
+    canvas.user_grid = parsedCanvas["user_grid"]
 }
 function get_canvas_json() {
     return canvas.canvas

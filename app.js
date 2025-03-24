@@ -82,6 +82,6 @@ function newConnection(socket) {
   console.log(`${socket.request.connection.remoteAddress} connected`);
   // socket.on('PlacePixel', PlacePixel);
 }
-const canvas = require('./server_scripts/canvas'); // Import the module
+const canvas = require('./modules/canvas'); // Import the module
 
 canvas.load_canvas()

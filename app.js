@@ -60,7 +60,7 @@ try {
 }
 
 var socket_app = express()
-if (options !== undefined) {
+if (!!options) {
     const https = require('https');
     var server = https.createServer(options, socket_app)
 } else {

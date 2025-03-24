@@ -1,7 +1,7 @@
 import { pannerInit } from "./panner.js";
 import { loadCanvas } from "./canvas.js";
 import { PixelSelector } from "./selector.js";
-import { paintPixel } from "./paint.js";
+import { paintPixel, paintPixelOnCanvas } from "./paint.js";
 import { showPalette, hidePalette, loadPalette } from "./palette.js";
 
 const ZOOM_THRESHOLD = 5;
@@ -59,5 +59,5 @@ loadPalette(colorsArray)
 loadCanvas(target.querySelector('.image'))
 var socket = io.connect("localhost:2345");
 socket.on("PaintPixel", (data) => {
-  paintPixel(colorsArray[data.id], {"x":data.x, "y":data.y}); 
+  paintPixelOnCanvas(colorsArray[data.id], data.x, data.y);
 })

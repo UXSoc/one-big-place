@@ -16,22 +16,26 @@ function generatePixl() {
   }, slotGenerationCooldown)
 }
 
-export function paintPixel(color, coords) {
-  // get current canvas
-  const canvas = document.querySelector(".panner-container canvas");
-  const ctx = canvas.getContext("2d");
+// get current canvas
+const canvas = document.querySelector(".panner-container canvas");
+const ctx = canvas.getContext("2d");
 
+export function paintPixel(color, coords) {
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
   if (slotCount>0) {
-    ctx.fillStyle = color;
-    ctx.fillRect(coords.x, coords.y, 1, 1);
+    paintPixelOnCanvas(color, coords.x, coords.y)
     slotCount--;
     updateBits()
     if (!generationTimer) {
       generationTimer = generatePixl();
     }
   }
+}
+
+export function paintPixelOnCanvas(color, x, y) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, 1, 1);
 }
 
 const bits_container = document.querySelector("#bits-counter");

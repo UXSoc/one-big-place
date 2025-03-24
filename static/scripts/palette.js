@@ -17,28 +17,30 @@ export function hidePalette() {
     colorPalette.classList.remove("active");
 }
 
-for (let i = 0; i < colorsArray.length; i++) {
-    const colorElement = document.createElement("div");
-    colorElement.className = "colors";
-    colorElement.style.backgroundColor = colorsArray[i];
-    colorElement.id = i;
-
-    colorElement.onclick = function () {
-        const selectedColor = this.style.backgroundColor;
-
-        const colorChangeEvent = new CustomEvent("colorSelected", {
-            detail: { color: selectedColor }
-        });
-        document.dispatchEvent(colorChangeEvent);
-    };
-
-    colorContainer.appendChild(colorElement);
-}
-
-document.querySelector("#color-tab").addEventListener("click", function() {
-    if (colorPalette.classList.contains("active")) {
-        hidePalette();
-    } else {
-        showPalette();
+export function loadPalette(colorsArray) {
+    for (let i = 0; i < colorsArray.length; i++) {
+        const colorElement = document.createElement("div");
+        colorElement.className = "colors";
+        colorElement.style.backgroundColor = colorsArray[i];
+        colorElement.id = i;
+    
+        colorElement.onclick = function () {
+            const color_id = this.id;
+    
+            const colorChangeEvent = new CustomEvent("colorSelected", {
+                detail: { color_id: color_id }
+            });
+            document.dispatchEvent(colorChangeEvent);
+        };
+    
+        colorContainer.appendChild(colorElement);
     }
-})
+    
+    document.querySelector("#color-tab").addEventListener("click", function() {
+        if (colorPalette.classList.contains("active")) {
+            hidePalette();
+        } else {
+            showPalette();
+        }
+    })
+}

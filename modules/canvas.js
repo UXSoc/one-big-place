@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { createCanvas, loadImage } = require('canvas')
+const { createCanvas } = require('canvas')
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -7,6 +7,8 @@ const colorsArray = [
     '#695BFF', '#94B3FF', '#801D9F', '#B449BF', '#E4ABFD', '#DD117E', '#FE3781', '#FE99A9',
     '#6D462F', '#9B6926', '#FEB470', '#000000', '#525252', '#888D90', '#D5D6D8', '#FFFFFF',
 ];
+const saveFrame_interval = 5*60*1000; // save frame every 5 minutes (for timelapse)
+const saveCanvas_interval = 60*1000; // save canvas to JSON every minute
 
 function parseFile(path) {
     if (!fs.existsSync(path)) {
@@ -18,7 +20,7 @@ function parseFile(path) {
 function writeJSONFile(filename, data) {
     fs.writeFileSync(`./json/${filename}.json`, JSON.stringify(data), function(err, result) {
         if(err) console.log('error', err);
-        console.log('\x1b[32m', `File Written: ${filename}.json`, '\x1b[0m')
+        console.log('\x1b[32m', `File Saved: ${filename}.json`, '\x1b[0m')
     });
 }
 
@@ -95,8 +97,22 @@ async function saveFrame() {
     })
 }
 
+function placePixel(x,y,id) {
+    canvas.canvas[y][x] = id
+    console.log(`placed pixel: ${x} ${y} ${id}`)
+}
+
+setTimeout(() => {
+    writeJSONFile("canvas", canvas)
+}, saveCanvas_interval)
+
+setTimeout(() => {
+    saveFrame()
+}, saveFrame_interval)
+
 module.exports = {
     load_canvas: load_canvas,
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
+    placePixel: placePixel,
 };

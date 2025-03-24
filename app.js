@@ -67,21 +67,24 @@ if (options !== undefined) {
     var server = https.createServer(socket_app)
 }
 var io = require('socket.io')(server, {
-    cors: {
-      origin: '*',
-      methods: ["GET", "POST"],
-      allowedHeaders: ["my-custom-header"],
-      credentials: true
-    }
-  });
+  cors: {
+    origin: '*',
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+});
 server.listen(SOCKETPORT);
 console.log(`SocketIO Server Started on port ${SOCKETPORT}`)
+
+const canvas = require('./modules/canvas');
+
 io.sockets.on('connection', newConnection);
 function newConnection(socket) {
   console.log(`${socket.request.connection.remoteAddress} connected`);
-  // socket.on('PlacePixel', PlacePixel);
+  socket.on('PaintPixel', (data) => {
+    canvas.placePixel(data.x, data.y, data.id)
+  });
 }
-const canvas = require('./modules/canvas'); // Import the module
-const paint = require('./modules/paint'); // Import the module
 
 canvas.load_canvas()

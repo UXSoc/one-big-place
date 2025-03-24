@@ -20,11 +20,12 @@ function generatePixl() {
 const canvas = document.querySelector(".panner-container canvas");
 const ctx = canvas.getContext("2d");
 
-export function paintPixel(color, coords) {
+export function paintPixel(color, color_id, coords, socket) {
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
   if (slotCount>0) {
     paintPixelOnCanvas(color, coords.x, coords.y)
+    socket.emit("PaintPixel", {"x":coords.x, "y":coords.y, "id":color_id})
     slotCount--;
     updateBits()
     if (!generationTimer) {

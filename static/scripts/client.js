@@ -51,8 +51,7 @@ pannerInit(target, {
 document.addEventListener("colorSelected", (e) => {
   const color_id = e.detail.color_id;
   const [x, y] = coords;
-  paintPixel(colorsArray[color_id], { x, y }); 
-  socket.emit("PaintPixel", {"x":x, "y":y, "id":color_id})
+  paintPixel(colorsArray[color_id], color_id, { x, y }, socket); 
 });
 
 loadPalette(colorsArray)

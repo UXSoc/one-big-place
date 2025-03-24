@@ -7,12 +7,14 @@ function parseFile(path) {
     }
     return JSON.parse(fs.readFileSync(path, 'utf8'));
 }
+
 function writeJSONFile(filename, data) {
     fs.writeFileSync(`./json/${filename}.json`, JSON.stringify(data), function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', `File Written: ${filename}.json`, '\x1b[0m')
     });
 }
+
 function initialize_empty_canvas() {
     var [width, height] = init_canvas_size
     console.log(`Initializing empty ${width} x ${height} canvas`)
@@ -30,10 +32,7 @@ function initialize_empty_canvas() {
     writeJSONFile("canvas", canvas)
 }
 
-var canvas = {
-    "canvas": [],
-    "user_grid": [],
-}
+var canvas = {"canvas": [],"user_grid": []}
 function load_canvas() {
     if (!fs.existsSync('./json')) {
         fs.mkdirSync('./json', { recursive: true });
@@ -44,12 +43,15 @@ function load_canvas() {
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
 }
+
 function get_canvas_json() {
     return canvas.canvas
 }
+
 function get_user_grid_json() {
     return canvas.user_grid
 }
+
 module.exports = {
     load_canvas: load_canvas,
     get_canvas_json: get_canvas_json,

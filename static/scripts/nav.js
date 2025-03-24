@@ -18,7 +18,6 @@ function closeModals() {
     })
 }
 
-
 document.addEventListener("click", (e) => {
     if (!NAV.contains(e.target)) {
         closeModals();

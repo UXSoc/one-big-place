@@ -5,29 +5,33 @@ const colorsArrayRGB = [
   [109, 70, 47], [155, 105, 38], [254, 180, 112], [0, 0, 0], [82, 82, 82], [136, 141, 144], [213, 214, 216], [255, 255, 255]
 ]
 
-export function loadCanvas(canvas, array2D) {
-  const rows = array2D.length;
-  const cols = array2D[0].length;
-
-  canvas.width = cols;
-  canvas.height = rows;
-  canvas.ctx = canvas.getContext("2d");
-
-  const imageData = canvas.ctx.createImageData(cols, rows);
-  const data = imageData.data;
-
-  for (let y = 0; y < rows; y++) {
-      for (let x = 0; x < cols; x++) {
-          const color = colorsArrayRGB[array2D[y][x]] || [255, 255, 255]; // Default to white
-          const index = (y * cols + x) * 4;
-          data[index] = color[0];
-          data[index + 1] = color[1];
-          data[index + 2] = color[2];
-          data[index + 3] = 255;
-      }
-  }
-
-  canvas.ctx.putImageData(imageData, 0, 0);
-  canvas.parentElement.updateSize();
-  canvas.parentElement.center();
+export function loadCanvas(canvas) {
+  fetch(`json/canvas`)
+  .then(response => response.json()) 
+  .then(array2D => {
+    const rows = array2D.length;
+    const cols = array2D[0].length;
+  
+    canvas.width = cols;
+    canvas.height = rows;
+    canvas.ctx = canvas.getContext("2d");
+  
+    const imageData = canvas.ctx.createImageData(cols, rows);
+    const data = imageData.data;
+  
+    for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+            const color = colorsArrayRGB[array2D[y][x]] || [255, 255, 255]; // Default to white
+            const index = (y * cols + x) * 4;
+            data[index] = color[0];
+            data[index + 1] = color[1];
+            data[index + 2] = color[2];
+            data[index + 3] = 255;
+        }
+    }
+  
+    canvas.ctx.putImageData(imageData, 0, 0);
+    canvas.parentElement.updateSize();
+    canvas.parentElement.center();
+  }) 
 }

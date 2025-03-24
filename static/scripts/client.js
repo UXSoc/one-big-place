@@ -48,8 +48,4 @@ document.addEventListener("colorSelected", (e) => {
   paintPixel(selectedColor, { x, y }); 
 });
 
-fetch(`json/canvas`)
-.then(response => response.json()) 
-.then(json => { 
-  loadCanvas(target.querySelector('.image'), json)
-}) 
+loadCanvas(target.querySelector('.image'))

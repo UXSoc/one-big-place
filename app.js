@@ -32,6 +32,14 @@ app.get("/modals/:filename", (req, res) => {
   });
 });
 
+app.get('/json/canvas', (req, res) => {
+  res.json(canvas.get_canvas_json());
+});
+
+app.get('/json/user_grid', (req, res) => {
+  res.json(canvas.get_user_grid_json());
+});
+
 app.listen(port, () => {
   console.log(`listening on port ${port} ( http://localhost:${port}/ )`);
 })
@@ -69,7 +77,11 @@ var io = require('socket.io')(server, {
   });
 server.listen(SOCKETPORT);
 console.log(`SocketIO Server Started on port ${SOCKETPORT}`)
-
+io.sockets.on('connection', newConnection);
+function newConnection(socket) {
+  console.log(`${socket.request.connection.remoteAddress} connected`);
+  // socket.on('PlacePixel', PlacePixel);
+}
 const canvas = require('./server_scripts/canvas'); // Import the module
 
-canvas.loadCanvas()
+canvas.load_canvas()

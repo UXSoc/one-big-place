@@ -22,7 +22,7 @@ export function loadPalette(pixelSelector) {
         colorElement.onclick = function () {
             const color_id = this.id;
             const [x, y] = pixelSelector.getPixelSelector()
-            paintPixel(color_id, { x, y }, socket);
+            paintPixel(color_id, x, y, socket);
         };
     
         colorContainer.appendChild(colorElement);

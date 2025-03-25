@@ -29,9 +29,8 @@ const ctx = canvas.getContext("2d");
 export function paintPixel(color_id, coords, socket) {
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
-  var color = colorsArray[color_id]
   if (slotCount>0) {
-    paintPixelOnCanvas(color, coords.x, coords.y)
+    paintPixelOnCanvas(color_id, coords.x, coords.y)
     socket.emit("PaintPixel", {"x":coords.x, "y":coords.y, "id":color_id})
     slotCount--;
     updateBits()

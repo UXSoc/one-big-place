@@ -17,6 +17,10 @@ const port = 3000;
 app.use(express.static("static"));
 
 app.get("/", (req, res) => {
+  res.sendFile("landing.html", {root: path.join(__dirname)});
+})
+
+app.get("/canvas", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
 })
 

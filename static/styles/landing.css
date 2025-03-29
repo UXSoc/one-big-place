@@ -64,7 +64,7 @@ header img {
     position: absolute;
     align-self: center;
     width: 175%;
-    box-shadow: rgba(108, 101, 246, 0.73) 0 0 80px 15px;
+    box-shadow: rgba(108, 101, 246, 0.73) 0 0 80px 12px;
 }
 
 .header__timer__text {
@@ -88,10 +88,10 @@ header img {
     position: absolute;
     align-self: center;
     width: 100%;
-    box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 15px;
+    box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 12px;
 }
 
-@media only screen and (max-width: 830px) {
+@media only screen and (max-width: 900px) {
     header img {
         width: 15rem;
     }
@@ -118,10 +118,6 @@ header img {
 }
 
 @media only screen and (max-width: 660px) {
-    header img {
-        width: 15rem;
-    }
-
     .header__centerText {
         gap: 2rem;
     }

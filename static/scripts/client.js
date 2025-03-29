@@ -9,7 +9,6 @@ const ZOOM_THRESHOLD = 5;
 let pixelSelector = new PixelSelector();
 
 var target = document.getElementById('canvas')
-var body = document.querySelector("body");
 var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
 pannerInit(target, {

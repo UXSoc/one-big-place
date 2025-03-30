@@ -20,6 +20,14 @@ app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
 })
 
+app.get("/register", (req, res) => {
+  res.sendFile("register.html", {root: path.join(__dirname)});
+})
+
+app.get("/login", (req, res) => {
+  res.sendFile("login.html", {root: path.join(__dirname)});
+})
+
 app.get("/modals/:filename", (req, res) => {
   const filename = req.params.filename;
   const filePath = path.join(__dirname, "modals", filename);

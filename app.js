@@ -1,7 +1,7 @@
 require('dotenv').config()
+const {Sequelize} = require("sequelize");
 const express = require("express");
 const app = express();
-const pgp = require('pg-promise')(/*options*/);
 
 const dbuser = process.env.DBUSER;
 const dbpass = process.env.DBPASS;
@@ -9,12 +9,18 @@ const dbhost = process.env.DBHOST;
 const dbport = process.env.DBPORT;
 const dbname = process.env.DBNAME;
 const cn = `postgres://${dbuser}:${dbpass}@${dbhost}:${dbport}/${dbname}`;
-const db = pgp(cn);
+const sequelize = new Sequelize(cn);
 
 const path = require('path');
 const port = 3000;
 
 app.use(express.static("static"));
+
+sequelize.authenticate().then(() => {
+  console.log("Connection to database has been established successfully.");
+}).catch((error) => {
+  console.error("Unable to connect to the database:", error);
+  });
 
 app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});

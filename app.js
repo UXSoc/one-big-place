@@ -1,26 +1,19 @@
 require('dotenv').config()
-const {Sequelize} = require("sequelize");
+const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
-const app = express();
-
-const dbuser = process.env.DBUSER;
-const dbpass = process.env.DBPASS;
-const dbhost = process.env.DBHOST;
-const dbport = process.env.DBPORT;
-const dbname = process.env.DBNAME;
-const cn = `postgres://${dbuser}:${dbpass}@${dbhost}:${dbport}/${dbname}`;
-const sequelize = new Sequelize(cn);
-
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
-const port = 3000;
+
+const app = express();
+const prisma = new PrismaClient();
+const port = process.env.APP_PORT || 3000;
 
 app.use(express.static("static"));
-
-sequelize.authenticate().then(() => {
-  console.log("Connection to database has been established successfully.");
-}).catch((error) => {
-  console.error("Unable to connect to the database:", error);
-  });
+app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
@@ -28,6 +21,25 @@ app.get("/", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.sendFile("register.html", {root: path.join(__dirname)});
+})
+
+app.post("/register", async (req, res, next) => {
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username: req.body.username,
+        password: req.body.password,
+      },
+    });
+    console.log("User created successfully!");
+    console.log(user);
+    const users = await prisma.user.findMany();
+    console.log(users);
+    res.redirect("/");
+  } catch(err) {
+    console.log("Could not create the new user.");
+    return next(err);
+  }
 })
 
 app.get("/login", (req, res) => {
@@ -56,12 +68,12 @@ app.get('/json/user_grid', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`listening on port ${port} ( http://localhost:${port}/ )`);
+  console.log(`Listening on port ${port} ( http://localhost:${port}/ )`);
 })
 
 
 // Setup Socket.io
-const SOCKETPORT = process.env.SOCKETPORT;
+const SOCKETPORT = process.env.SOCKET_PORT;
 const fs = require('fs');
 
 try {

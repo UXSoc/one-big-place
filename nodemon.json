@@ -2,4 +2,3 @@
     "watch": ["."], 
     "ignore": ["json/*", "timelapse/*"]
 }
-  

@@ -15,6 +15,50 @@ app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
+// https://www.theodinproject.com/lessons/node-path-nodejs-authentication-basics
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      // const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      const user = await prisma.user.findUnique({
+        where: {
+          username: username,
+        }
+      })
+
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      if (user.password !== password) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+      return done(null, user);
+    } catch(err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    // const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id,
+      }
+    })
+
+    done(null, user);
+  } catch(err) {
+    done(err);
+  }
+});
+
 app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
 })
@@ -45,6 +89,13 @@ app.post("/register", async (req, res, next) => {
 app.get("/login", (req, res) => {
   res.sendFile("login.html", {root: path.join(__dirname)});
 })
+
+app.post("/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login"
+  })
+);
 
 app.get("/modals/:filename", (req, res) => {
   const filename = req.params.filename;

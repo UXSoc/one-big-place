@@ -11,7 +11,7 @@ datasource db {
 model User {
   id             Int       @id @default(autoincrement())
   username       String    @unique @db.VarChar(255)
-  password       String    @db.VarChar(6)
+  password       String    @db.VarChar(255)
   lastPlacedDate DateTime? @db.Timestamptz(6)
   lastBitCount   Int?
 }

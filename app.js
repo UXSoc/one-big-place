@@ -3,34 +3,37 @@ const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
-const LocalStrategy = require('passport-local').Strategy;
-const path = require('path');
+const LocalStrategy = require("passport-local").Strategy;
+const path = require("path");
+const bcrypt = require("bcrypt");
 
 const app = express();
 const prisma = new PrismaClient();
 const port = process.env.APP_PORT || 3000;
+const saltRounds = 10;
 
 app.use(express.static("static"));
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-// https://www.theodinproject.com/lessons/node-path-nodejs-authentication-basics
-
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      // const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      let match;
       const user = await prisma.user.findUnique({
         where: {
           username: username,
         }
       })
-
-      if (!user) {
+      
+      if (user !== null) {
+        match = await bcrypt.compare(password, user.password);
+      }
+      if (user === null) {
         return done(null, false, { message: "Incorrect username" });
       }
-      if (user.password !== password) {
+      if (!match) {
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
@@ -46,7 +49,6 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    // const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     const user = await prisma.user.findUnique({
       where: {
         id: id,
@@ -69,19 +71,16 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res, next) => {
   try {
-    const user = await prisma.user.create({
+    let hashedPassword;
+    hashedPassword = await bcrypt.hashSync(req.body.password, saltRounds);
+    await prisma.user.create({
       data: {
         username: req.body.username,
-        password: req.body.password,
+        password: hashedPassword,
       },
     });
-    console.log("User created successfully!");
-    console.log(user);
-    const users = await prisma.user.findMany();
-    console.log(users);
     res.redirect("/");
   } catch(err) {
-    console.log("Could not create the new user.");
     return next(err);
   }
 })
@@ -93,9 +92,18 @@ app.get("/login", (req, res) => {
 app.post("/login",
   passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/login"
+    failureRedirect: "/login",
   })
 );
+
+app.get("/logout", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
 
 app.get("/modals/:filename", (req, res) => {
   const filename = req.params.filename;
@@ -121,7 +129,6 @@ app.get('/json/user_grid', (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on port ${port} ( http://localhost:${port}/ )`);
 })
-
 
 // Setup Socket.io
 const SOCKETPORT = process.env.SOCKET_PORT;

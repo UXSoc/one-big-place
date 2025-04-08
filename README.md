@@ -1,9 +1,11 @@
 # One Big Place
 
-## Setup
+## Setup (For Development)
 
-1. run `npm i` to install dependencies
-2. duplicate the file ".env.example" and rename the duplicate file to ".env"
-2. run `npm run dev` to start the website
+1. Run `npm i` to install dependencies.
+2. Duplicate .env.example and rename the duplicate to .env
+3. Populate .env according to your workspace.
+4. Run `npx prisma migrate dev` to create the database.
+5. Run `npm run dev` to start the website.
 
-by default, the website will be accessible at https://localhost:3000/
+By default, the website will be accessible at <https://localhost:3000/>.

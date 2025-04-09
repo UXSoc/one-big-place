@@ -36,7 +36,7 @@ nav > ul > li {
 nav > ul > li:hover, nav > ul > li.active {
     background-color: #f0e4ff;
 }
-.modal {
+.nav-tab {
     position: fixed;
     background-color: white;
     border-radius: 20px;
@@ -96,7 +96,7 @@ nav > ul > li:hover, nav > ul > li.active {
         opacity: 1;
         visibility: visible;
     }
-    .modal {
+    .nav-tab {
         position: absolute;
         display: block;
         background-color: white;

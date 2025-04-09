@@ -75,11 +75,11 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.sendFile("index.html", {root: path.join(__dirname)});
+  res.sendFile("html/index.html", {root: path.join(__dirname)});
 })
 
 app.get("/register", (req, res) => {
-  res.sendFile("register.html", {root: path.join(__dirname)});
+  res.sendFile("html/auth/register.html", {root: path.join(__dirname)});
 })
 
 app.post("/register", async (req, res, next) => {
@@ -102,7 +102,7 @@ app.post("/register", async (req, res, next) => {
 })
 
 app.get("/login", (req, res) => {
-  res.sendFile("login.html", {root: path.join(__dirname)});
+  res.sendFile("/html/auth/login.html", {root: path.join(__dirname)});
 })
 
 app.post("/login",

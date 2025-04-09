@@ -1,6 +1,6 @@
 const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
 const NAV = document.querySelector("nav")
-const MODALS = [
+const NAV_TABS = [
     "leaderboard",
     "challenges",
     "coverage",
@@ -8,8 +8,8 @@ const MODALS = [
     "credits",
 ]
 
-function closeModals() {
-    document.querySelectorAll(".modal").forEach((item) => {
+function closeTabs() {
+    document.querySelectorAll(".nav-tab").forEach((item) => {
         item.remove();
     })
     NAV.classList.remove("active")
@@ -20,25 +20,25 @@ function closeModals() {
 
 document.addEventListener("click", (e) => {
     if (!NAV.contains(e.target)) {
-        closeModals();
+        closeTabs();
     }
 })
 
 for (let i = 0; i < NAV_ITEMS.length; i++) {
     NAV_ITEMS[i].addEventListener('click', function() {
-        closeModals();
+        closeTabs();
         NAV.classList.add("active")
         NAV_ITEMS[i].classList.add("active")
-        fetch(`modals/${MODALS[i]}.html`) 
+        fetch(`html/nav_tabs/${NAV_TABS[i]}.html`) 
         .then(response => response.text()) 
         .then(html => { 
-            var modal = document.createElement("div")
-            modal.className = "modal"
+            var tab = document.createElement("div")
+            tab.className = "nav-tab"
             if (window.matchMedia('only screen and (min-width: 1200px)').matches) {
-                modal.style.maxHeight = `${NAV.offsetHeight}px`;
+                tab.style.maxHeight = `${NAV.offsetHeight}px`;
             }
-            modal.innerHTML = html
-            NAV.appendChild(modal);
+            tab.innerHTML = html
+            NAV.appendChild(tab);
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
     });

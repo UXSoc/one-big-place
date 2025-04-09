@@ -191,3 +191,13 @@ io.sockets.on('connection', (socket) => {
 });
 
 canvas.load_canvas()
+
+function cleanup() {
+  console.log("Saving Data...")
+  canvas.saveCanvasData();
+  canvas.saveFrame(true);
+}
+
+process.on("SIGINT", () => {
+  cleanup();
+});

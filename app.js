@@ -6,27 +6,34 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
+const Joi = require("joi");
 
 const app = express();
 const prisma = new PrismaClient();
 const port = process.env.APP_PORT || 3000;
 const saltRounds = 10;
 
-app.use(express.static("static"));
-app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
-app.use(passport.session());
-app.use(express.urlencoded({ extended: false }));
+const schema = Joi.object({
+  username: Joi.string().alphanum().min(3).max(30).required(),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+  confirmPassword: Joi.ref("password"),
+}).with("password", "confirmPassword");
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
+      if (username.length === 0 || password.length === 0) {
+        return done(null, false, { message: "No username or password given"});
+      }
       let match;
+      // const value = await schema.validateAsync({ username: username, password: password, confirmPassword: password });
+      // const validatedUsername = value["username"];
+      // const validatedPassword = value["password"];
       const user = await prisma.user.findUnique({
         where: {
           username: username,
         }
       })
-      
       if (user !== null) {
         match = await bcrypt.compare(password, user.password);
       }
@@ -37,7 +44,8 @@ passport.use(
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
-    } catch(err) {
+    }
+    catch(err) {
       return done(err);
     }
   })
@@ -54,12 +62,17 @@ passport.deserializeUser(async (id, done) => {
         id: id,
       }
     })
-
     done(null, user);
-  } catch(err) {
+  }
+  catch(err) {
     done(err);
   }
 });
+
+app.use(express.static("static"));
+app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   res.sendFile("index.html", {root: path.join(__dirname)});
@@ -71,11 +84,14 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res, next) => {
   try {
+    const value = await schema.validateAsync({ username: req.body.username, password: req.body.password, confirmPassword: req.body.confirmPassword });
+    const validatedUsername = value["username"];
+    const validatedPassword = value["password"];
     let hashedPassword;
-    hashedPassword = await bcrypt.hashSync(req.body.password, saltRounds);
+    hashedPassword = await bcrypt.hashSync(validatedPassword, saltRounds);
     await prisma.user.create({
       data: {
-        username: req.body.username,
+        username: validatedUsername,
         password: hashedPassword,
       },
     });
@@ -93,6 +109,7 @@ app.post("/login",
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
+    failureMessage: true,
   })
 );
 

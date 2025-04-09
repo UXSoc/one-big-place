@@ -51,6 +51,7 @@ function load_canvas() {
     var parsedCanvas = parseFile("./canvas_data/canvas.json")
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
+    saveFrame()
 }
 
 function get_canvas_json() {

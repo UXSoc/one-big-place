@@ -138,6 +138,5 @@ dist
 .pnp.*
 
 #json data
-json/
-timelapse/
+canvas_data/
 generated/

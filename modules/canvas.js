@@ -18,7 +18,7 @@ function parseFile(path) {
 }
 
 function writeJSONFile(filename, data) {
-    fs.writeFileSync(`./json/${filename}.json`, JSON.stringify(data), function(err, result) {
+    fs.writeFileSync(`./canvas_data/${filename}.json`, JSON.stringify(data), function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', `File Saved: ${filename}.json`, '\x1b[0m')
     });
@@ -43,12 +43,12 @@ function initialize_empty_canvas() {
 
 var canvas = {"canvas": [],"user_grid": []}
 function load_canvas() {
-    if (!fs.existsSync('./json')) {
-        fs.mkdirSync('./json', { recursive: true });
-        console.log('json directory created');
+    if (!fs.existsSync('./canvas_data')) {
+        fs.mkdirSync('./canvas_data', { recursive: true });
+        console.log('canvas_data directory created');
         initialize_empty_canvas();
     }
-    var parsedCanvas = parseFile("./json/canvas.json")
+    var parsedCanvas = parseFile("./canvas_data/canvas.json")
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
     saveFrame()
@@ -77,7 +77,7 @@ function formatDate(date) {
 }
 
 async function saveFrame() {
-    if (!fs.existsSync('./timelapse'))  fs.mkdirSync('./timelapse', { recursive: true });
+    if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
     var width = canvas.canvas[0].length
     var height = canvas.canvas.length
     var frame_canvas = createCanvas(width, height)
@@ -91,7 +91,7 @@ async function saveFrame() {
     var buffer = frame_canvas.toBuffer('image/png')
     var d = new Date();
     var d_tz = convertTZ(d)
-    await fs.writeFile(`./timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
+    await fs.writeFile(`./canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', 'Frame saved', '\x1b[0m')
     })

@@ -51,7 +51,6 @@ function load_canvas() {
     var parsedCanvas = parseFile("./canvas_data/canvas.json")
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
-    saveFrame()
 }
 
 function get_canvas_json() {
@@ -101,6 +100,16 @@ function paintPixel(x,y,id) {
     canvas.canvas[y][x] = id
     console.log(`placed pixel: ${x} ${y} ${id}`)
 }
+
+function cleanup() {
+    saveFrame();
+    writeJSONFile("canvas", canvas);
+}
+
+process.on("SIGINT", () => {
+  cleanup();
+  process.exit(0);
+});
 
 setTimeout(() => {
     writeJSONFile("canvas", canvas)

@@ -107,12 +107,12 @@ function saveCanvasData() {
     writeJSONFile("canvas", canvas)
 }
 
-setTimeout(() => {
+setInterval(() => {
     saveCanvasData()
 }, saveCanvas_interval)
 
-setTimeout(() => {
-    saveFrame();
+setInterval(() => {
+    saveFrame(false);
 }, saveFrame_interval)
 
 module.exports = {

@@ -140,3 +140,6 @@ dist
 #json data
 canvas_data/
 generated/
+
+# docker
+docker-compose.yml

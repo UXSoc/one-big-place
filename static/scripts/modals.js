@@ -25,6 +25,7 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
     header.innerText = heading;
     p.innerText = message;
     closeButton.innerText = "Ok";
+    closeButton.style.margin = "0 auto";
     closeButton.addEventListener('click', (e) => {
         e.target.parentElement.remove()
         onclose();

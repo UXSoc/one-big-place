@@ -24,7 +24,7 @@ let timerFunc = setInterval(() => {
 
   webTimer.innerText = timerHours + ":" + timerMinutes + ":" + timerSeconds;
 
-  if (timerDistance < 0) {
+  if (timeDistance < 0) {
     clearInterval(timerFunc);
     webTimer.innerText = "00:00:00";
   }

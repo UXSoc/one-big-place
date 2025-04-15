@@ -3,6 +3,11 @@
     src: url("../fonts/PixL.otf");
 }
 
+:root {
+    --title-glow: rgba(1, 197, 255, 1) 0 0 20px;
+    --timer-glow: rgba(180, 176, 255, 1) 0 0 15px;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -42,12 +47,16 @@ header {
     width: 100%;
 }
 
+.header__logo {
+    filter: drop-shadow(0 0 80px rgba(1, 197, 255, 0.8));
+}
+
 header h1 {
     font-size: 7.5rem;
     font-weight: 500;
     color: rgba(1, 197, 255, 1);
     margin: 0;
-    animation: 8s infinite linear flicker;
+    animation: 5s infinite linear title-flicker;
 }
 
 header p {
@@ -75,7 +84,7 @@ header img {
 .header__timer__text {
     font-size: 5.5rem;
     font-weight: 500;
-    animation: 10s infinite linear flicker;
+    animation: 10s infinite linear timer-flicker;
     font-family: "PixL", sans-serif;
 }
 
@@ -98,32 +107,108 @@ header img {
     box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 12px;
 }
 
-@keyframes flicker {
+@keyframes title-flicker {
     0% {
+        text-shadow: var(--title-glow);
         opacity: 1;
     }
-    5% {
-        text-shadow: rgba(255, 255, 255, 0.2) 0 0 12px;
-        opacity: 0.9;
-    }
-    6% {
+    19% {
+        text-shadow: var(--title-glow);
         opacity: 1;
     }
-    7% {
-        text-shadow: rgba(255, 255, 255, 0.3) 0 0 12px;
+    20% {
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
         opacity: 0.8;
     }
-    8% {
+    21% {
+        text-shadow: var(--title-glow);
         opacity: 1;
     }
-    80% {
+    29% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    30% {
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.6;
+    }
+    31% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    82% {
+        text-shadow: var(--title-glow);
         opacity: 1;
     }
     83% {
-        text-shadow: rgba(255, 255, 255, 0.15) 0 0 12px;
-        opacity: 0.85;
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.7;
     }
     84% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    100% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+}
+
+@keyframes timer-flicker {
+    0% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    19% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    20% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.8;
+    }
+    21% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    29% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    30% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.6;
+    }
+    31% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    82% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    83% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.7;
+    }
+    84% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    100% {
+        text-shadow: var(--timer-glow);
         opacity: 1;
     }
 }
@@ -174,6 +259,7 @@ header img {
     .header__queue {
         font-size: 2.5rem;
     }
+}
 
 .info {
     width: 100%;
@@ -208,5 +294,4 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
-}
 }

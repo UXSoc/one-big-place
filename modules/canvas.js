@@ -1,5 +1,6 @@
 const fs = require('fs');
-const { createCanvas } = require('canvas')
+const { createCanvas } = require('canvas');
+const { func } = require('joi');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -51,7 +52,6 @@ function load_canvas() {
     var parsedCanvas = parseFile("./canvas_data/canvas.json")
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
-    saveFrame()
 }
 
 function get_canvas_json() {
@@ -76,7 +76,7 @@ function formatDate(date) {
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
 }
 
-async function saveFrame() {
+async function saveFrame(close_on_exit=false) {
     if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
     var width = canvas.canvas[0].length
     var height = canvas.canvas.length
@@ -94,6 +94,7 @@ async function saveFrame() {
     await fs.writeFile(`./canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', 'Frame saved', '\x1b[0m')
+        if (close_on_exit) process.exit(0);
     })
 }
 
@@ -102,12 +103,16 @@ function paintPixel(x,y,id) {
     console.log(`placed pixel: ${x} ${y} ${id}`)
 }
 
-setTimeout(() => {
+function saveCanvasData() {
     writeJSONFile("canvas", canvas)
+}
+
+setInterval(() => {
+    saveCanvasData()
 }, saveCanvas_interval)
 
-setTimeout(() => {
-    saveFrame()
+setInterval(() => {
+    saveFrame(false);
 }, saveFrame_interval)
 
 module.exports = {
@@ -115,4 +120,6 @@ module.exports = {
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
     paintPixel: paintPixel,
+    saveFrame: saveFrame,
+    saveCanvasData: saveCanvasData,
 };

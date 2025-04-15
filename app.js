@@ -102,7 +102,7 @@ app.post("/register", async (req, res, next) => {
 })
 
 app.get("/login", (req, res) => {
-  res.sendFile("/html/auth/login.html", {root: path.join(__dirname)});
+  res.sendFile("html/auth/login.html", {root: path.join(__dirname)});
 })
 
 app.post("/login",
@@ -122,15 +122,16 @@ app.get("/logout", (req, res, next) => {
   });
 });
 
-app.get("/modals/:filename", (req, res) => {
+app.get("/html/:dir/:filename", (req, res) => {
+  const dir = req.params.dir;
   const filename = req.params.filename;
-  const filePath = path.join(__dirname, "modals", filename);
+  const filePath = path.join(__dirname, "html", dir, filename);
   if (path.extname(filename) !== ".html") {
     return res.status(403).send("Forbidden");
   }
   res.sendFile(filePath, (err) => {
     if (err) {
-      res.status(404).send("File not found");
+      res.status(404).send(`File not found: ${filePath}`);
     }
   });
 });
@@ -190,3 +191,13 @@ io.sockets.on('connection', (socket) => {
 });
 
 canvas.load_canvas()
+
+function cleanup() {
+  console.log("Saving Data...")
+  canvas.saveCanvasData();
+  canvas.saveFrame(true);
+}
+
+process.on("SIGINT", () => {
+  cleanup();
+});

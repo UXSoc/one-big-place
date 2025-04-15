@@ -2,6 +2,7 @@ require('dotenv').config()
 const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
 const session = require("express-session");
+const sharedSession = require('express-socket.io-session');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
@@ -97,6 +98,7 @@ app.post("/register", async (req, res, next) => {
     });
     res.redirect("/");
   } catch(err) {
+    res.redirect("/");
     return next(err);
   }
 })
@@ -107,8 +109,8 @@ app.get("/login", (req, res) => {
 
 app.post("/login",
   passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
+    successRedirect: "/?success=Login+successful",
+    failureRedirect: "/?error=Invalid+username+or+password",
     failureMessage: true,
   })
 );
@@ -144,12 +146,7 @@ app.get('/json/user_grid', (req, res) => {
   res.json(canvas.get_user_grid_json());
 });
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port} ( http://localhost:${port}/ )`);
-})
-
 // Setup Socket.io
-const SOCKETPORT = process.env.SOCKET_PORT;
 const fs = require('fs');
 
 try {
@@ -161,15 +158,11 @@ try {
 } catch {
 }
 
-var socket_app = express()
-if (!!options) {
-    const https = require('https');
-    var server = https.createServer(options, socket_app)
-} else {
-    const https = require('http');
-    var server = https.createServer(socket_app)
-}
-var io = require('socket.io')(server, {
+const httpServer = !!options 
+  ? require('https').createServer(options, app) 
+  : require('http').createServer(app);
+
+var io = require('socket.io')(httpServer, {
   cors: {
     origin: '*',
     methods: ["GET", "POST"],
@@ -177,8 +170,16 @@ var io = require('socket.io')(server, {
     credentials: true
   }
 });
-server.listen(SOCKETPORT);
-console.log(`SocketIO Server Started on port ${SOCKETPORT}`)
+httpServer.listen(port, () => {
+  console.log(`HTTP and Socket.IO listening on port ${port}`);
+});
+io.use(sharedSession(session({
+  secret: "cats",
+  resave: false,
+  saveUninitialized: false
+}), {
+  autoSave: true  // Automatically save session changes
+}));
 
 const canvas = require('./modules/canvas');
 

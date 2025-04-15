@@ -16,6 +16,7 @@ const saltRounds = 10;
 
 const schema = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
+  idNumber: Joi.string().pattern(/^\d{6}$/).required(),
   password: Joi.string().pattern(/^\d{6}$/).required(),
   confirmPassword: Joi.ref("password"),
 }).with("password", "confirmPassword");
@@ -39,7 +40,7 @@ passport.use(
         match = await bcrypt.compare(password, user.password);
       }
       if (user === null) {
-        return done(null, false, { message: "Incorrect username" });
+        return done(null, false, { message: "User does not exist" });
       }
       if (!match) {
         return done(null, false, { message: "Incorrect password" });
@@ -91,20 +92,24 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const value = await schema.validateAsync({ username: req.body.username, password: req.body.password, confirmPassword: req.body.confirmPassword });
+    const username = req.body.username.toLowerCase();
+    const value = await schema.validateAsync({ username: username, idNumber: req.body.id_number, password: req.body.password, confirmPassword: req.body.confirmPassword });
     const validatedUsername = value["username"];
     const validatedPassword = value["password"];
+    const validatedIDNumber = parseInt(value["idNumber"]);
     let hashedPassword;
     hashedPassword = await bcrypt.hashSync(validatedPassword, saltRounds);
     await prisma.user.create({
       data: {
         username: validatedUsername,
         password: hashedPassword,
+        idNumber: validatedIDNumber,
       },
     });
     console.log(`Registered user: ${validatedUsername} ${validatedPassword}`)
     res.redirect("/?success=Registration+successful&open-modal=login");
   } catch(err) {
+    console.error(err);
     let errorMessage = "Registration+failed";
     
     // Joi validation errors
@@ -222,6 +227,7 @@ io.sockets.on('connection', (socket) => {
 });
 
 canvas.load_canvas()
+canvas.saveFrame();
 
 function cleanup() {
   console.log("Saving Data...")

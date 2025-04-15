@@ -5,38 +5,45 @@
     <input required id="username" name="username" placeholder="Username" type="text" />
   </div>
   <div>
+    <label for="password">ID Number</label>
+    <input required id="idNumber" name="id_number" class="digits-input" placeholder="e.g. 23xxxx" type="text" minlength="6" maxlength="6" pattern="\d{6}"/>
+  </div>
+  <div>
     <label for="password">PIN</label>
-    <input required id="registerPassword" name="password" placeholder="6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
+    <input required id="registerPassword" name="password" class="digits-input" placeholder="6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
   </div>
   <div>
     <label for="confirmPassword">Confirm PIN:</label>
-    <input required id="confirmRegisterPassword" name="confirmPassword" placeholder="Confirm 6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
+    <input required id="confirmRegisterPassword" name="confirmPassword" class="digits-input" placeholder="Confirm 6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
   </div>
   <button>Submit</button>
 </form>
 <p>Already have an account? <a href="" data-openmodal="login">Log in</a>.</p>
 <script>
-  const inputs = document.querySelectorAll('#registerPassword, #confirmRegisterPassword')
+  const password_inputs = document.querySelectorAll('#registerPassword, #confirmRegisterPassword')
+  const inputs = document.querySelectorAll('.digits-input')
   function validatePasswords() {
     console.log('validating')
     const pw = document.getElementById("registerPassword").value;
     const confirm = document.getElementById("confirmRegisterPassword").value;
     if (pw !== confirm) {
-      for (var input of inputs) {
+      for (var input of password_inputs) {
         input.style.outline = '2px solid red';
       }
       return false;
     }
-    for (var input of inputs) {
+    for (var input of password_inputs) {
       input.style.outline = 'none';
     }
     return true;
   }
-  for (var input of inputs) {
+  for (var input of password_inputs) {
     console.log(input)
     input.addEventListener('change', (e) => {
       validatePasswords();
     })
+  }
+  for (var input of inputs) {
     input.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/\D/g, '');
     })

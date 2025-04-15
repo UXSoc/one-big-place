@@ -42,7 +42,7 @@ header h1 {
     font-weight: 500;
     color: rgba(1, 197, 255, 1);
     margin: 0;
-    text-shadow: rgba(1, 197, 255, 0.73) 0 0 100px;
+    animation: 8s infinite linear flicker;
 }
 
 header p {
@@ -70,6 +70,7 @@ header img {
 .header__timer__text {
     font-size: 5.5rem;
     font-weight: 500;
+    animation: 10s infinite linear flicker;
 }
 
 .header__queue {
@@ -89,6 +90,36 @@ header img {
     align-self: center;
     width: 100%;
     box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 12px;
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 1;
+    }
+    5% {
+        text-shadow: rgba(255, 255, 255, 0.2) 0 0 12px;
+        opacity: 0.9;
+    }
+    6% {
+        opacity: 1;
+    }
+    7% {
+        text-shadow: rgba(255, 255, 255, 0.3) 0 0 12px;
+        opacity: 0.8;
+    }
+    8% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    83% {
+        text-shadow: rgba(255, 255, 255, 0.15) 0 0 12px;
+        opacity: 0.85;
+    }
+    84% {
+        opacity: 1;
+    }
 }
 
 @media only screen and (max-width: 900px) {
@@ -137,4 +168,39 @@ header img {
     .header__queue {
         font-size: 2.5rem;
     }
+}
+
+.info {
+    width: 100%;
+    height: fit-content;
+    padding: 2rem 12rem;
+    font-size: 1.8rem;
+}
+
+.info h2 {
+    color: #97E7FF;
+    font-weight: 500;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+}
+
+.info > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+}
+
+.info__heading-line {
+    width: 100%;
+    height: auto;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
 }

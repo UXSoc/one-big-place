@@ -43,6 +43,14 @@ export function openModal(name) {
         .then(html => { 
             modal.innerHTML = html;
             modal.id = `modal-${name}`;
+            var closeButton = document.createElement('p');
+            closeButton.className = 'close-modal-button';
+            closeButton.innerText = '✖';
+            closeButton.addEventListener('click', (e) => {
+                e.target.parentElement.remove()
+                onclose();
+            })
+            modal.append(closeButton);
             CONTAINER.appendChild(modal);
             const links = modal.querySelectorAll('a');
             for (var link of links) {

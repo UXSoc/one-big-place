@@ -67,4 +67,19 @@ input[type=text], input[type=password] {
     padding: .5rem 1rem;
     border-radius: 10px;
     margin: 1rem 0 auto auto;
+    cursor: pointer;
+}
+.modal .close-modal-button {
+    font-family: BlockCraft;
+    font-size: 2rem;
+    line-height: 2rem;
+    position: absolute;
+    padding: 1rem;
+    right: 1rem;
+    top: 1rem;
+    margin: 0;
+    cursor: pointer;
+}
+.modal .close-modal-button:hover {
+    scale: 1.1;
 }

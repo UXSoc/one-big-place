@@ -6,9 +6,7 @@ const MODALS = {
 
 export function closeModal(name) {
     const modal = document.getElementById(`modal-${name}`);
-    console.log(`${name} ${!!modal}`)
     if (!!modal) {
-        console.log(`closing ${name}`)
         modal.remove()
     };
 }
@@ -21,10 +19,10 @@ export function closeOthers() {
 
 export function openCustomModal(heading, message, closable=true, onclose=()=>{}) {
     var modal = document.createElement('div');
-    var h1 = document.createElement('p');
+    var header = document.createElement('h3');
     var p = document.createElement('p');
     var closeButton = document.createElement('button');
-    h1.innerText = heading;
+    header.innerText = heading;
     p.innerText = message;
     closeButton.innerText = "Ok";
     closeButton.addEventListener('click', (e) => {
@@ -32,7 +30,7 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
         onclose();
     })
     modal.className = "modal";
-    modal.append(h1, p, closeButton);
+    modal.append(header, p, closeButton);
     CONTAINER.appendChild(modal);
 }
 
@@ -47,7 +45,6 @@ export function openModal(name) {
             CONTAINER.appendChild(modal);
             const links = modal.querySelectorAll('a');
             for (var link of links) {
-                console.log(link.dataset.openmodal)
                 if (link.dataset.openmodal) {
                     link.addEventListener("click", (e) => {
                         e.preventDefault();
@@ -56,6 +53,15 @@ export function openModal(name) {
                     })
                 }
             }
+            const scripts = modal.querySelectorAll("script");
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement("script");
+                [...oldScript.attributes].forEach(attr =>
+                newScript.setAttribute(attr.name, attr.value)
+                );
+                newScript.text = oldScript.text;
+                oldScript.replaceWith(newScript);
+            });
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
 }

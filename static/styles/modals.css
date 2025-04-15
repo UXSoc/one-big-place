@@ -1,0 +1,37 @@
+#modals-container {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+.modal {
+    background-color: white;
+    border-radius: 25px;
+    filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
+    padding: 5rem;
+}
+.modal h1 {
+    font-family: PixelGame;
+    font-size: 5rem;
+    text-align: center;
+    margin: 0;
+}
+label {
+    font-family: BlockCraft;
+    display: block;
+    margin: .5rem auto;
+}
+input[type=text], input[type=password] {
+    font-family: BlockCraft;
+    border: none;
+    background-color: #e6e6e6;
+    padding: .5rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}

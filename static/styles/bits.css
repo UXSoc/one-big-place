@@ -39,9 +39,8 @@
 #bits-display > div > p {
     font-family: BlockCraft;
     margin: 0;
-    translate: 0 -10%;
-    line-height: 1.5rem;
     font-size: 1.5rem;
+    line-height: 1rem;
 }
 #bits-counter {
     display: flex;
@@ -73,7 +72,7 @@
     #bits-display {
         gap: 0;
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr auto;
+        grid-template-rows: 1fr 1fr;
 
         justify-content: center;
         align-items: center;
@@ -112,19 +111,11 @@
         font-size: 1em;
         font-weight: normal
     }
-    #bits-display > div > p {
-        font-family: BlockCraft;
-        margin: 0;
-        translate: 0 -40%;
-        line-height: 1.5rem;
-        font-size: 1.5rem;
-    }
     #bits-counter {
         display: flex;
         flex-direction: row;
         justify-content: space-evenly;
         gap: 12px;
-        margin: .6rem 0;
     }
     #bits-counter > div.filled {
         background-color: black;

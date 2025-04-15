@@ -70,8 +70,14 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+const sessionMiddleware = session({
+  secret: "cats",
+  resave: false,
+  saveUninitialized: false
+});
+
 app.use(express.static("static"));
-app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(sessionMiddleware);
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
@@ -96,8 +102,10 @@ app.post("/register", async (req, res, next) => {
         password: hashedPassword,
       },
     });
+    console.log(`Registered user: ${validatedUsername} ${validatedPassword}`)
     res.redirect("/");
   } catch(err) {
+    console.log(`Failed to register user`)
     res.redirect("/");
     return next(err);
   }
@@ -173,19 +181,27 @@ var io = require('socket.io')(httpServer, {
 httpServer.listen(port, () => {
   console.log(`HTTP and Socket.IO listening on port ${port}`);
 });
-io.use(sharedSession(session({
-  secret: "cats",
-  resave: false,
-  saveUninitialized: false
-}), {
+io.use(sharedSession(sessionMiddleware, {
   autoSave: true  // Automatically save session changes
 }));
 
 const canvas = require('./modules/canvas');
 
 io.sockets.on('connection', (socket) => {
-  console.log(`${socket.request.connection.remoteAddress} connected`);
+  
+  // if (!socket.handshake.session.passport?.user) {
+  //   console.log('Unauthenticated connection');
+  //   return socket.disconnect(); // Kick unauthenticated users
+  // }
+
+  // const userId = socket.handshake.session.passport.user;
+  // console.log(`Authenticated user ${userId} connected`);
+
   socket.on('PaintPixel', (data) => {
+    if (!socket.handshake.session.passport?.user) {
+      socket.emit("request_login");
+      return;
+    }
     canvas.paintPixel(data.x, data.y, data.id)
     io.emit("PaintPixel", data)
   });

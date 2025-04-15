@@ -1,25 +1,15 @@
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <title>One Big Place - Register</title>
-  </head>
-  <body>
-    <h1>Log in</h1>
-    <form method="post">
-      <div>
-        <div>
-          <label for="username">Username</label>
-          <input id="username" name="username" placeholder="Username" type="text" />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input required id="password" name="password" placeholder="Password" type="password" />
-        </div>
-      </div>
-      <button>Log in</button>
-    </form>
-    <p>Don't have an account? <a href="/register">Register for one</a>.</p>
-  </body>
-</html>
+<h1>Log in</h1>
+<form method="post">
+  <div>
+    <div>
+      <label for="username">Username</label>
+      <input id="username" name="username" placeholder="Username" type="text" autocomplete="off"/>
+    </div>
+    <div>
+      <label for="password">PIN</label>
+      <input required id="password" name="password" placeholder="6-Digit PIN" type="password" autocomplete="off"/>
+    </div>
+  </div>
+  <button>Log in</button>
+</form>
+<p>Don't have an account? <a href="/register">Register for one</a>.</p>

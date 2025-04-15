@@ -16,7 +16,7 @@ const saltRounds = 10;
 
 const schema = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+  password: Joi.string().pattern(/^\d{6}$/).required(),
   confirmPassword: Joi.ref("password"),
 }).with("password", "confirmPassword");
 
@@ -89,7 +89,7 @@ app.get("/register", (req, res) => {
   res.sendFile("html/auth/register.html", {root: path.join(__dirname)});
 })
 
-app.post("/register", async (req, res, next) => {
+app.post("/register", async (req, res) => {
   try {
     const value = await schema.validateAsync({ username: req.body.username, password: req.body.password, confirmPassword: req.body.confirmPassword });
     const validatedUsername = value["username"];
@@ -103,11 +103,20 @@ app.post("/register", async (req, res, next) => {
       },
     });
     console.log(`Registered user: ${validatedUsername} ${validatedPassword}`)
-    res.redirect("/");
+    res.redirect("/?success=Registration+successful&open-modal=login");
   } catch(err) {
-    console.log(`Failed to register user`)
-    res.redirect("/");
-    return next(err);
+    let errorMessage = "Registration+failed";
+    
+    // Joi validation errors
+    if (err.isJoi) {
+      errorMessage = err.details[0].message.replace(/ /g, '+');
+    }
+    // Prisma errors
+    else if (err.code === 'P2002') {
+      errorMessage = "Username+already+taken";
+    }
+    
+    res.redirect(`/?error=${errorMessage}&open-modal=register`);
   }
 })
 
@@ -115,13 +124,18 @@ app.get("/login", (req, res) => {
   res.sendFile("html/auth/login.html", {root: path.join(__dirname)});
 })
 
-app.post("/login",
-  passport.authenticate("local", {
-    successRedirect: "/?success=Login+successful",
-    failureRedirect: "/?error=Invalid+username+or+password",
-    failureMessage: true,
-  })
-);
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.redirect(`/?error=${encodeURIComponent(info.message)}&open-modal=login`);
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.redirect("/?success=Login+successful");
+    });
+  })(req, res, next);
+});
 
 app.get("/logout", (req, res, next) => {
   req.logout((err) => {

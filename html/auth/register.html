@@ -6,12 +6,39 @@
   </div>
   <div>
     <label for="password">PIN</label>
-    <input required id="password" name="password" placeholder="6-Digit PIN" type="password" />
+    <input required id="registerPassword" name="password" placeholder="6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
   </div>
   <div>
     <label for="confirmPassword">Confirm PIN:</label>
-    <input required id="confirmPassword" name="confirmPassword" placeholder="Confirm 6-Digit PIN" type="password" />
+    <input required id="confirmRegisterPassword" name="confirmPassword" placeholder="Confirm 6-Digit PIN" type="password" minlength="6" maxlength="6" pattern="\d{6}"/>
   </div>
   <button>Submit</button>
 </form>
 <p>Already have an account? <a href="" data-openmodal="login">Log in</a>.</p>
+<script>
+  const inputs = document.querySelectorAll('#registerPassword, #confirmRegisterPassword')
+  function validatePasswords() {
+    console.log('validating')
+    const pw = document.getElementById("registerPassword").value;
+    const confirm = document.getElementById("confirmRegisterPassword").value;
+    if (pw !== confirm) {
+      for (var input of inputs) {
+        input.style.outline = '2px solid red';
+      }
+      return false;
+    }
+    for (var input of inputs) {
+      input.style.outline = 'none';
+    }
+    return true;
+  }
+  for (var input of inputs) {
+    console.log(input)
+    input.addEventListener('change', (e) => {
+      validatePasswords();
+    })
+    input.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    })
+  }
+</script>

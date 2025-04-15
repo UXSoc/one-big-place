@@ -1,4 +1,4 @@
-import { openCustomModal } from "./modals.js";
+import { openCustomModal, openModal } from "./modals.js";
 
 export function handleURLParams() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -7,7 +7,9 @@ export function handleURLParams() {
     
     // Display error message if exists
     if (error) {
-        openCustomModal("An error has occurred.", decodeURIComponent(error))
+        const msg = decodeURIComponent(error);
+        onclose = (msg=="Invalid username or password")?() => {openModal('login')}:() => {}; 
+        openCustomModal("An error has occurred.", msg, true, onclose)
         window.history.replaceState({}, document.title, window.location.pathname);
     }
     

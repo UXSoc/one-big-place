@@ -19,7 +19,7 @@ export function closeOthers() {
     }
 }
 
-export function openCustomModal(heading, message, closable=true) {
+export function openCustomModal(heading, message, closable=true, onclose=()=>{}) {
     var modal = document.createElement('div');
     var h1 = document.createElement('p');
     var p = document.createElement('p');
@@ -29,6 +29,7 @@ export function openCustomModal(heading, message, closable=true) {
     closeButton.innerText = "Ok";
     closeButton.addEventListener('click', (e) => {
         e.target.parentElement.remove()
+        onclose();
     })
     modal.className = "modal";
     modal.append(h1, p, closeButton);

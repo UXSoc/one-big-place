@@ -3,16 +3,14 @@ import { loadCanvas } from "./canvas.js";
 import { PixelSelector } from "./selector.js";
 import { showPalette, hidePalette, loadPalette } from "./palette.js";
 import { connectToServer } from "./socket.js";
-import { openModal, closeModal } from "./modals.js";
 import { setupTabs } from "./nav.js";
 import { handleURLParams } from "./auth.js";
 
-const ZOOM_THRESHOLD = 5;
+const ZOOM_THRESHOLD = 15;
 
 let pixelSelector = new PixelSelector();
 
 var target = document.getElementById('canvas')
-var body = document.querySelector("body");
 var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
 pannerInit(target, {

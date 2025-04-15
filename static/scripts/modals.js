@@ -1,21 +1,21 @@
 const CONTAINER = document.querySelector("#modals-container");
-const MODALS = [
-    'login',
-    'register',
-]
+const MODALS = {
+    'login': 'auth/login',
+    'register': 'auth/register',
+}
 
-function close(name) {
+export function closeModal(name) {
     document.querySelector(`#modal-${name}`).remove();
 }
 
-function open(name) {
+export function openModal(name) {
     var modal = document.createElement('div');
-    tab.className = "modal";
-    fetch(`html/nav_tabs/${NAV_TABS[i]}.html`) 
+    modal.className = "modal";
+    fetch(`html/${MODALS[name]}.html`) 
         .then(response => response.text()) 
         .then(html => { 
             modal.innerHTML = html;
-            CONTAINER.appendChild(tab);
+            CONTAINER.appendChild(modal);
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
 }

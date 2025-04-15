@@ -5,6 +5,7 @@ import { showPalette, hidePalette, loadPalette } from "./palette.js";
 import { connectToServer } from "./socket.js";
 import { setupTabs } from "./nav.js";
 import { handleURLParams } from "./auth.js";
+import { loadSfx, playSfx } from "./sounds.js";
 
 const ZOOM_THRESHOLD = 15;
 
@@ -16,6 +17,7 @@ var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
       pixelSelector.setPixelSelector(target, x, y);
+      playSfx('select', 1);
       showPalette();
     },
     onDrag: () => {
@@ -43,5 +45,6 @@ pannerInit(target, {
 loadPalette(pixelSelector);
 loadCanvas(target.querySelector('.image'));
 connectToServer("localhost:3000");
+loadSfx();
 setupTabs();
 handleURLParams();

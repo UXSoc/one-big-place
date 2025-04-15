@@ -1,3 +1,5 @@
+import { playSfx } from "./sounds.js";
+
 let generationTimer = undefined;
 let slotCapacity = 6;
 let slotCount = 6;
@@ -32,6 +34,7 @@ export function paintPixel(color_id, x, y, socket) {
   if (slotCount>0) {
     paintPixelOnCanvas(color_id, x, y)
     slotCount--;
+    playSfx('place', 1);
     updateBits()
     if (!generationTimer) {
       generationTimer = generatePixl();

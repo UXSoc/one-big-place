@@ -14,17 +14,26 @@
     -moz-box-shadow: inset 0px 0px 183px 0px rgba(0,0,0,0.75);
     box-shadow: inset 0px 0px 183px 0px rgba(0,0,0,0.75);
 }
+#modals-container:not(:has(.modal)) {
+    display: none;
+}
 .modal {
+    display: none;
     background-color: white;
     border-radius: 25px;
     filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
     padding: 5rem;
+    text-align: center;
+}
+.modal:last-child {
+    display: block;
 }
 .modal h1 {
     font-family: PixelGame;
     font-size: 5rem;
     text-align: center;
     margin: 0;
+    font-weight: 100;
 }
 .modal *  {
     font-size: 1.5rem;
@@ -44,7 +53,6 @@ input[type=text], input[type=password] {
     width: 100%;
 }
 .modal button {
-    display: block;
     outline: none;
     border: none;
     font-family: BlockCraft;

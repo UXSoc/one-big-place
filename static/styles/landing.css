@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "PixL";
+    src: url("../fonts/PixL.otf");
+}
+
 * {
     box-sizing: border-box;
 }
@@ -71,6 +76,7 @@ header img {
     font-size: 5.5rem;
     font-weight: 500;
     animation: 10s infinite linear flicker;
+    font-family: "PixL", sans-serif;
 }
 
 .header__queue {
@@ -168,7 +174,6 @@ header img {
     .header__queue {
         font-size: 2.5rem;
     }
-}
 
 .info {
     width: 100%;
@@ -203,4 +208,5 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
+}
 }

@@ -5,6 +5,7 @@ import { showPalette, hidePalette, loadPalette } from "./palette.js";
 import { connectToServer } from "./socket.js";
 import { openModal, closeModal } from "./modals.js";
 import { setupTabs } from "./nav.js";
+import { handleURLParams } from "./auth.js";
 
 const ZOOM_THRESHOLD = 5;
 
@@ -43,5 +44,6 @@ pannerInit(target, {
 
 loadPalette(pixelSelector);
 loadCanvas(target.querySelector('.image'));
-connectToServer("localhost:2345");
+connectToServer("localhost:3000");
 setupTabs();
+handleURLParams();

@@ -284,9 +284,13 @@ header img {
     height: fit-content;
 }
 
+.info ul {
+    padding-left: 1rem;
+}
+
 .info__heading-line {
     width: 100%;
-    height: auto;
+    height: 1px;
 }
 
 footer {
@@ -294,4 +298,23 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
+}
+
+
+@media only screen and (max-width: 900px) {
+    .info {
+        padding: 2rem 5rem;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .info {
+        padding: 2rem 3rem;
+        font-size: 1.5rem;
+    }
+
+    .info h2 {
+        font-size: 2rem;
+    }
 }

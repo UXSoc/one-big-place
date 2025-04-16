@@ -205,24 +205,28 @@ io.use(sharedSession(sessionMiddleware, {
 }));
 
 const canvas = require('./modules/canvas');
+const { cacheUserFromDB, startDBSyncing } = require('./modules/user');
+startDBSyncing(prisma);
 
-io.sockets.on('connection', (socket) => {
-  
-  // if (!socket.handshake.session.passport?.user) {
-  //   console.log('Unauthenticated connection');
-  //   return socket.disconnect(); // Kick unauthenticated users
-  // }
+io.sockets.on('connection', async (socket) => {
+  let userId;
+  if (socket.handshake.session.passport?.user) {
+    userId = socket.handshake.session.passport.user;
+    console.log(`Authenticated user ${userId} connected`);
+    cacheUserFromDB(prisma, userId);
+  } else {
+    console.log('Unauthenticated connection');
+  }
 
-  // const userId = socket.handshake.session.passport.user;
-  // console.log(`Authenticated user ${userId} connected`);
 
   socket.on('PaintPixel', (data) => {
     if (!socket.handshake.session.passport?.user) {
       socket.emit("request_login");
       return;
     }
+    console.log(socket.request.user)
     canvas.paintPixel(data.x, data.y, data.id)
-    io.emit("PaintPixel", data)
+    io.emit("PaintPixel", { ...data, userId: userId })
   });
 });
 

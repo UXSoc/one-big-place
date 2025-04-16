@@ -16,22 +16,24 @@ var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
-      pixelSelector.setPixelSelector(target, x, y);
-      showPalette();
+        pixelSelector.setPixelSelector(target, x, y);
+        showPalette();
     },
     onDrag: () => {
-      hidePalette();
+        hidePalette();
     },
     onDragEnd: () => {
     },
     onZoom: (pixelSize, zoomValue) => {
-      hidePalette();
-      pixelSelectorDisplay.style.width = `${pixelSize}px`;
-      if (zoomValue < ZOOM_THRESHOLD) {
-        pixelSelectorDisplay.style.display = "none";
-      } else {
-        pixelSelectorDisplay.style.display = "block";
-      }
+        hidePalette();
+        pixelSelectorDisplay.style.width = `${pixelSize}px`;
+        if (zoomValue < ZOOM_THRESHOLD) {
+            pixelSelectorDisplay.style.display = "none";
+            pixelSelectorDisplay.isDisplayNone = true;
+        } else {
+            pixelSelectorDisplay.style.display = "block";
+            pixelSelectorDisplay.isDisplayNone = false;
+        }
     },
     zoom: {
         value: 10,

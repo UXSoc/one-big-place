@@ -7,8 +7,10 @@ class PixelSelector {
     this.coordinatesY = 0;
     this.coordinates.textContent = `0, 0`;
 
+    this.zoomThreshold = 5;
     this.selector = document.querySelector(".pixel-selector");
     this.selector.interfacePos = [0, 0];
+    this.isDisplayNone = true;
   }
   getPixelSelector() {
     return [this.coordinatesX, this.coordinatesY];
@@ -27,31 +29,43 @@ class PixelSelector {
   changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y];
 
-    if (target.zoom < 2) {
-      this.selector.style.display = "none";
-    } else {
-      this.selector.animate(
-        [
-          {
-            translate: `${this.initCoordinatesX * target.pixelSize}px ${
-              this.initCoordinatesY * target.pixelSize
-            }px`,
-          },
-          { translate: `${x * target.pixelSize}px ${y * target.pixelSize}px` },
-        ],
-        {
-          duration: 150,
-          iterations: 1,
-        }
-      );
+    if (target.zoom < this.zoomThreshold) {
       this.selector.src = "images/Selector.svg";
       this.selector.style = `
-      display: block;
-      position: absolute;
-      translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-      width: ${target.pixelSize}px;
-      aspect-ratio: 1 / 1;
+          display: block;
+          position: absolute;
+          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+          width: ${target.pixelSize}px;
+          aspect-ratio: 1 / 1;
       `;
+    } else {
+      if (!this.isDisplayNone) {
+        this.selector.animate(
+          [
+            {
+              translate: `${this.initCoordinatesX * target.pixelSize}px ${
+                this.initCoordinatesY * target.pixelSize
+              }px`,
+            },
+            {
+              translate: `${x * target.pixelSize}px ${y * target.pixelSize}px`,
+            },
+          ],
+          {
+            duration: 150,
+            iterations: 1,
+          }
+        );
+      }
+      this.selector.src = "images/Selector.svg";
+      this.selector.style = `
+          display: block;
+          position: absolute;
+          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+          width: ${target.pixelSize}px;
+          aspect-ratio: 1 / 1;
+      `;
+      this.isDisplayNone = false;
     }
   }
 }

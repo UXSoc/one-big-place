@@ -68,9 +68,35 @@ async function cacheUserFromDB(prisma, userId) {
     return user;
 }
 
+async function getLeaderboard(prisma) {
+  try {
+    const top_users = await prisma.user.findMany({
+      orderBy: {
+        placeCount: 'desc',
+      },
+      select: {
+        id: true,
+        username: true,
+        lastPlacedDate: true,
+        lastBitCount: true,
+        maxBits: true,
+        placeCount: true,
+        bonus: true,
+        lastUpdated: true,
+      },
+      take: 10,
+    });
+    return top_users;
+  } catch (error) {
+    console.error('Error fetching top users:', error);
+    return [];
+  }
+}
+
 module.exports = {
     startDBSyncing: startDBSyncing,
     updateUser: updateUser,
     user: user,
     cacheUserFromDB: cacheUserFromDB,
+    getLeaderboard: getLeaderboard,
 }

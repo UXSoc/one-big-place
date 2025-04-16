@@ -184,6 +184,11 @@ app.get('/json/user_grid', (req, res) => {
   res.json(canvas.get_user_grid_json());
 });
 
+app.get('/json/user', async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
+  res.json(await user(prisma, parseInt(req.user.id)));
+});
+
 app.get('/json/user/:userId', async (req, res) => {
   const userId = req.params.userId;
   res.json(await user(prisma, parseInt(userId)));

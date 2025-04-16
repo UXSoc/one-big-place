@@ -205,27 +205,48 @@ io.use(sharedSession(sessionMiddleware, {
 }));
 
 const canvas = require('./modules/canvas');
-const { cacheUserFromDB, startDBSyncing } = require('./modules/user');
+const { cacheUserFromDB, startDBSyncing, user, updateUser } = require('./modules/user');
+const { calculateBits } = require('./modules/bits');
 startDBSyncing(prisma);
+
+async function sync_cooldown(userId, socket) {
+  const user_data = await user(prisma, userId);
+  const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
+  socket.emit("sync_cooldown", { current_bits: current_bits, extra_time: extraTime, maxBits: user_data.maxBits })
+}
 
 io.sockets.on('connection', async (socket) => {
   let userId;
+
   if (socket.handshake.session.passport?.user) {
     userId = socket.handshake.session.passport.user;
     console.log(`Authenticated user ${userId} connected`);
     cacheUserFromDB(prisma, userId);
+    sync_cooldown(userId, socket);
   } else {
     console.log('Unauthenticated connection');
   }
 
-
-  socket.on('PaintPixel', (data) => {
+  socket.on('PaintPixel', async (data) => {
     if (!socket.handshake.session.passport?.user) {
       socket.emit("request_login");
+      socket.emit("PaintPixel", { ...data, id: 31 })
       return;
     }
-    console.log(socket.request.user)
+    const user_data = await user(prisma, userId);
+    const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
+    console.log(`current: ${current_bits}, ${extraTime}`)
+    if (current_bits < 1) {
+      socket.emit("PaintPixel", { ...data, id: 31, userId: userId })
+      return;
+    }
+    updateUser(userId, {
+      lastBitCount: current_bits-1,
+      lastPlacedDate: Date.now(),
+      extraTime: extraTime,
+    })
     canvas.paintPixel(data.x, data.y, data.id)
+    sync_cooldown(userId, socket);
     io.emit("PaintPixel", { ...data, userId: userId })
   });
 });

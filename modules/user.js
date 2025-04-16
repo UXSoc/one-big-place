@@ -12,8 +12,14 @@ function startDBSyncing(prisma) {
             prisma.user.update({
               where: { id: userId },
               data: {
-                lastPosition: userData.lastPosition,
-                lastActivity: new Date()
+                lastPlacedDate: new Date(userData.lastPlacedDate),
+                lastBitCount: userData.lastBitCount,
+                maxBits: userData.maxBits,
+                extraTime: userData.extraTime,
+                placeCount: userData.placeCount,
+                replaced: userData.replaced,
+                placedBreak: userData.placedBreak,
+                bonus: userData.bonus,
               }
             }).catch(console.error)
           );
@@ -30,8 +36,16 @@ async function updateUser(userId, newData) {
     userDataCache.set(userId, { ...cachedUser, ...newData, lastUpdated: Date.now() });  
 }
 
+async function user(prisma, userId) {
+    const cachedUser = userDataCache.get(userId);
+    if (!cachedUser) {
+        return await cacheUserFromDB(prisma, userId);
+    }
+    return cachedUser;
+}
+
 async function cacheUserFromDB(prisma, userId) {
-    await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
         where: { id: userId },
         select: {
             id: true,
@@ -47,13 +61,14 @@ async function cacheUserFromDB(prisma, userId) {
             bonus: true,
             lastUpdated: true,
         }
-    }).then(user => {
-        if (user) userDataCache.set(userId, { ...user, lastUpdated: 0 });
-    });
+    })
+    if (user) userDataCache.set(userId, { ...user, lastUpdated: 0 });
+    return user;
 }
 
 module.exports = {
     startDBSyncing: startDBSyncing,
     updateUser: updateUser,
+    user: user,
     cacheUserFromDB: cacheUserFromDB,
 }

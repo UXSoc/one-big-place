@@ -1,9 +1,9 @@
 import { playSfx } from "./sounds.js";
 
 let generationTimer = undefined;
-let slotCapacity = 5;
-let slotCount = 5;
-let slotGenerationCooldown = 15*1000; // in ms
+let maxBits = 5;
+let bitCount = 5;
+let bitGenerationInterval = 15*1000; // in ms
 export const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
     '#7EEC57', '#02756D', '#009DAA', '#00CCBE', '#277FA4', '#3790EA', '#52E8F3', '#4839BF',
@@ -11,17 +11,18 @@ export const colorsArray = [
     '#6D462F', '#9B6926', '#FEB470', '#000000', '#525252', '#888D90', '#D5D6D8', '#FFFFFF',
 ];
 
-function generatePixl() {
+function generatePixl(timeout=bitGenerationInterval) {
+  console.log(`setting timeout of ${timeout/1000}`)
   return setTimeout(() => {
-    slotCount++;
-    console.log(`Generated Pixel ${slotCount}/${slotCapacity}`)
-    if (slotCount<slotCapacity) {
+    bitCount++;
+    console.log(`Generated Pixel ${bitCount}/${maxBits}`)
+    if (bitCount<maxBits) {
       generatePixl();
     } else {
       generationTimer = undefined
     }
     updateBits()
-  }, slotGenerationCooldown)
+  }, timeout)
 }
 
 // get current canvas
@@ -31,9 +32,9 @@ const ctx = canvas.getContext("2d");
 export function paintPixel(color_id, x, y, socket) {
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
-  if (slotCount>0) {
+  if (bitCount>0) {
     paintPixelOnCanvas(color_id, x, y)
-    slotCount--;
+    bitCount--;
     playSfx('place', 1);
     updateBits()
     if (!generationTimer) {
@@ -51,7 +52,7 @@ export function paintPixelOnCanvas(color_id, x, y) {
 const bits_container = document.querySelector("#bits-counter");
 const bits_p = document.querySelector("#bits-display > div > p")
 function loadBits() {
-  for (let i = 0; i < slotCount; i++) {
+  for (let i = 0; i < bitCount; i++) {
     var bit = document.createElement('div')
     bit.classList.add("filled")
     bits_container.append(bit)
@@ -63,12 +64,20 @@ loadBits()
 function updateBits() {
   var bits = bits_container.querySelectorAll("div");
   for (let i = 0; i < bits.length; i++) {
-    if (i > slotCount-1) {
+    if (i > bitCount-1) {
       bits[i].classList.remove("filled");
     } else {
       bits[i].classList.add("filled");
     }
   }
-  bits_p.innerHTML = `<span>${slotCount}</span> Bits Left`
+  bits_p.innerHTML = `<span>${bitCount}</span> Bits Left`
 }
 updateBits()
+
+export function syncCooldown(data) {
+  bitCount = data.current_bits;
+  updateBits();
+  if (bitCount < data.maxBits) {
+    generationTimer = generatePixl(bitGenerationInterval-data.extra_time);
+  }
+}

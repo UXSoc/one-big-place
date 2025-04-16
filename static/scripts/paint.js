@@ -13,7 +13,8 @@ export const colorsArray = [
 
 function generatePixl(timeout=bitGenerationInterval) {
   console.log(`setting timeout of ${timeout/1000}`)
-  return setTimeout(() => {
+  clearTimeout(generationTimer)
+  generationTimer = setTimeout(() => {
     bitCount++;
     console.log(`Generated Pixel ${bitCount}/${maxBits}`)
     if (bitCount<maxBits) {
@@ -38,7 +39,7 @@ export function paintPixel(color_id, x, y, socket) {
     playSfx('place', 1);
     updateBits()
     if (!generationTimer) {
-      generationTimer = generatePixl();
+      generatePixl();
     }
     socket.emit("PaintPixel", {"x":x, "y":y, "id":color_id})
   }
@@ -78,6 +79,6 @@ export function syncCooldown(data) {
   bitCount = data.current_bits;
   updateBits();
   if (bitCount < data.maxBits) {
-    generationTimer = generatePixl(bitGenerationInterval-data.extra_time);
+    generatePixl(bitGenerationInterval-data.extra_time);
   }
 }

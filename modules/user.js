@@ -93,10 +93,33 @@ async function getLeaderboard(prisma) {
   }
 }
 
+async function getUserCountByYear(prisma) {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        idNumber: true,
+      },
+    });
+
+    const yearCount = users.reduce((acc, user) => {
+      const year = `${user.idNumber.toString().slice(0, 2)}`;
+      acc[year] = (acc[year] || 0) + 1;
+      return acc;
+    }, {});
+
+    return yearCount;
+  } catch (error) {
+    console.error('Error fetching user count by year:', error);
+    return {};
+  }
+}
+
+
 module.exports = {
     startDBSyncing: startDBSyncing,
     updateUser: updateUser,
     user: user,
     cacheUserFromDB: cacheUserFromDB,
     getLeaderboard: getLeaderboard,
+    getUserCountByYear: getUserCountByYear,
 }

@@ -10,7 +10,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard } = require('./modules/user');
+const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard, getUserCountByYear } = require('./modules/user');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -191,6 +191,10 @@ app.get('/json/user/:userId', async (req, res) => {
 
 app.get('/json/statistics/leaderboard', async (req, res) => {
   res.json(await getLeaderboard(prisma));
+});
+
+app.get('/json/statistics/yr_dist', async (req, res) => {
+  res.json(await getUserCountByYear(prisma));
 });
 
 // Setup Socket.io

@@ -46,7 +46,6 @@ export class PixelSelector {
           iterations: 1,
         }
       );
-      this.selector.src = "images/Selector.svg";
       this.selector.style = `
       display: block;
       position: absolute;
@@ -57,7 +56,7 @@ export class PixelSelector {
     }
   }
 }
-
+const userDataCache = new Map();
 const pin = document.querySelector('.panner_interface > .pixel-id');
 export async function getPixelId(target, x, y) {
   pin.interfacePos = [x, y];
@@ -74,12 +73,18 @@ export async function getPixelId(target, x, y) {
     hidePixelId();
     return;
   }
-  fetch(`json/user/${pixelId}`)
-  .then(response => response.json()) 
-  .then(json => {
-    pin.innerText = json.username || "";
+  let userData = userDataCache.get(pixelId);
+  if (!userData) {
+    const response = await fetch(`json/user/${pixelId}`);
+    userData = await response.json();
+    if (userData.id) {
+      userDataCache.set(userData.id, userData)
+    }
+  }
+  if (userData?.id) {
+    pin.innerText = userData.username || "";
     showPixelId();
-  })
+  }
 }
 export function hidePixelId() {
   pin.style.backgroundColor = "transparent";

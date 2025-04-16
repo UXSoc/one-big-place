@@ -55,7 +55,7 @@ export class PixelSelector {
           width: ${target.pixelSize}px;
           aspect-ratio: 1 / 1;
       `;
-    }
+    } 
   }
 }
 const userDataCache = new Map();

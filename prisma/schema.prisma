@@ -21,5 +21,6 @@ model User {
   placeCount     Int       @default(0)
   replaced       Int       @default(0)
   placedBreak    Int       @default(0)
-  bonus          String[]
+  bonus          String[]  @default([])
+  lastUpdated    DateTime  @updatedAt @default(now())
 }

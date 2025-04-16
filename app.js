@@ -243,6 +243,25 @@ async function sync_cooldown(userId, socket) {
   socket.emit("sync_cooldown", { current_bits: current_bits, extra_time: extraTime, maxBits: user_data.maxBits })
 }
 
+function isLunch() {
+  return (timeBetw('11:00:00', '14:00:00')||timeBetw('3:30:00', '3:50:00'))
+}
+
+function timeBetw(startTime, endTime) {
+  currentDate = new Date()   
+
+  startDate = new Date(currentDate.getTime());
+  startDate.setHours(startTime.split(":")[0]);
+  startDate.setMinutes(startTime.split(":")[1]);
+  startDate.setSeconds(startTime.split(":")[2]);
+
+  endDate = new Date(currentDate.getTime());
+  endDate.setHours(endTime.split(":")[0]);
+  endDate.setMinutes(endTime.split(":")[1]);
+  endDate.setSeconds(endTime.split(":")[2]);
+  return startDate < currentDate && endDate > currentDate
+}
+
 io.sockets.on('connection', async (socket) => {
   let userId;
 
@@ -263,13 +282,16 @@ io.sockets.on('connection', async (socket) => {
     }
     const user_data = await user(prisma, userId);
     const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
-    console.log(`current: ${current_bits}, ${extraTime}`)
     if (current_bits < 1) {
       socket.emit("PaintPixel", { ...data, id: 31, userId: userId })
       return;
     }
+    const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
     updateUser(userId, {
       lastBitCount: current_bits-1,
+      placeCount: user_data.placeCount+1,
+      replaced: (pos_current_userId&&pos_current_userId!==userId)?user_data.replaced+1:user_data.replaced,
+      placedBreak: (isLunch())?user_data.placedBreak+1:user_data.placedBreak,
       lastPlacedDate: Date.now(),
       extraTime: extraTime,
     })

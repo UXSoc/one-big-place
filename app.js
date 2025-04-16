@@ -2,6 +2,8 @@ require('dotenv').config()
 const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
 const session = require("express-session");
+const PgSession = require("connect-pg-simple")(session);
+const { Pool } = require("pg");
 const sharedSession = require('express-socket.io-session');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -72,7 +74,15 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+const pgPool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
 const sessionMiddleware = session({
+  store: new PgSession({
+    pool: pgPool,
+    createTableIfMissing: true,
+  }),
   secret: "cats",
   resave: false,
   saveUninitialized: false

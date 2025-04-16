@@ -15,6 +15,7 @@ model User {
   password       String    @db.VarChar(255)
   lastPlacedDate DateTime? @db.Timestamptz(6)
   lastBitCount   Int?
+  maxBits        Int       @default(5)
   extraTime      Int       @default(0)
   idNumber       Int
   placeCount     Int       @default(0)

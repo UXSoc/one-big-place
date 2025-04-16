@@ -1,8 +1,8 @@
 import { playSfx } from "./sounds.js";
 
 let generationTimer = undefined;
-let slotCapacity = 6;
-let slotCount = 6;
+let slotCapacity = 5;
+let slotCount = 5;
 let slotGenerationCooldown = 15*1000; // in ms
 export const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',

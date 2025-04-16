@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: "BlockCraft";
-    src: url("../fonts/BlockCraft.otf") format("opentype");
+    src: url("../fonts/BlockCraft.woff");
 }
 
 * {
@@ -42,14 +42,13 @@ body {
 
 .ranks {
     width: 100%;
-    margin-bottom: 2em;
+    margin-bottom: 1.5em;
 }
 
 .ranks__titles {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1.5px solid black;
 }
 
 .ranks__titles div {
@@ -60,7 +59,6 @@ body {
 .ranks__titles p {
     margin: 0;
     padding: 0;
-    padding-bottom: 0.25em;
     font-family: "BlockCraft", sans-serif;    
     font-size: 1.1rem;
 }
@@ -77,8 +75,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 0.2em;
-    border-bottom: 1.5px solid black;
+    padding-top: 0.3em;
+    padding-bottom: 0.1em;
+    border-top: 1.5px solid black;
 }
 
 .ranks__user div {
@@ -89,6 +88,7 @@ body {
 .ranks__user p {
     margin: 0;
     padding: 0;
+    font-size: 1.1rem;
     font-family: "BlockCraft", sans-serif;
 }
 
@@ -98,10 +98,9 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-top: 0.5em;
-    padding-bottom: 0.2em;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
-    border: 1.5px solid black;
+    padding-top: 0.3em;
+    padding-bottom: 0.1em;
+    outline: 1.5px solid black;
 }
 
 .ranks__currentUser div {
@@ -112,11 +111,13 @@ body {
 .ranks__currentUser p {
     margin: 0;
     padding: 0;
+    font-size: 1.1rem;
     font-family: "BlockCraft", sans-serif;
 }
 
 .divLeft {
     text-align: start;
+    padding-left: 0.5em;
 }
 
 .divMid {
@@ -124,5 +125,18 @@ body {
 }
 
 .divRight {
+    text-align: end;
+    padding-right: 0.5em;
+}
+
+.ranks__left {
+    text-align: start;
+}
+
+.ranks__mid {
+    text-align: center;
+}
+
+.ranks__right {
     text-align: end;
 }

@@ -9,8 +9,10 @@ export class PixelSelector {
     this.coordinatesY = 0;
     this.coordinates.textContent = `0, 0`;
 
+    this.zoomThreshold = 5;
     this.selector = document.querySelector(".pixel-selector");
     this.selector.interfacePos = [0, 0];
+    this.isDisplayNone = true;
   }
   getPixelSelector() {
     return [this.coordinatesX, this.coordinatesY];
@@ -47,11 +49,11 @@ export class PixelSelector {
         }
       );
       this.selector.style = `
-      display: block;
-      position: absolute;
-      translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-      width: ${target.pixelSize}px;
-      aspect-ratio: 1 / 1;
+          display: block;
+          position: absolute;
+          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+          width: ${target.pixelSize}px;
+          aspect-ratio: 1 / 1;
       `;
     }
   }

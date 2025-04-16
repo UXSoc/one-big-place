@@ -22,7 +22,7 @@ pannerInit(target, {
       showPalette();
     },
     onDrag: () => {
-      hidePalette();
+        hidePalette();
     },
     onDragEnd: () => {
     },

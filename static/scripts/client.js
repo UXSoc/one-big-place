@@ -1,6 +1,6 @@
 import { pannerInit } from "./panner.js";
 import { loadCanvas } from "./canvas.js";
-import { PixelSelector } from "./selector.js";
+import { PixelSelector, getPixelId } from "./selector.js";
 import { showPalette, hidePalette, loadPalette } from "./palette.js";
 import { connectToServer } from "./socket.js";
 import { setupTabs } from "./nav.js";
@@ -17,6 +17,7 @@ var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 pannerInit(target, {
     onClick: (x, y, clientX, clientY) => {
       pixelSelector.setPixelSelector(target, x, y);
+      getPixelId(target, x, y)
       playSfx('select', 1);
       showPalette();
     },
@@ -33,6 +34,7 @@ pannerInit(target, {
       } else {
         pixelSelectorDisplay.style.display = "block";
       }
+      getPixelId(target, pixelSelector.coordinatesX, pixelSelector.coordinatesY)
     },
     zoom: {
         value: 10,
@@ -44,6 +46,7 @@ pannerInit(target, {
 
 loadPalette(pixelSelector);
 loadCanvas(target.querySelector('.image'));
+getPixelId(0, 0)
 connectToServer("localhost:3000");
 loadSfx();
 setupTabs();

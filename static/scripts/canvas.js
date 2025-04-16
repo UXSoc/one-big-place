@@ -5,6 +5,22 @@ const colorsArrayRGB = [
   [109, 70, 47], [155, 105, 38], [254, 180, 112], [0, 0, 0], [82, 82, 82], [136, 141, 144], [213, 214, 216], [255, 255, 255]
 ]
 
+let user_grid;
+export async function loadUserGrid() {
+  const response = await fetch('json/user_grid');
+  const array2D = await response.json();
+  user_grid = array2D;
+  return user_grid;
+}
+
+export function setUserGrid(id, x, y) {
+  user_grid[y][x] = id;
+}
+
+export function getUserGrid(id, x, y) {
+  return user_grid;
+}
+
 export function loadCanvas(canvas) {
   fetch(`json/canvas`)
   .then(response => response.json()) 
@@ -34,4 +50,5 @@ export function loadCanvas(canvas) {
     canvas.parentElement.updateSize();
     canvas.parentElement.center();
   }) 
+  loadUserGrid();
 }

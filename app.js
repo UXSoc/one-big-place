@@ -8,6 +8,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
+const { cacheUserFromDB, startDBSyncing, user, updateUser } = require('./modules/user');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -173,6 +174,11 @@ app.get('/json/user_grid', (req, res) => {
   res.json(canvas.get_user_grid_json());
 });
 
+app.get('/json/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  res.json(await user(prisma, parseInt(userId)));
+});
+
 // Setup Socket.io
 const fs = require('fs');
 
@@ -205,7 +211,6 @@ io.use(sharedSession(sessionMiddleware, {
 }));
 
 const canvas = require('./modules/canvas');
-const { cacheUserFromDB, startDBSyncing, user, updateUser } = require('./modules/user');
 const { calculateBits } = require('./modules/bits');
 startDBSyncing(prisma);
 
@@ -245,9 +250,9 @@ io.sockets.on('connection', async (socket) => {
       lastPlacedDate: Date.now(),
       extraTime: extraTime,
     })
-    canvas.paintPixel(data.x, data.y, data.id)
+    canvas.paintPixel(data.x, data.y, data.id, userId);
     sync_cooldown(userId, socket);
-    io.emit("PaintPixel", { ...data, userId: userId })
+    io.emit("PaintPixel", { ...data, userId: userId });
   });
 });
 

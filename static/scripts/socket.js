@@ -12,7 +12,7 @@ function setupEvents() {
         syncCooldown(data);
     })
     socket.on("PaintPixel", (data) => {
-        paintPixelOnCanvas(data.id, data.x, data.y);
+        paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
     })
     socket.on("request_login", (data) => {
         openModal('login');

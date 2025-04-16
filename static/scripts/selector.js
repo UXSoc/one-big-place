@@ -1,4 +1,6 @@
-class PixelSelector {
+import { loadUserGrid, getUserGrid } from "./canvas.js"
+
+export class PixelSelector {
   constructor() {
     this.coordinates = document.querySelector(".canvas-coordinates > p");
     this.initCoordinatesX = 0;
@@ -56,4 +58,32 @@ class PixelSelector {
   }
 }
 
-export { PixelSelector };
+const pin = document.querySelector('.panner_interface > .pixel-id');
+export async function getPixelId(target, x, y) {
+  pin.interfacePos = [x, y];
+  pin.style.transform = `translate(${target.pixelSize}px, -110%)`
+  pin.updatePos();
+  let user_grid = getUserGrid();
+  if (!user_grid) {
+    user_grid = await loadUserGrid();
+    return;
+  };
+  const pixelId = user_grid[y][x];
+  if (!pixelId) {
+    pin.innerText = "";
+    hidePixelId();
+    return;
+  }
+  fetch(`json/user/${pixelId}`)
+  .then(response => response.json()) 
+  .then(json => {
+    pin.innerText = json.username || "";
+    showPixelId();
+  })
+}
+export function hidePixelId() {
+  pin.style.backgroundColor = "transparent";
+}
+export function showPixelId() {
+  pin.style.backgroundColor = "white";
+}

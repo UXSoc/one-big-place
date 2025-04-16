@@ -98,9 +98,10 @@ async function saveFrame(close_on_exit=false) {
     })
 }
 
-function paintPixel(x,y,id) {
-    canvas.canvas[y][x] = id
-    console.log(`placed pixel: ${x} ${y} ${id}`)
+function paintPixel(x, y, id, userId) {
+    canvas.canvas[y][x] = id;
+    canvas.user_grid[y][x] = userId;
+    console.log(`placed pixel: ${x} ${y} ${id}`);
 }
 
 function saveCanvasData() {

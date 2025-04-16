@@ -135,23 +135,32 @@ function zoom(el, zoom_value, x, y) {
     const pixel_size = el.offsetWidth/el.pixel_width;
     el.pixelSize = pixel_size;
     interface_elements.forEach(element => {
-        if (element.interfacePos !== undefined || element.interfacePos !== null) {
-            const x = element.interfacePos[0];
-            const y = element.interfacePos[1];
-            if (element.scaleWithZoom) element.style.width = `${element.naturalWidth*zoom_value}px`;
-            element.style.translate = `${x*pixel_size}px ${y*pixel_size}px`;
-        }
+        element.updatePos();
+        if (element.scaleWithZoom) element.style.width = `${element.naturalWidth*zoom_value}px`;
     });
     el.zoom = zoom_value;
     center(el, x, y);
     if (el.onZoom) el.onZoom(pixel_size, zoom_value)
+}
+export function setupInterfaceElements(el) {
+    const interface_elements = el.interface.querySelectorAll('*');
+    interface_elements.forEach(element => {
+        element.updatePos = () => {
+            if (element.interfacePos == undefined && element.interfacePos == null) return;
+            const x = element.interfacePos[0];
+            const y = element.interfacePos[1];
+            const pixel_size = el.offsetWidth/el.pixel_width;
+            element.style.translate = `${x*pixel_size}px ${y*pixel_size}px`;
+        }
+    });
 }
 export function pannerInit(el, options) {
     if (!el.parentElement.classList.contains("panner-container")) {console.error("Failed to initialize panner: element not inside panner container")};
     el.panner_container = el.parentElement;
     el.img = el.querySelector(".image");
     el.interface = el.querySelector(".panner_interface");
-    
+    setupInterfaceElements(el);
+
     el.updateSize = () => {
         el.pixel_width = el.img.width;
         el.pixel_height = el.img.height;

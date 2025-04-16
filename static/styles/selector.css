@@ -31,10 +31,30 @@
   animation: pop-in .5s cubic-bezier(.14,1.02,.45,1.1);
 }
 
+.pixel-id {
+  display: none;
+  background-color: white;
+  border-radius: 10px 10px 10px 0px;
+  padding: .5rem 1rem;
+  filter: drop-shadow(0 0 0.4rem rgba(72, 72, 72, 0.6));
+  font-family: BlockCraft;
+  position: absolute;
+  animation: fade .5s cubic-bezier(.14,1.02,.45,1.1);
+}
+
+.panner_interface:has(.pixel-selector:hover) .pixel-id {
+  display: block;
+}
+
 @media screen and (max-device-width: 1200px) {
   .canvas-coordinates {
     display: none;
   }
+}
+
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 
 @keyframes pop-in {

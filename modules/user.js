@@ -37,11 +37,12 @@ async function updateUser(userId, newData) {
 }
 
 async function user(prisma, userId) {
-    const cachedUser = userDataCache.get(userId);
-    if (!cachedUser) {
-        return await cacheUserFromDB(prisma, userId);
-    }
-    return cachedUser;
+  if (!userId || !prisma) return;
+  const cachedUser = userDataCache.get(userId);
+  if (!cachedUser) {
+      return await cacheUserFromDB(prisma, userId);
+  }
+  return cachedUser;
 }
 
 async function cacheUserFromDB(prisma, userId) {

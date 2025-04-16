@@ -69,20 +69,22 @@ p {
 
 .divFirst {
     width: 100%;
-    height: fit-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .divFirst p {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-family: "BlockCraft", sans-serif;
 }
 
 .divFirst div {
     font-family: "BlockCraft", sans-serif;
-    padding: 0.2em;
+    font-size: 1.1rem;
+    padding-left: 0.2em;
+    padding-top: 0.2em;
+    padding-right: 0.2em;
     color: white;
     background-color: #9747FF;
 }
@@ -94,4 +96,6 @@ p {
 
 .divSecond p {
     color: #474747;
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.1rem;
 }

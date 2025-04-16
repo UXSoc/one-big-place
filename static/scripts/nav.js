@@ -10,7 +10,7 @@ const NAV_TABS = [
 
 function closeTabs() {
     document.querySelectorAll(".nav-tab").forEach((item) => {
-        item.remove();
+        item.style.display = 'none';
     })
     NAV.classList.remove("active")
     NAV_ITEMS.forEach((item) => {
@@ -28,11 +28,17 @@ export function setupTabs() {
             closeTabs();
             NAV.classList.add("active")
             NAV_ITEMS[i].classList.add("active")
+            const NAV_TAB = document.querySelector(`#nav-tab-${NAV_TABS[i]}`);
+            if (NAV_TAB) {
+                NAV_TAB.style.display = 'block';
+                return;
+            }
             fetch(`html/nav_tabs/${NAV_TABS[i]}.html`) 
             .then(response => response.text()) 
             .then(html => { 
                 var tab = document.createElement("div")
                 tab.className = "nav-tab"
+                tab.id = `nav-tab-${NAV_TABS[i]}`
                 if (window.matchMedia('only screen and (min-width: 1200px)').matches) {
                     tab.style.maxHeight = `${NAV.offsetHeight}px`;
                 }

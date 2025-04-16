@@ -14,7 +14,7 @@ model User {
   username       String    @unique @db.VarChar(255)
   password       String    @db.VarChar(255)
   lastPlacedDate DateTime? @db.Timestamptz(6)
-  lastBitCount   Int?
+  lastBitCount   Int?      @default(5)
   maxBits        Int       @default(5)
   extraTime      Int       @default(0)
   idNumber       Int

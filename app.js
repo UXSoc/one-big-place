@@ -33,7 +33,7 @@ passport.use(
       // const validatedPassword = value["password"];
       const user = await prisma.user.findUnique({
         where: {
-          username: username,
+          username: username.toLowerCase(),
         }
       })
       if (user !== null) {

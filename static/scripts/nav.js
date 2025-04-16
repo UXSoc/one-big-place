@@ -37,6 +37,17 @@ export function setupTabs() {
                     tab.style.maxHeight = `${NAV.offsetHeight}px`;
                 }
                 tab.innerHTML = html
+
+                const scripts = tab.querySelectorAll("script");
+                scripts.forEach((oldScript) => {
+                    const newScript = document.createElement("script");
+                    [...oldScript.attributes].forEach((attr) =>
+                        newScript.setAttribute(attr.name, attr.value)
+                    );
+                    newScript.text = oldScript.text;
+                    oldScript.replaceWith(newScript);
+                });
+
                 NAV.appendChild(tab);
             }) 
             .catch(error => console.error('Error loading HTML:', error)); 

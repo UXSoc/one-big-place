@@ -45,6 +45,7 @@ async function user(prisma, userId) {
 }
 
 async function cacheUserFromDB(prisma, userId) {
+    if (userDataCache.has(userId)) return;
     const user = await prisma.user.findUnique({
         where: { id: userId },
         select: {

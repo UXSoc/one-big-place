@@ -38,9 +38,6 @@ export function paintPixel(color_id, x, y, socket) {
     bitCount--;
     playSfx('place', 1);
     updateBits()
-    if (!generationTimer) {
-      generatePixl();
-    }
     socket.emit("PaintPixel", {"x":x, "y":y, "id":color_id})
   }
 }

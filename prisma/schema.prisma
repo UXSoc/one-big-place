@@ -13,7 +13,7 @@ model User {
   id             Int       @id @default(autoincrement())
   username       String    @unique @db.VarChar(255)
   password       String    @db.VarChar(255)
-  lastPlacedDate DateTime? @db.Timestamptz(6)
+  lastPlacedDate DateTime? @db.Timestamptz(6) @default(now())
   lastBitCount   Int?      @default(5)
   maxBits        Int       @default(5)
   extraTime      Int       @default(0)

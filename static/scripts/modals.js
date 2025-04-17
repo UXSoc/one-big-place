@@ -38,7 +38,7 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
 export function openModal(name) {
     var modal = document.createElement('div');
     modal.className = "modal";
-    fetch(`html/${MODALS[name]}.html`) 
+    fetch(`html/${MODALS[name]}.html`)
         .then(response => response.text()) 
         .then(html => { 
             modal.innerHTML = html;
@@ -48,7 +48,6 @@ export function openModal(name) {
             closeButton.innerText = '✖';
             closeButton.addEventListener('click', (e) => {
                 e.target.parentElement.remove()
-                onclose();
             })
             modal.append(closeButton);
             CONTAINER.appendChild(modal);
@@ -73,4 +72,38 @@ export function openModal(name) {
             });
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
+}
+function updateContainerVisibility() {
+    const modalExists = CONTAINER.querySelector('.modal');
+    const loaderExists = CONTAINER.querySelector('#loader:not(.hidden)');
+    if (!modalExists && !loaderExists) {
+        CONTAINER.style.display = 'none';
+    } else {
+        CONTAINER.style.removeProperty('display');
+    }
+}
+const observer = new MutationObserver(updateContainerVisibility);
+observer.observe(CONTAINER, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+});
+const loader = document.querySelector('#loader');
+export function showLoading() { loader.classList.remove('hidden') }
+export function hideLoading() { loader.classList.add('hidden') }
+const loadingProgress = new Map([
+    ['canvasLoad', false],
+    ['socketConnect', false],
+]);
+export function setLoadingProgress(stage, status) {
+    if (loadingProgress.has(stage)) {
+        loadingProgress.set(stage, status);
+    }
+    const allDone = [...loadingProgress.values()].every(v => v === true);
+    if (allDone) {
+        hideLoading();
+    } else {
+        showLoading();
+    }
 }

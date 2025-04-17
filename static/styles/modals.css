@@ -14,13 +14,13 @@
     -moz-box-shadow: inset 0px 0px 183px 0px rgba(255, 255, 255, 0.75);
     box-shadow: inset 0px 0px 183px 0px rgba(255, 255, 255, 0.75);
 }
-#modals-container:not(:has(.modal)) {
+#modals-container:not(:has(.modal, #loader:not(.hidden))) {
     display: none;
 }
 .modal {
+    position: relative;
     max-width: 95vw;
     box-sizing: border-box;
-    display: none;
     background-color: white;
     border-radius: 25px;
     filter: drop-shadow(0 0 0.6rem rgba(51, 51, 51, 0.6));
@@ -82,4 +82,79 @@ input[type=text], input[type=password] {
 }
 .modal .close-modal-button:hover {
     scale: 1.1;
+}
+#loader {
+    background-color: white;
+    padding: 1.2rem;
+    border-radius: 15px;
+    filter: drop-shadow(0 0 0.6rem rgba(51, 51, 51, 0.6));
+    z-index: 9999;
+    position: absolute;
+}
+#loader > h2 {
+    font-family: BlockCraft;
+    font-weight: 100;
+    font-size: 1.8rem;
+    margin: 1rem 0 0 0;
+}
+:root {
+    --corner-offset: -4px;
+    --cut-corner-size: 4px;
+}
+.hidden {
+    display: none;
+}
+#loader > div {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: calc(var(--cut-corner-size)/2);
+    padding: calc(var(--cut-corner-size)/2);
+    border: var(--cut-corner-size) solid black;
+    position: relative;
+}
+#loader > div > div:not(.cut-corners) {
+    background-color: black;
+    width: calc(var(--cut-corner-size)*5);
+    aspect-ratio: 1;
+    opacity: 0;
+    animation: appear 2s steps(1, start) infinite;
+}
+#loader > div > .cut-corners {
+    position: absolute;
+    background-color: white;
+    width: var(--cut-corner-size);
+    aspect-ratio: 1;
+}
+#loader > div > .cut-corners:nth-child(11) {
+    left: var(--corner-offset);
+    top: var(--corner-offset);
+}
+#loader > div > .cut-corners:nth-child(12) {
+    right: var(--corner-offset);
+    top: var(--corner-offset);
+}
+#loader > div > .cut-corners:nth-child(13) {
+    left: var(--corner-offset);
+    bottom: var(--corner-offset);
+}
+#loader > div > .cut-corners:nth-child(14) {
+    right: var(--corner-offset);
+    bottom: var(--corner-offset);
+}
+
+#loader > div > div:nth-child(1) { animation-delay: 0s; }
+#loader > div > div:nth-child(2) { animation-delay: .2s; }
+#loader > div > div:nth-child(3) { animation-delay: .4s; }
+#loader > div > div:nth-child(4) { animation-delay: .6s; }
+#loader > div > div:nth-child(5) { animation-delay: .8s; }
+#loader > div > div:nth-child(6) { animation-delay: 1s; }
+#loader > div > div:nth-child(7) { animation-delay: 1.2s; }
+#loader > div > div:nth-child(8) { animation-delay: 1.4s; }
+#loader > div > div:nth-child(9) { animation-delay: 1.6s; }
+#loader > div > div:nth-child(10) { animation-delay: 1.8s; }
+
+@keyframes appear {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
 }

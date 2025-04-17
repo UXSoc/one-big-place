@@ -1,5 +1,5 @@
 import { paintPixelOnCanvas, syncCooldown } from "./paint.js";
-import { openModal } from "./modals.js"
+import { setLoadingProgress, openModal } from "./modals.js"
 
 export var socket;
 export function connectToServer(ip) {
@@ -8,13 +8,19 @@ export function connectToServer(ip) {
 }
 
 function setupEvents() {
+    socket.on("connect", (data) => {
+        setLoadingProgress('socketConnect', true);
+    })
+    socket.on("disconnect", (data) => {
+        setLoadingProgress('socketConnect', false);
+    })
     socket.on("sync_cooldown", (data) => {
         syncCooldown(data);
     })
     socket.on("PaintPixel", (data) => {
         paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
     })
-    socket.on("request_login", (data) => {
+    socket.on("request_login", () => {
         openModal('login');
     })
 }

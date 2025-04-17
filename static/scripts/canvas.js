@@ -1,3 +1,5 @@
+import { setLoadingProgress } from "./modals.js";
+
 const colorsArrayRGB = [
   [107, 1, 25], [189, 0, 55], [255, 69, 0], [254, 168, 0], [255, 212, 53], [254, 248, 185], [1, 162, 103], [9, 204, 118],
   [126, 236, 87], [2, 117, 109], [0, 157, 170], [0, 204, 190], [39, 127, 164], [55, 144, 234], [82, 232, 243], [72, 57, 191],
@@ -49,6 +51,7 @@ export function loadCanvas(canvas) {
     canvas.ctx.putImageData(imageData, 0, 0);
     canvas.parentElement.updateSize();
     canvas.parentElement.center();
+    setLoadingProgress('canvasLoad', true);
   }) 
   loadUserGrid();
 }

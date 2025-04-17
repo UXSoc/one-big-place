@@ -111,3 +111,8 @@ async function fetchData() {
 }
 
 fetchData();
+setInterval(() => {
+    document.querySelector(".ranks__users").textContent = "";
+    document.querySelector(".ranks__currentUser").textContent = "";
+    fetchData(); 
+}, 30000);

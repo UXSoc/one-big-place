@@ -95,7 +95,7 @@ export async function getPixelId(target, x, y) {
     }
   }
   if (userData?.id) {
-    pin.innerText = userData.username || "";
+    pin.innerText = `${userData.username} | ${String(userData.idNumber).slice(0, 2)}'` || "";
     showPixelId();
   }
 }

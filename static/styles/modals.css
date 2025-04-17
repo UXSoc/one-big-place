@@ -17,6 +17,10 @@
 #modals-container:not(:has(.modal)) {
     display: none;
 }
+body:has(nav.active) #bits-display {
+    opacity: 0;
+    visibility: hidden;
+}
 .modal {
     max-width: 95vw;
     box-sizing: border-box;

@@ -195,7 +195,7 @@ app.get('/json/user/:userId', async (req, res) => {
 });
 
 app.get('/json/statistics/leaderboard', async (req, res) => {
-  res.json(await getLeaderboard(prisma));
+  res.json(await getLeaderboard(prisma, req.isAuthenticated()?req.user.id:undefined));
 });
 
 app.get('/json/statistics/yr_dist', async (req, res) => {

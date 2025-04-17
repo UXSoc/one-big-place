@@ -68,7 +68,7 @@ async function cacheUserFromDB(prisma, userId) {
     return user;
 }
 
-async function getLeaderboard(prisma) {
+async function getLeaderboard(prisma, userId) {
   try {
     const top_users = await prisma.user.findMany({
       orderBy: {
@@ -86,7 +86,34 @@ async function getLeaderboard(prisma) {
       },
       take: 10,
     });
-    return top_users;
+    let higherCount;
+    if (userId) {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { 
+          id: true,
+          username: true,
+          lastPlacedDate: true,
+          lastBitCount: true,
+          maxBits: true,
+          placeCount: true,
+          bonus: true,
+          lastUpdated: true,
+        }
+      });
+      if (!!user) {
+        const userPlaceCount = user.placeCount;
+        higherCount = await prisma.user.count({
+          where: {
+            placeCount: {
+              gt: userPlaceCount
+            }
+          }
+        });
+        return {leaderboard: top_users, user: {...user, place: higherCount + 1}};
+      }
+    }
+    return {leaderboard: top_users};
   } catch (error) {
     console.error('Error fetching top users:', error);
     return [];

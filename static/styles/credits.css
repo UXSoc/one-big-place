@@ -1,6 +1,6 @@
 @font-face {
     font-family: "PixelGame";
-    src: url("../fonts/PixelGame.otf") format("opentype");
+    src: url("../fonts/Pixel Game.woff");
 }
 
 @font-face {
@@ -43,6 +43,7 @@ p {
     padding: 0;
     font-family: "PixelGame", sans-serif;
     font-size: 2.8rem;
+    font-weight: 100;
 }
 
 .creators {

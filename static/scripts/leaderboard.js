@@ -5,6 +5,21 @@ let currentUserIdx = null;
 function generateUserPlacement() {
     let currentUser = document.querySelector(".ranks__currentUser")
 
+    if ("error" in userData) {
+        let div = document.createElement("div");
+        let p = document.createElement("p");
+        p.textContent = "Login to see your placement!";
+        div.appendChild(p);
+        div.style = `
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+        `;
+        currentUser.appendChild(div);
+        return;
+    }
+
     let divLeft = document.createElement("div");
     let divMid = document.createElement("div");
     let divRight = document.createElement("div");
@@ -27,6 +42,7 @@ function generateUserPlacement() {
     currentUser.appendChild(divLeft);
     currentUser.appendChild(divMid);
     currentUser.appendChild(divRight);
+    currentUser.style.outline = `1.5px solid black`;
 }
 
 function generateLeaderboard() {

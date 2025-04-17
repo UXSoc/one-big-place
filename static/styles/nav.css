@@ -46,6 +46,8 @@ nav > ul > li:hover, nav > ul > li.active {
     margin: 0 auto;
     width: 90vw;
     text-align: center;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 @media only screen and (min-width: 1200px) {
     nav {

@@ -1,1 +1,77 @@
-<h1>Canvas Coverage</h1>
+<link rel="stylesheet" href="styles/coverage.css">
+<div class="container">
+    <div class="title">
+        <img src="images/Pie.svg" alt="Pie Chart Icon">
+        <h1>Canvas Coverage</h1>
+    </div>
+    <p>Amount of the canvas covered by each batch</p>
+    <div class="pie-container">
+        <div class="pie" style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            aspect-ratio: 1;
+            border-radius: 50%
+        "></div>
+    </div>
+</div>
+<script>
+const baseColors = ["#00cdc0", "#493ac1", "#3590ea", "#e6abfe", "#6b5cfe"];
+const pieContainer = document.querySelector('.pie-container');
+const pieElement = document.querySelector('.pie-container > .pie');
+const pieRadius = pieElement.offsetWidth / 2;
+function adjustColor(hex, factor) {
+  const rgb = hex.match(/\w\w/g).map(c => parseInt(c, 16));
+  const adjusted = rgb.map(c => Math.min(255, Math.max(0, Math.round(c * factor))));
+  return `rgb(${adjusted.join(',')})`;
+}
+
+async function updatePieChart() {
+  const response = await fetch('json/statistics/yr_dist');
+  const data = {
+    "20": 11065,
+    "21": 742,
+    "22": 7410,
+    "23": 7824,
+    "24": 8654,
+    "25": 4145,
+  };
+  pieContainer.querySelectorAll('.label').forEach(el => el.remove());
+
+  const entries = Object.entries(data);
+  const total = entries.reduce((sum, [, val]) => sum + val, 0);
+
+  let currentAngle = 0;
+  let gradientParts = [];
+
+  entries.forEach(([label, value], i) => {
+    const percentage = (value / total) * 100;
+    const angle = (percentage / 100) * 360;
+    const midAngle = currentAngle + angle / 2;
+
+    const colorIndex = i % baseColors.length;
+    const variation = 1 + Math.floor(i / baseColors.length) * 0.1 * (i % 2 === 0 ? 1 : -1);
+    const color = adjustColor(baseColors[colorIndex], variation);
+
+    const start = currentAngle;
+    const end = currentAngle + angle;
+    gradientParts.push(`${color} ${start}deg ${end}deg`);
+
+    // Label setup
+    const labelEl = document.createElement("div");
+    labelEl.className = "label";
+    labelEl.style.transform = `
+      rotate(${midAngle}deg)
+      translateY(-${pieRadius}px)
+      rotate(${-midAngle}deg)
+    `;
+    labelEl.innerHTML = `${label}'<br><span>${percentage.toFixed(1)}%</span>`;
+    pieElement.appendChild(labelEl);
+
+    currentAngle += angle;
+  });
+  pieElement.style.backgroundImage = `conic-gradient(${gradientParts.join(', ')})`;
+}
+updatePieChart();
+</script>

@@ -1,6 +1,9 @@
+import { getLeaderboardData, setLeaderboardData } from "./socket";
+
 let leaderboard = null;
 let userData = null;
 let currentUserIdx = null;
+let isCurrentUserInTop = false;
 
 function generateUserPlacement() {
     let currentUser = document.querySelector(".ranks__currentUser")
@@ -28,7 +31,7 @@ function generateUserPlacement() {
     let userName = document.createElement("p");
     let userPlaced = document.createElement("p");
 
-    currentRank.textContent = `${currentUserIdx}`;
+    currentRank.textContent = (isCurrentUserInTop ? `${currentUserIdx}` : `10+`);
     userName.textContent = `[You] ${userData["username"]}`;
     userPlaced.textContent = `${userData["placeCount"]}`;
 
@@ -82,6 +85,8 @@ async function fetchData() {
     try {
         let fetchRes = await fetch("json/statistics/leaderboard").then((res) => res.json());
 
+        setLeaderboardData(fetchRes);        
+
         leaderboard = fetchRes["leaderboard"];
         userData = fetchRes["user"];
 
@@ -90,6 +95,7 @@ async function fetchData() {
         let currentIdx = 1;
         for (const user of leaderboard) {
             if (user["id"] === userData["id"]) {
+                isCurrentUserInTop = true;
                 currentUserIdx = currentIdx;
                 break;
             }
@@ -108,4 +114,4 @@ setInterval(() => {
     document.querySelector(".ranks__users").textContent = "";
     document.querySelector(".ranks__currentUser").textContent = "";
     fetchData(); 
-}, 30000);
+}, 1000);

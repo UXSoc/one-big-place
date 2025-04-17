@@ -49,6 +49,10 @@ nav > ul > li:hover, nav > ul > li.active {
     overflow-y: auto;
     overflow-x: hidden;
 }
+body:has(nav.active) #bits-display {
+    opacity: 0;
+    visibility: hidden;
+}
 @media only screen and (min-width: 1200px) {
     nav {
         box-sizing: border-box;
@@ -114,6 +118,10 @@ nav > ul > li:hover, nav > ul > li.active {
         z-index: 99;
         margin: 0;
         overflow-y: auto;
+    }
+    body:has(nav.active) #bits-display {
+        opacity: 1;
+        visibility: visible;
     }
 }
   

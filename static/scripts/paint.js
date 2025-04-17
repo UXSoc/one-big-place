@@ -1,3 +1,4 @@
+import { disablePalette, enablePalette } from "./palette.js";
 import { playSfx } from "./sounds.js";
 import { setUserGrid } from "./canvas.js";
 
@@ -71,6 +72,11 @@ function updateBits() {
     }
   }
   bits_p.innerHTML = `<span>${bitCount}</span> Bits Left`
+  if (bitCount<=0) {
+    disablePalette();
+    return;
+  }
+  enablePalette();
 }
 updateBits()
 

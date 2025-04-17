@@ -12,6 +12,14 @@ export function hidePalette() {
     colorPalette.classList.remove("active");
 }
 
+export function disablePalette() {
+    document.getElementById('color-palette').classList.add("palette-disabled");
+}
+
+export function enablePalette() {
+    document.getElementById('color-palette').classList.remove("palette-disabled");
+}
+
 export function loadPalette(pixelSelector) {
     for (let i = 0; i < colorsArray.length; i++) {
         const colorElement = document.createElement("div");

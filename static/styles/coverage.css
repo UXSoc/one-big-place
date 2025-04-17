@@ -43,7 +43,11 @@ p {
     margin: 0;
     padding: 0;
     font-family: "PixelGame", sans-serif;
-    font-size: 2.7rem;
+    font-size: 2.8rem;
+}
+
+.description {
+    font-size: 1.2rem;
 }
 
 .pie-container {

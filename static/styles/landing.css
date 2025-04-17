@@ -1,0 +1,330 @@
+@font-face {
+    font-family: "PixL";
+    src: url("../fonts/PixL.otf");
+}
+
+:root {
+    --title-glow: rgba(1, 197, 255, 1) 0 0 20px;
+    --timer-glow: rgba(180, 176, 255, 1) 0 0 15px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Pixelify Sans", sans-serif;
+    color: white;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: black;
+}
+
+#container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+header {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.header__centerText {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.header__logo {
+    filter: drop-shadow(0 0 80px rgba(1, 197, 255, 0.8));
+}
+
+header h1 {
+    font-size: 7.5rem;
+    font-weight: 500;
+    color: rgba(1, 197, 255, 1);
+    margin: 0;
+    animation: 5s infinite linear title-flicker;
+}
+
+header p {
+    color: rgba(180, 176, 255, 1);
+    margin: 0;
+}
+
+header img {
+    width: 20rem;
+}
+
+.header__timer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.header__timer__blur {
+    position: absolute;
+    align-self: center;
+    width: 175%;
+    box-shadow: rgba(108, 101, 246, 0.73) 0 0 80px 12px;
+}
+
+.header__timer__text {
+    font-size: 5.5rem;
+    font-weight: 500;
+    animation: 10s infinite linear timer-flicker;
+    font-family: "PixL", sans-serif;
+}
+
+.header__queue {
+    font-size: 3.5rem;
+}
+
+.header__title {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -1rem;
+    width: 100%;
+}
+
+.header__title__blur {
+    position: absolute;
+    align-self: center;
+    width: 100%;
+    box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 12px;
+}
+
+@keyframes title-flicker {
+    0% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    19% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    20% {
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.8;
+    }
+    21% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    29% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    30% {
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.6;
+    }
+    31% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    82% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    83% {
+        text-shadow:
+            var(--title-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.7;
+    }
+    84% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+    100% {
+        text-shadow: var(--title-glow);
+        opacity: 1;
+    }
+}
+
+@keyframes timer-flicker {
+    0% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    19% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    20% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.8;
+    }
+    21% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    29% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    30% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.6;
+    }
+    31% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    82% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    83% {
+        text-shadow:
+            var(--timer-glow),
+            rgba(255, 255, 255, 0.3) 0 0 15px;
+        opacity: 0.7;
+    }
+    84% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+    100% {
+        text-shadow: var(--timer-glow);
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    header img {
+        width: 15rem;
+    }
+
+    .header__centerText {
+        gap: 2rem;
+    }
+
+    .header__title {
+        margin: 0;
+    }
+
+    header h1 {
+        font-size: 6rem;
+    }
+
+    .header__timer__text {
+        font-size: 5rem;
+    }
+
+    .header__queue {
+        font-size: 3rem;
+    }
+}
+
+@media only screen and (max-width: 660px) {
+    .header__centerText {
+        gap: 2rem;
+    }
+
+    .header__title {
+        margin: 0;
+    }
+
+    header h1 {
+        font-size: 5rem;
+    }
+
+    .header__timer__text {
+        font-size: 4rem;
+    }
+
+    .header__queue {
+        font-size: 2.5rem;
+    }
+}
+
+.info {
+    width: 100%;
+    height: fit-content;
+    padding: 2rem 12rem;
+    font-size: 1.8rem;
+}
+
+.info h2 {
+    color: #97E7FF;
+    font-weight: 500;
+    font-size: 2.2rem;
+    text-transform: uppercase;
+}
+
+.info > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+}
+
+.info ul {
+    padding-left: 1rem;
+}
+
+.info__heading-line {
+    width: 100%;
+    height: 1px;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+
+@media only screen and (max-width: 900px) {
+    .info {
+        padding: 2rem 5rem;
+    }
+}
+
+
+@media only screen and (max-width: 500px) {
+    .info {
+        padding: 2rem 3rem;
+        font-size: 1.5rem;
+    }
+
+    .info h2 {
+        font-size: 2rem;
+    }
+}
+
+.background {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100vw;
+    background: blue;
+}

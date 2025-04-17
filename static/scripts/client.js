@@ -31,8 +31,10 @@ pannerInit(target, {
       pixelSelectorDisplay.style.width = `${pixelSize}px`;
       if (zoomValue < ZOOM_THRESHOLD) {
         pixelSelectorDisplay.style.display = "none";
+        pixelSelectorDisplay.isDisplayNone = true;
       } else {
         pixelSelectorDisplay.style.display = "block";
+        pixelSelectorDisplay.isDisplayNone = false;
       }
       getPixelId(target, pixelSelector.coordinatesX, pixelSelector.coordinatesY)
     },

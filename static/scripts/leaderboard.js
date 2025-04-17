@@ -80,17 +80,12 @@ function generateLeaderboard() {
 
 async function fetchData() {
     try {
-        let [leaderboardRes, userRes] = await Promise.all([
-            fetch("json/statistics/leaderboard"),
-            fetch("json/user"),
-        ]);
+        let fetchRes = await fetch("json/statistics/leaderboard").then((res) => res.json());
 
-        leaderboard = await leaderboardRes.json();
-        userData = await userRes.json();
+        leaderboard = fetchRes["leaderboard"];
+        userData = fetchRes["user"];
 
-        if (!Array.isArray(leaderboard)) {
-            leaderboard = [leaderboard];
-        }
+        leaderboard = (Array.isArray(leaderboard) ? leaderboard : [leaderboard]); 
 
         let currentIdx = 1;
         for (const user of leaderboard) {
@@ -100,8 +95,6 @@ async function fetchData() {
             }
             currentIdx++;
         }
-
-        leaderboard = leaderboard.slice(0, 8);
 
         generateLeaderboard();
         generateUserPlacement();

@@ -1,18 +1,10 @@
-const DUMMY_USERS = [
-    {
-        name: "User1",
-        placed: "10000"
-    },
-    {
-        name: "User2",
-        placed: "9000"
-    }
-];
+let leaderboard = null;
+let userData = null;
+let currentUserIdx = null;
 
-let ranks = document.querySelector(".ranks__users");
-let idx = 1;
-for (const user of DUMMY_USERS) {
-    let div = document.createElement("div");
+function generateUserPlacement() {
+    let currentUser = document.querySelector(".ranks__currentUser")
+
     let divLeft = document.createElement("div");
     let divMid = document.createElement("div");
     let divRight = document.createElement("div");
@@ -21,47 +13,85 @@ for (const user of DUMMY_USERS) {
     let userName = document.createElement("p");
     let userPlaced = document.createElement("p");
 
-    currentRank.textContent = `${idx}`;
-    userName.textContent = `${user["name"]}`;
-    userPlaced.textContent = `${user["placed"]}`;
+    currentRank.textContent = `${currentUserIdx}`;
+    userName.textContent = `[You] ${userData["username"]}`;
+    userPlaced.textContent = `${userData["placeCount"]}`;
 
-    divLeft.appendChild(currentRank)
+    divLeft.appendChild(currentRank);
     divLeft.setAttribute("class", "divLeft");
     divMid.appendChild(userName);
     divMid.setAttribute("class", "divMid");
     divRight.appendChild(userPlaced);
     divRight.setAttribute("class", "divRight");
-    div.appendChild(divLeft);
-    div.appendChild(divMid);
-    div.appendChild(divRight);
-    div.setAttribute("class", "ranks__user");
-    ranks.appendChild(div);
 
-    idx++;
+    currentUser.appendChild(divLeft);
+    currentUser.appendChild(divMid);
+    currentUser.appendChild(divRight);
 }
 
-let currentUser = document.querySelector(".ranks__currentUser")
-let currentUserIdx = 0;
+function generateLeaderboard() {
+    let ranks = document.querySelector(".ranks__users");
+    let idx = 1;
+    for (const user of leaderboard) {
+        let div = document.createElement("div");
+        let divLeft = document.createElement("div");
+        let divMid = document.createElement("div");
+        let divRight = document.createElement("div");
 
-let divLeft = document.createElement("div");
-let divMid = document.createElement("div");
-let divRight = document.createElement("div");
+        let currentRank = document.createElement("p");
+        let userName = document.createElement("p");
+        let userPlaced = document.createElement("p");
 
-let currentRank = document.createElement("p");
-let userName = document.createElement("p");
-let userPlaced = document.createElement("p");
+        currentRank.textContent = `${idx}`;
+        userName.textContent = `${user["username"]}`;
+        userPlaced.textContent = `${user["placeCount"]}`;
 
-currentRank.textContent = `${currentUserIdx+1}`;
-userName.textContent = `[You] ${DUMMY_USERS[currentUserIdx]["name"]}`;
-userPlaced.textContent = `${DUMMY_USERS[currentUserIdx]["placed"]}`;
+        divLeft.appendChild(currentRank)
+        divLeft.setAttribute("class", "divLeft");
+        divMid.appendChild(userName);
+        divMid.setAttribute("class", "divMid");
+        divRight.appendChild(userPlaced);
+        divRight.setAttribute("class", "divRight");
+        div.appendChild(divLeft);
+        div.appendChild(divMid);
+        div.appendChild(divRight);
+        div.setAttribute("class", "ranks__user");
+        ranks.appendChild(div);
 
-divLeft.appendChild(currentRank);
-divLeft.setAttribute("class", "divLeft");
-divMid.appendChild(userName);
-divMid.setAttribute("class", "divMid");
-divRight.appendChild(userPlaced);
-divRight.setAttribute("class", "divRight");
+        idx++;
+    }
+}
 
-currentUser.appendChild(divLeft);
-currentUser.appendChild(divMid);
-currentUser.appendChild(divRight);
+async function fetchData() {
+    try {
+        let [leaderboardRes, userRes] = await Promise.all([
+            fetch("json/statistics/leaderboard"),
+            fetch("json/user"),
+        ]);
+
+        leaderboard = await leaderboardRes.json();
+        userData = await userRes.json();
+
+        if (!Array.isArray(leaderboard)) {
+            leaderboard = [leaderboard];
+        }
+
+        let currentIdx = 1;
+        for (const user of leaderboard) {
+            if (user["id"] === userData["id"]) {
+                currentUserIdx = currentIdx;
+                break;
+            }
+            currentIdx++;
+        }
+
+        leaderboard = leaderboard.slice(0, 8);
+
+        generateLeaderboard();
+        generateUserPlacement();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+fetchData();

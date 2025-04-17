@@ -81,7 +81,6 @@ async function getLeaderboard(prisma, userId) {
         lastBitCount: true,
         maxBits: true,
         placeCount: true,
-        bonus: true,
         lastUpdated: true,
       },
       take: 10,
@@ -97,7 +96,6 @@ async function getLeaderboard(prisma, userId) {
           lastBitCount: true,
           maxBits: true,
           placeCount: true,
-          bonus: true,
           lastUpdated: true,
         }
       });

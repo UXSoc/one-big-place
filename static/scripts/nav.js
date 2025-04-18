@@ -1,3 +1,5 @@
+import { hidePalette } from "./palette.js";
+
 const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
 const NAV = document.querySelector("nav")
 const NAV_TABS = [
@@ -26,6 +28,7 @@ export function setupTabs() {
     for (let i = 0; i < NAV_ITEMS.length; i++) {
         NAV_ITEMS[i].addEventListener('click', function() {
             closeTabs();
+            hidePalette();
             NAV.classList.add("active")
             NAV_ITEMS[i].classList.add("active")
             const NAV_TAB = document.querySelector(`#nav-tab-${NAV_TABS[i]}`);

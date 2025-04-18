@@ -93,7 +93,7 @@ async function cacheUserFromDB(prisma, userId) {
     return userDataCache.get(userId);
 }
 
-async function getLeaderboard(prisma, userId) {
+async function getLeaderboard(prisma) {
   try {
     const top_users = await prisma.user.findMany({
       orderBy: {
@@ -101,21 +101,19 @@ async function getLeaderboard(prisma, userId) {
       },
       select: {
         id: true,
-        username: true,
-        lastPlacedDate: true,
-        lastBitCount: true,
-        maxBits: true,
-        placeCount: true,
-        lastUpdated: true,
       },
       take: 10,
     });
-    return top_users;
+    const userObjects = await Promise.all(
+      top_users.map(u => user(prisma, u.id))
+    );
+    return userObjects;
   } catch (error) {
     console.error('Error fetching top users:', error);
     return [];
   }
 }
+
 
 async function getUserCountByYear(prisma) {
   try {

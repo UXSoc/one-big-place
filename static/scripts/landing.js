@@ -14,6 +14,17 @@ const pixelArray = [];
 
 let trailLength = 10;
 let trailColors = ["#13132b"];
+const trailFadeDelay = 1;
+
+window.addEventListener("load", () => {
+  setInterval(() => {
+    if (pixelArray.length > trailLength) {
+      let [prevPixelX, prevPixelY] = pixelArray.pop();
+      let prevPixel = ctx.getImageData(prevPixelX, prevPixelY, pixelSize, pixelSize);
+      window.requestAnimationFrame(() => { fadePixel(prevPixelX, prevPixelY, prevPixel) });
+    }
+  }, trailFadeDelay);
+});
 
 window.addEventListener("mousemove", (e) => {
   const mouseX = e.x;
@@ -23,11 +34,6 @@ window.addEventListener("mousemove", (e) => {
   drawPixel(pixelX, pixelY, trailColors[Math.floor(Math.random()*trailColors.length)]);
   if (pixelArray.find((a) => {return (JSON.stringify(a) === JSON.stringify([pixelX, pixelY]));}) === undefined) {
     pixelArray.unshift([pixelX, pixelY]);
-    if (pixelArray.length > trailLength) {
-      let [prevPixelX, prevPixelY] = pixelArray.pop();
-      let prevPixel = ctx.getImageData(prevPixelX, prevPixelY, pixelSize, pixelSize);
-      window.requestAnimationFrame(() => { fadePixel(prevPixelX, prevPixelY, prevPixel) });
-    }
   }
 });
 

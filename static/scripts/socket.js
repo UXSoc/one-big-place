@@ -29,6 +29,6 @@ function setupEvents() {
         }
     })
     socket.on("request_login", (data) => {
-        openModal('login');
+        openModal('register');
     })
 }

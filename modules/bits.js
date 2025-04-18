@@ -1,4 +1,4 @@
-const cooldown = .2*1000;
+const cooldown = 15*1000;
 const frnzy_cooldown = 10*1000;
 let frnzy_active = false;
 

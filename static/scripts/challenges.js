@@ -17,6 +17,12 @@ async function loadChallenges(data) {
     let challenges = document.querySelector(".challenges");
     const fragment = document.createDocumentFragment();
     const userData = await getUserData();
+    if (!userData) {
+        const message = document.createElement('p');
+        message.innerText = "Login to complete challenges!";
+        challenges.parentElement.append(message);
+        return;
+    }
     for (const challenge of data) {
         let div = document.createElement("div");
         let divFirst = document.createElement("div");

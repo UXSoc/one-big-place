@@ -184,6 +184,15 @@ app.get('/json/user_grid', (req, res) => {
   res.json(canvas.get_user_grid_json());
 });
 
+app.get('/json/challenges', (req, res) => {
+  const filePath = path.join(__dirname, "server_json", "challenges.json");
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      res.status(404).send(`File not found: ${filePath}`);
+    }
+  });
+});
+
 app.get('/json/user', async (req, res) => {
   if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
   res.json(await user(prisma, parseInt(req.user.id)));

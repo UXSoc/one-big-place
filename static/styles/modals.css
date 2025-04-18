@@ -83,3 +83,28 @@ input[type=text], input[type=password] {
 .modal .close-modal-button:hover {
     scale: 1.1;
 }
+
+.scroller {
+    scrollbar-width: thin;
+    scrollbar-color: #b1b2b4 transparent;
+    overflow-y: auto;
+}
+
+.scroller::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroller::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+    background-color: #b1b2b4;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.scroller::-webkit-scrollbar-button {
+    display: none;
+}

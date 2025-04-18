@@ -10,7 +10,7 @@ const NAV_TABS = [
     "credits",
 ]
 
-function closeTabs() {
+export function closeTabs() {
     document.querySelectorAll(".nav-tab").forEach((item) => {
         item.style.display = 'none';
     })

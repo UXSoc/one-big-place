@@ -98,6 +98,10 @@
     overflow: hidden;
 }
 
+.challenge p {
+    margin: 0;
+}
+
 .challenge > .challenge-progress {
     position: relative;
     background-color: #dabeff;

@@ -1,6 +1,16 @@
 import { loadUserGrid, getUserGrid } from "./canvas.js";
 import { getUserData } from "./user.js";
 
+function isInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= window.innerHeight &&
+    rect.right <= window.innerWidth
+  );
+}
+
 export class PixelSelector {
   constructor() {
     this.coordinates = document.querySelector(".canvas-coordinates > p");
@@ -13,7 +23,7 @@ export class PixelSelector {
     this.zoomThreshold = 15;
     this.selector = document.querySelector(".pixel-selector");
     this.selector.interfacePos = [0, 0];
-    this.isDisplayNone = true;
+    this.selector.isDisplayNone = true;
   }
   getPixelSelector() {
     return [this.coordinatesX, this.coordinatesY];
@@ -31,43 +41,36 @@ export class PixelSelector {
   }
   changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y];
-
-    if (target.zoom < this.zoomThreshold) {
-      this.selector.style = `
-          display: block;
-          position: absolute;
-          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-          width: ${target.pixelSize}px;
-          aspect-ratio: 1 / 1;
-      `;
-    } else {
-      if (!this.isDisplayNone) {
-        this.selector.animate(
-          [
-            {
-              translate: `${this.initCoordinatesX * target.pixelSize}px ${
-                this.initCoordinatesY * target.pixelSize
-              }px`,
-            },
-            {
-              translate: `${x * target.pixelSize}px ${y * target.pixelSize}px`,
-            },
-          ],
+    if (!this.selector.isDisplayNone && isInViewport(this.selector)) {
+      this.selector.animate(
+        [
           {
-            duration: 150,
-            iterations: 1,
-          }
-        );
-      }
-      this.selector.style = `
-          display: block;
-          position: absolute;
-          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-          width: ${target.pixelSize}px;
-          aspect-ratio: 1 / 1;
-      `;
-      this.isDisplayNone = false;
+            translate: `${this.initCoordinatesX * target.pixelSize}px ${
+              this.initCoordinatesY * target.pixelSize
+            }px`,
+          },
+          {
+            translate: `${x * target.pixelSize}px ${y * target.pixelSize}px`,
+          },
+        ],
+        {
+          duration: 150,
+          iterations: 1,
+        }
+      );
+    } else {
+      this.selector.style.animation = 'none';
+      this.selector.offsetHeight;
+      this.selector.style.animation = '';
     }
+    this.selector.style = `
+        display: block;
+        position: absolute;
+        translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+        width: ${target.pixelSize}px;
+        aspect-ratio: 1 / 1;
+    `;
+    this.selector.isDisplayNone = false;
   }
 }
 const userDataCache = new Map();

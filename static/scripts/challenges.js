@@ -1,73 +1,79 @@
-const CHALLENGES = [
-    {
-        name: "Social Butterfly",
-        increase: 1,
-        description: "Share the event announcement post on Facebook."
-    },
-    {
-        name: "Tweet Master",
-        increase: 1,
-        description: "Share the event link on X/Twitter."
-    },
-    {
-        name: "#1 Fan",
-        increase: 1,
-        description: "Follow the User Experience Society Facebook Page."
-    },
-    {
-        name: "Tara Gonz",
-        increase: 1,
-        description: "Place 120 total pixels during lunchtime (between 11:00am - 2:00pm)."
-    },
-    {
-        name: "Excuse Me",
-        increase: 1,
-        description: "Replace 150 pixels placed by a user."
-    },
-    {
-        name: "Starter Sketcher",
-        increase: 1,
-        description: "Place 200 pixels."
-    },
-    {
-        name: "Master Painter",
-        increase: 1,
-        description: "Place 500 pixels."
-    },
-    {
-        name: "Artistic Virtuouso",
-        increase: 1,
-        description: "Place 1000 pixels."
-    },
-    {
-        name: "Grandmaster Artisan",
-        increase: 1,
-        description: "Place 5000 pixels."
+import { getUserData, userEventTarget } from "./user.js";
+
+let challengeData;
+async function fetchData() {
+    try {
+        let fetchRes = await fetch("json/challenges").then((res) => res.json());
+        challengeData = fetchRes;
+        await loadChallenges(fetchRes);
+    } catch (err) {
+        console.error(err);
     }
-];
-
-let challenges = document.querySelector(".challenges");
-for (const challenge of CHALLENGES) {
-    let div = document.createElement("div");
-    let divFirst = document.createElement("div");
-    let divSecond = document.createElement("div");
-
-    let challengeName = document.createElement("p");
-    let challengeIncrease = document.createElement("div");
-    let challengeDescription = document.createElement("p");
-
-    challengeName.textContent = `${challenge["name"]}`;
-    challengeIncrease.textContent = `+${challenge["increase"]}`;
-    challengeDescription.textContent = `${challenge["description"]}`;
-
-    divFirst.appendChild(challengeName);
-    divFirst.appendChild(challengeIncrease);
-    divFirst.setAttribute("class", "divFirst");
-    divSecond.appendChild(challengeDescription);
-    divSecond.setAttribute("class", "divSecond");
-
-    div.setAttribute("class", "challenge");
-    div.appendChild(divFirst);
-    div.appendChild(divSecond);
-    challenges.appendChild(div);
 }
+
+fetchData();
+
+async function loadChallenges(data) {
+    let challenges = document.querySelector(".challenges");
+    const fragment = document.createDocumentFragment();
+    const userData = await getUserData();
+    for (const challenge of data) {
+        let div = document.createElement("div");
+        let divFirst = document.createElement("div");
+        let divSecond = document.createElement("div");
+    
+        let challengeName = document.createElement("p");
+        let challengeIncrease = document.createElement("div");
+        let challengeDescription = document.createElement("p");
+    
+        challengeName.textContent = `${challenge["name"]}`;
+        challengeIncrease.textContent = `+1`;
+        challengeDescription.textContent = `${challenge["description"]}`;
+
+        let indicator;
+        if (challenge["type"] == "link") {
+            indicator = document.createElement('a');
+            indicator.innerText = challenge["button"]||"";
+            indicator.href = challenge["link"];
+            indicator.target = "_blank";
+        } else if (challenge["type"] == "progress") {
+            indicator = document.createElement('a');
+            indicator.className = "challenge-progress";
+            indicator.innerText = `${userData[challenge["field"]]}/${challenge["required"]}`;
+            const progress = document.createElement('div');
+            const progressText = document.createElement('div');
+            const total = challenge["required"];
+            const current = userData[challenge["field"]];
+            if (current>=total) {
+                progressText.innerText = `${Math.min(current, total)}/${total}`;
+                progressText.style.backgroundColor = `#711ede`;
+                indicator.style.outline = `2px solid #711ede`;
+                progressText.style.outline = `2px solid #711ede`;
+                progress.style.width = `100%`;
+            } else {
+                progressText.innerText = `${Math.min(current, total)}/${total}`;
+                progress.style.width = `${Math.min(current/total*100,100)}%`;
+            }
+
+            indicator.append(progress, progressText);
+        }
+    
+        divFirst.appendChild(challengeName);
+        divFirst.appendChild(challengeIncrease);
+        divFirst.setAttribute("class", "divFirst");
+        divSecond.appendChild(challengeDescription);
+        divSecond.setAttribute("class", "divSecond");
+    
+        div.setAttribute("class", "challenge");
+        div.appendChild(divFirst);
+        div.appendChild(divSecond);
+        div.appendChild(indicator)
+        fragment.appendChild(div);
+    }
+    challenges.replaceChildren(fragment);
+}
+
+userEventTarget.addEventListener('userUpdated', async (event) => {
+    const { userId, field, value } = event.detail;
+    if (challengeData) loadChallenges(challengeData);
+});

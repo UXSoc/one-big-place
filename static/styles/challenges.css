@@ -58,6 +58,9 @@ p {
     flex-direction: column;
     margin-top: 0.5em;
     margin-bottom: 1em;
+    max-height: 280px;
+    overflow-y: auto;
+    border-radius: 10px;
 }
 
 .challenge {
@@ -85,11 +88,11 @@ p {
 .divFirst div {
     font-family: "BlockCraft", sans-serif;
     font-size: 1.2rem;
-    padding-left: 0.2em;
-    padding-top: 0.2em;
-    padding-right: 0.2em;
+    padding: .5em .6em .3em .6em;
+    margin-right: .4em;
     color: white;
     background-color: #9747FF;
+    border-radius: 5px;
 }
 
 .divSecond {
@@ -101,4 +104,37 @@ p {
     color: #474747;
     font-family: "BlockCraft", sans-serif;
     font-size: 1.2rem;
+}
+
+.challenge > a {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2em;
+    background-color: #9747ff;
+    border-radius: 5px;
+    padding: .4em .4em .3em .6em;
+    outline: none;
+    border: none;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.challenge > .challenge-progress {
+    position: relative;
+    background-color: #dabeff;
+    outline: 2px #9747ff solid;
+}
+
+.challenge > .challenge-progress > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #9747ff;
+    height: 100%;
+    width: 100%;
+}
+
+.challenge > .challenge-progress > div:nth-child(2) {
+    padding: .4em .4em .3em .6em;
+    background-color: transparent;
 }

@@ -3,19 +3,25 @@
         "id": "fb-share",
         "name": "Social Butterfly",
         "description": "Share the event announcement post on Facebook.",
-        "type": "link"
+        "type": "link",
+        "button": "Go to Facebook!",
+        "link": "https://facebook.com"
     },
     {
         "id": "twitter-share",
         "name": "Tweet Master",
         "description": "Share the event link on Twitter.",
-        "type": "link"
+        "type": "link",
+        "button": "Go to Twitter!",
+        "link": ""
     },
     {
         "id": "fb-follow",
         "name": "#1 Fan",
         "description": "Follow the User Experience Society Facebook Page.",
-        "type": "link"
+        "type": "link",
+        "button": "Go to Facebook!",
+        "link": ""
     },
     {
         "id": "lunch-placer",

@@ -29,14 +29,8 @@ function adjustColor(hex, factor) {
 
 async function updatePieChart() {
   const response = await fetch('json/statistics/yr_dist');
-  const data = {
-    "20": 11065,
-    "21": 742,
-    "22": 7410,
-    "23": 7824,
-    "24": 8654,
-    "25": 4145,
-  };
+  const data = await response.json();
+  console.log(data)
   pieContainer.querySelectorAll('.label').forEach(el => el.remove());
 
   const entries = Object.entries(data);

@@ -1,7 +1,7 @@
 const canvas = document.querySelector("#js-landing-bg");
 const ctx = canvas.getContext("2d");
 
-let { width, height } = canvas.getBoundingClientRect();
+const { width, height } = canvas.getBoundingClientRect();
 canvas.width = width;
 canvas.height = height;
 
@@ -12,15 +12,15 @@ ctx.fillRect(0, 0, width, height);
 
 const pixelArray = [];
 
-let trailLength = 10;
-let trailColors = ["#13132b"];
+const trailLength = 10;
+const trailColors = ["#13132b"];
 const trailFadeDelay = 1;
 
 window.addEventListener("load", () => {
   setInterval(() => {
     if (pixelArray.length > trailLength) {
-      let [prevPixelX, prevPixelY] = pixelArray.pop();
-      let prevPixel = ctx.getImageData(prevPixelX, prevPixelY, pixelSize, pixelSize);
+      const [prevPixelX, prevPixelY] = pixelArray.pop();
+      const prevPixel = ctx.getImageData(prevPixelX, prevPixelY, pixelSize, pixelSize);
       window.requestAnimationFrame(() => { fadePixel(prevPixelX, prevPixelY, prevPixel) });
     }
   }, trailFadeDelay);

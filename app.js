@@ -214,7 +214,6 @@ app.get('/json/statistics/yr_dist', async (req, res) => {
 
 let promos;
 function loadPromos() {
-  console.log("Loading Promos")
   const filePath = path.join(__dirname, "server_json", "promos.json");
   try {
     const data = fs.readFileSync(filePath, 'utf8');
@@ -228,20 +227,30 @@ loadPromos();
 
 app.use(express.json())
 app.post('/redeem', async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "User not authenticated" });
   const { redeemCode } = req.body;
-  if (typeof redeemCode !== 'string') return res.status(400).json({ error: "Invalid input. Must be a string." });
-  const redeemingUser = await user(prisma, parseInt(req.user.id));
-  if (!redeemingUser) return res.status(404).json({ error: "User not found" });
-  if (redeemingUser.bonusSet.has(redeemCode)) return res.status(400).json({ error: "Redeem code already used" });
-  if (!promos.has(redeemCode)) return res.status(404).json({ error: "Promo code not found" });
-  updateUser(redeemingUser.id, {
+  try {
+    const message = await redeemCodeForUser(req.user.id, redeemCode);
+    return res.status(200).json({ message });
+  } catch (err) {
+    return res.status(400).json({ error: err.message });
+  }
+});
+
+async function redeemCodeForUser(userId, redeemCode) {
+  if (typeof redeemCode !== 'string') { throw new Error("Invalid input. Must be a string.") }
+  const redeemingUser = await user(prisma, parseInt(userId));
+  if (!redeemingUser) { throw new Error("User not found") }
+  if (redeemingUser.bonusSet.has(redeemCode)) { throw new Error("Redeem code already used") }
+  console.log(isChallenge(redeemCode), redeemCode)
+  if (!(promos.has(redeemCode) || isChallenge(redeemCode))) { throw new Error("Promo code not found") }
+  await updateUser(prisma, redeemingUser.id, {
     bonus: [...(redeemingUser.bonus || []), redeemCode],
     bonusSet: new Set([...(redeemingUser.bonusSet || []), redeemCode]),
-    maxBits: redeemingUser.maxBits+1
+    maxBits: redeemingUser.maxBits + 1
   });
-  return res.status(200).json({ message: "Bonus code redeemed successfully!" });
-});
+  return "Bonus code redeemed successfully!";
+}
 
 // Setup Socket.io
 
@@ -275,6 +284,7 @@ io.use(sharedSession(sessionMiddleware, {
 
 const canvas = require('./modules/canvas');
 const { calculateBits, getCooldown } = require('./modules/bits');
+const { isChallenge } = require('./modules/challenges');
 startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {
@@ -328,17 +338,18 @@ io.sockets.on('connection', async (socket) => {
   socket.on('PaintPixel', async (data) => {
     if (!socket.handshake.session.passport?.user) {
       socket.emit("request_login");
-      socket.emit("PaintPixel", { ...data, id: 31 })
+      socket.emit("PaintPixel", { ...data, id: canvas.getPixelColorId(data.x, data.y) })
+      
       return;
     }
     const user_data = await user(prisma, userId);
     const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
     if (current_bits < 1) {
-      socket.emit("PaintPixel", { ...data, id: 31 })
+      socket.emit("PaintPixel", { ...data, id: canvas.getPixelColorId(data.x, data.y) })
       return;
     }
     const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
-    updateUser(userId, {
+    updateUser(prisma, userId, {
       lastBitCount: current_bits-1,
       placeCount: user_data.placeCount+1,
       replaced: (pos_current_userId&&pos_current_userId!==userId)?user_data.replaced+1:user_data.replaced,

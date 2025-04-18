@@ -106,6 +106,10 @@ function paintPixel(x, y, id, userId) {
     console.log(`placed pixel: ${x} ${y} ${id}`);
 }
 
+function getPixelColorId(x, y) {
+    return canvas.canvas[y][x] || 31;
+}
+
 function saveCanvasData() {
     writeJSONFile("canvas", canvas)
 }
@@ -123,6 +127,7 @@ module.exports = {
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
     paintPixel: paintPixel,
+    getPixelColorId: getPixelColorId,
     saveFrame: saveFrame,
     saveCanvasData: saveCanvasData,
 };

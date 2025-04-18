@@ -1,7 +1,7 @@
 import { openCustomModal } from "./modals.js";
 import { socket } from "./socket.js";
 
-async function redeem(redeemCode) {
+export async function redeem(redeemCode, openModal=true) {
     try {
         const response = await fetch('/redeem', {
             method: 'POST',
@@ -16,20 +16,13 @@ async function redeem(redeemCode) {
 
         const data = await response.json();
         if (!response.ok) {
-            openCustomModal("Error Redeeming", data.error)
+            if (openModal) openCustomModal("Error Redeeming", data.error)
             console.error('Error redeeming bonus:', data.error);
         } else {
-            openCustomModal("Redeemed Code!", data.message)
+            if (openModal) openCustomModal("Redeemed Code!", data.message)
             socket.emit('req_bit_sync');
         }
     } catch (err) {
-        openCustomModal("Error Redeeming", err)
+        if (openModal) openCustomModal("Error Redeeming", err)
     }
 }
-document.querySelector('form.redeem').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const redeemInput = e.target.querySelector('input');
-    if (redeemInput.value == "") return;
-    redeem(redeemInput.value);
-    redeemInput.value = '';
-})

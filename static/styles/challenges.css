@@ -85,7 +85,7 @@
     font-size: 1.2rem;
 }
 
-.challenge > a {
+.challenge > a, .challenge > .indicator {
     font-family: "BlockCraft", sans-serif;
     font-size: 1.2em;
     background-color: #9747ff;

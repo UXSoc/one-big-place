@@ -20,6 +20,7 @@ function startDBSyncing(prisma) {
                 replaced: userData.replaced,
                 placedBreak: userData.placedBreak,
                 bonus: userData.bonus,
+                lastUpdated: new Date(userData.lastUpdated),
               }
             }).catch(console.error)
           );
@@ -31,9 +32,10 @@ function startDBSyncing(prisma) {
     }, DATABASE_SYNC_INTERVAL);
 }
 
-async function updateUser(userId, newData) {
-    const cachedUser = userDataCache.get(userId) || {};
-    userDataCache.set(userId, { ...cachedUser, ...newData, lastUpdated: Date.now() });  
+async function updateUser(prisma, userId, newData) {
+    const cachedUser = await user(prisma, userId);
+    if (!cachedUser) throw new Error("Trying to update undefined User");
+    userDataCache.set(userId, { ...cachedUser, ...newData, lastUpdated: Date.now() });
 }
 
 async function user(prisma, userId) {

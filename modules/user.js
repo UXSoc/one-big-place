@@ -64,32 +64,16 @@ async function cacheUserFromDB(prisma, userId) {
             lastUpdated: true,
         }
     })
-    
+    if (!user) return;
     let higherCount;
-    if (userId) {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { 
-          id: true,
-          username: true,
-          lastPlacedDate: true,
-          lastBitCount: true,
-          maxBits: true,
-          placeCount: true,
-          lastUpdated: true,
+    higherCount = await prisma.user.count({
+      where: {
+        placeCount: {
+          gt: user.placeCount
         }
-      });
-      if (user) {
-        higherCount = await prisma.user.count({
-          where: {
-            placeCount: {
-              gt: user.placeCount
-            }
-          }
-        });
       }
-    }
-    if (user) userDataCache.set(userId, { ...user, lastUpdated: 0, place: higherCount + 1 });
+    });
+    userDataCache.set(userId, { ...user, lastUpdated: 0, place: higherCount + 1, bonusSet: new Set(user.bonus) })
     return userDataCache.get(userId);
 }
 

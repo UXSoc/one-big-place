@@ -1,4 +1,5 @@
 require('dotenv').config()
+const fs = require('fs');
 const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
 const session = require("express-session");
@@ -211,8 +212,38 @@ app.get('/json/statistics/yr_dist', async (req, res) => {
   res.json(await getUserCountByYear(prisma));
 });
 
+let promos;
+function loadPromos() {
+  console.log("Loading Promos")
+  const filePath = path.join(__dirname, "server_json", "promos.json");
+  try {
+    const data = fs.readFileSync(filePath, 'utf8');
+    const jsonData = JSON.parse(data);
+    promos = new Set(jsonData);
+  } catch (err) {
+    console.error('Error loading/parsing promos:', err);
+  }
+}
+loadPromos();
+
+app.use(express.json())
+app.post('/redeem', async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
+  const { redeemCode } = req.body;
+  if (typeof redeemCode !== 'string') return res.status(400).json({ error: "Invalid input. Must be a string." });
+  const redeemingUser = await user(prisma, parseInt(req.user.id));
+  if (!redeemingUser) return res.status(404).json({ error: "User not found" });
+  if (redeemingUser.bonusSet.has(redeemCode)) return res.status(400).json({ error: "Redeem code already used" });
+  if (!promos.has(redeemCode)) return res.status(404).json({ error: "Promo code not found" });
+  updateUser(redeemingUser.id, {
+    bonus: [...(redeemingUser.bonus || []), redeemCode],
+    bonusSet: new Set([...(redeemingUser.bonusSet || []), redeemCode]),
+    maxBits: redeemingUser.maxBits+1
+  });
+  return res.status(200).json({ message: "Bonus code redeemed successfully!" });
+});
+
 // Setup Socket.io
-const fs = require('fs');
 
 try {
     var options = {
@@ -291,7 +322,9 @@ io.sockets.on('connection', async (socket) => {
   } else {
     console.log('Unauthenticated connection');
   }
-
+  socket.on('req_bit_sync', () => {
+    sync_cooldown(userId, socket);
+  })
   socket.on('PaintPixel', async (data) => {
     if (!socket.handshake.session.passport?.user) {
       socket.emit("request_login");

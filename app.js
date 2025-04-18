@@ -195,7 +195,7 @@ app.get('/json/user/:userId', async (req, res) => {
 });
 
 app.get('/json/statistics/leaderboard', async (req, res) => {
-  res.json(await getLeaderboard(prisma, req.isAuthenticated()?req.user.id:undefined));
+  res.json(await getLeaderboard(prisma));
 });
 
 app.get('/json/statistics/yr_dist', async (req, res) => {
@@ -283,7 +283,7 @@ io.sockets.on('connection', async (socket) => {
     const user_data = await user(prisma, userId);
     const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
     if (current_bits < 1) {
-      socket.emit("PaintPixel", { ...data, id: 31, userId: userId })
+      socket.emit("PaintPixel", { ...data, id: 31 })
       return;
     }
     const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];

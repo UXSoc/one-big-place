@@ -1,4 +1,5 @@
 import { loadUserGrid, getUserGrid } from "./canvas.js";
+import { getUserData } from "./user.js";
 
 export class PixelSelector {
   constructor() {
@@ -86,14 +87,7 @@ export async function getPixelId(target, x, y) {
     hidePixelId();
     return;
   }
-  let userData = userDataCache.get(pixelId);
-  if (!userData) {
-    const response = await fetch(`json/user/${pixelId}`);
-    userData = await response.json();
-    if (userData.id) {
-      userDataCache.set(userData.id, userData);
-    }
-  }
+  const userData = await getUserData(pixelId);
   if (userData?.id) {
     pin.innerText = `${userData.username} | ${String(userData.idNumber).slice(0, 2)}'` || "";
     showPixelId();

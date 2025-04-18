@@ -1,17 +1,6 @@
 import { paintPixelOnCanvas, syncCooldown } from "./paint.js";
 import { openModal } from "./modals.js"
-
-let leaderboard = null;
-
-async function fetchData() {
-    try {
-        leaderboard = await fetch("json/statistics/leaderboard").then((res) => res.json());
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-fetchData();
+import { getUserData, updateUserData } from "./user.js";
 
 export var socket;
 export function connectToServer(ip) {
@@ -23,6 +12,7 @@ export function getLeaderboardData() {
     return leaderboard;
 }
 
+var leaderboard;
 export function setLeaderboardData(leaderboardData) {
     leaderboard = leaderboardData;
 }
@@ -31,14 +21,11 @@ function setupEvents() {
     socket.on("sync_cooldown", (data) => {
         syncCooldown(data);
     })
-    socket.on("PaintPixel", (data) => {
+    socket.on("PaintPixel", async (data) => {
         paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
-        leaderboard["user"]["placeCount"]++;
-        for (const user of leaderboard["leaderboard"]) {
-            if (user["id"] === data.userId) {
-                user["placeCount"]++;
-                break;
-            }
+        if (data.userId) {
+            const userData = await getUserData(data.userId);
+            if (userData) updateUserData("placeCount", userData.placeCount+1, userData.id);
         }
     })
     socket.on("request_login", (data) => {

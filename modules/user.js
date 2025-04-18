@@ -64,8 +64,33 @@ async function cacheUserFromDB(prisma, userId) {
             lastUpdated: true,
         }
     })
-    if (user) userDataCache.set(userId, { ...user, lastUpdated: 0 });
-    return user;
+    
+    let higherCount;
+    if (userId) {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { 
+          id: true,
+          username: true,
+          lastPlacedDate: true,
+          lastBitCount: true,
+          maxBits: true,
+          placeCount: true,
+          lastUpdated: true,
+        }
+      });
+      if (user) {
+        higherCount = await prisma.user.count({
+          where: {
+            placeCount: {
+              gt: user.placeCount
+            }
+          }
+        });
+      }
+    }
+    if (user) userDataCache.set(userId, { ...user, lastUpdated: 0, place: higherCount + 1 });
+    return userDataCache.get(userId);
 }
 
 async function getLeaderboard(prisma, userId) {
@@ -85,33 +110,7 @@ async function getLeaderboard(prisma, userId) {
       },
       take: 10,
     });
-    let higherCount;
-    if (userId) {
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { 
-          id: true,
-          username: true,
-          lastPlacedDate: true,
-          lastBitCount: true,
-          maxBits: true,
-          placeCount: true,
-          lastUpdated: true,
-        }
-      });
-      if (!!user) {
-        const userPlaceCount = user.placeCount;
-        higherCount = await prisma.user.count({
-          where: {
-            placeCount: {
-              gt: userPlaceCount
-            }
-          }
-        });
-        return {leaderboard: top_users, user: {...user, place: higherCount + 1}};
-      }
-    }
-    return {leaderboard: top_users};
+    return top_users;
   } catch (error) {
     console.error('Error fetching top users:', error);
     return [];

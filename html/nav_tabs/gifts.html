@@ -1,1 +1,30 @@
-<h1>Redeem Gift Codes</h1>
+<link rel="stylesheet" href="styles/gifts.css">
+<div class="container">
+    <div class="title">
+        <img src="images/Gift.svg" alt="Star Icon">
+        <h1>Redeem Codes</h1>
+    </div>  
+    <div class="description">
+        <p>Redeem codes can be found on promotional materials.</p>
+    </div>
+    <form class="redeem">
+        <input type="text" name="code" placeholder="Enter code." id="code-field" autocomplete="off">
+        <button>Redeem</button>
+    </form>
+    <script type="module">
+        import { openCustomModal } from "./scripts/modals.js";
+        import { redeem } from "./scripts/redeem.js"
+        document.querySelector('form.redeem').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const redeemInput = e.target.querySelector('input');
+            if (redeemInput.value == "") return;
+            if (redeemInput.value.toLowerCase().startsWith("challenge-")) {
+                openCustomModal("Error Redeeming", "Promo code not found");
+                redeemInput.value = '';
+                return;
+            };
+            redeem(redeemInput.value);
+            redeemInput.value = '';
+        })
+    </script>
+</div>

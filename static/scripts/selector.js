@@ -1,4 +1,5 @@
-import { loadUserGrid, getUserGrid } from "./canvas.js"
+import { loadUserGrid, getUserGrid } from "./canvas.js";
+import { getUserData } from "./user.js";
 
 export class PixelSelector {
   constructor() {
@@ -9,8 +10,10 @@ export class PixelSelector {
     this.coordinatesY = 0;
     this.coordinates.textContent = `0, 0`;
 
+    this.zoomThreshold = 15;
     this.selector = document.querySelector(".pixel-selector");
     this.selector.interfacePos = [0, 0];
+    this.isDisplayNone = true;
   }
   getPixelSelector() {
     return [this.coordinatesX, this.coordinatesY];
@@ -29,58 +32,62 @@ export class PixelSelector {
   changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y];
 
-    if (target.zoom < 2) {
-      this.selector.style.display = "none";
-    } else {
-      this.selector.animate(
-        [
-          {
-            translate: `${this.initCoordinatesX * target.pixelSize}px ${
-              this.initCoordinatesY * target.pixelSize
-            }px`,
-          },
-          { translate: `${x * target.pixelSize}px ${y * target.pixelSize}px` },
-        ],
-        {
-          duration: 150,
-          iterations: 1,
-        }
-      );
+    if (target.zoom < this.zoomThreshold) {
       this.selector.style = `
-      display: block;
-      position: absolute;
-      translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
-      width: ${target.pixelSize}px;
-      aspect-ratio: 1 / 1;
+          display: block;
+          position: absolute;
+          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+          width: ${target.pixelSize}px;
+          aspect-ratio: 1 / 1;
       `;
+    } else {
+      if (!this.isDisplayNone) {
+        this.selector.animate(
+          [
+            {
+              translate: `${this.initCoordinatesX * target.pixelSize}px ${
+                this.initCoordinatesY * target.pixelSize
+              }px`,
+            },
+            {
+              translate: `${x * target.pixelSize}px ${y * target.pixelSize}px`,
+            },
+          ],
+          {
+            duration: 150,
+            iterations: 1,
+          }
+        );
+      }
+      this.selector.style = `
+          display: block;
+          position: absolute;
+          translate: ${x * target.pixelSize}px ${y * target.pixelSize}px;
+          width: ${target.pixelSize}px;
+          aspect-ratio: 1 / 1;
+      `;
+      this.isDisplayNone = false;
     }
   }
 }
 const userDataCache = new Map();
-const pin = document.querySelector('.panner_interface > .pixel-id');
+const pin = document.querySelector(".panner_interface > .pixel-id");
 export async function getPixelId(target, x, y) {
   pin.interfacePos = [x, y];
-  pin.style.transform = `translate(${target.pixelSize}px, -110%)`
+  pin.style.transform = `translate(${target.pixelSize}px, -110%)`;
   pin.updatePos();
   let user_grid = getUserGrid();
   if (!user_grid) {
     user_grid = await loadUserGrid();
     return;
-  };
+  }
   const pixelId = user_grid[y][x];
   if (!pixelId) {
     pin.innerText = "";
     hidePixelId();
     return;
   }
-  let userData = userDataCache.get(pixelId);
-  if (!userData) {
-    const response = await fetch(`json/user/${pixelId}`);
-    userData = await response.json();
-    if (userData.id) {
-      userDataCache.set(userData.id, userData)
-    }
-  }
+  const userData = await getUserData(pixelId);
   if (userData?.id) {
     pin.innerText = `${userData.username} | ${String(userData.idNumber).slice(0, 2)}'` || "";
     showPixelId();

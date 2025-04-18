@@ -20,6 +20,7 @@ function startDBSyncing(prisma) {
                 replaced: userData.replaced,
                 placedBreak: userData.placedBreak,
                 bonus: userData.bonus,
+                lastUpdated: new Date(userData.lastUpdated),
               }
             }).catch(console.error)
           );
@@ -31,9 +32,10 @@ function startDBSyncing(prisma) {
     }, DATABASE_SYNC_INTERVAL);
 }
 
-async function updateUser(userId, newData) {
-    const cachedUser = userDataCache.get(userId) || {};
-    userDataCache.set(userId, { ...cachedUser, ...newData, lastUpdated: Date.now() });  
+async function updateUser(prisma, userId, newData) {
+    const cachedUser = await user(prisma, userId);
+    if (!cachedUser) throw new Error("Trying to update undefined User");
+    userDataCache.set(userId, { ...cachedUser, ...newData, lastUpdated: Date.now() });
 }
 
 async function user(prisma, userId) {
@@ -64,8 +66,17 @@ async function cacheUserFromDB(prisma, userId) {
             lastUpdated: true,
         }
     })
-    if (user) userDataCache.set(userId, { ...user, lastUpdated: 0 });
-    return user;
+    if (!user) return;
+    let higherCount;
+    higherCount = await prisma.user.count({
+      where: {
+        placeCount: {
+          gt: user.placeCount
+        }
+      }
+    });
+    userDataCache.set(userId, { ...user, lastUpdated: 0, place: higherCount + 1, bonusSet: new Set(user.bonus) })
+    return userDataCache.get(userId);
 }
 
 async function getLeaderboard(prisma) {
@@ -76,44 +87,42 @@ async function getLeaderboard(prisma) {
       },
       select: {
         id: true,
-        username: true,
-        lastPlacedDate: true,
-        lastBitCount: true,
-        maxBits: true,
-        placeCount: true,
-        bonus: true,
-        lastUpdated: true,
       },
       take: 10,
     });
-    return top_users;
+    const userObjects = await Promise.all(
+      top_users.map(u => user(prisma, u.id))
+    );
+    return userObjects;
   } catch (error) {
     console.error('Error fetching top users:', error);
     return [];
   }
 }
 
-async function getUserCountByYear(prisma) {
+
+async function getUserPlaceCountByYear(prisma) {
   try {
     const users = await prisma.user.findMany({
       select: {
         idNumber: true,
+        placeCount: true,
       },
     });
 
     const yearCount = users.reduce((acc, user) => {
-      const year = `${user.idNumber.toString().slice(0, 2)}`;
-      acc[year] = (acc[year] || 0) + 1;
+      const year = user.idNumber.toString().slice(0, 2);
+      const placed = user.placeCount || 0;
+      acc[year] = (acc[year] || 0) + placed;
       return acc;
     }, {});
 
     return yearCount;
   } catch (error) {
-    console.error('Error fetching user count by year:', error);
+    console.error('Error fetching placed count by year:', error);
     return {};
   }
 }
-
 
 module.exports = {
     startDBSyncing: startDBSyncing,
@@ -121,5 +130,5 @@ module.exports = {
     user: user,
     cacheUserFromDB: cacheUserFromDB,
     getLeaderboard: getLeaderboard,
-    getUserCountByYear: getUserCountByYear,
+    getUserPlaceCountByYear: getUserPlaceCountByYear,
 }

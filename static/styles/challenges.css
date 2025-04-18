@@ -1,0 +1,124 @@
+@font-face {
+    font-family: "PixelGame";
+    src: url("../fonts/Pixel Game.woff");
+}
+
+@font-face {
+    font-family: "BlockCraft";
+    src: url("../fonts/BlockCraft.woff");
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 0;
+    font-family: "PixelGame", sans-serif;
+    font-size: 2.8rem;
+    font-weight: 100;
+}
+
+.description p {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+}
+
+.challenges {
+    width: 100%;
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    max-height: 240px;
+    overflow-y: auto;
+    border-radius: 10px;
+}
+
+.challenge {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    background-color: #e6e6e6;
+    padding: 0.5em;
+    border-radius: 10px;
+}
+
+.divFirst {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.divFirst p {
+    font-size: 1.6rem;
+    font-family: "BlockCraft", sans-serif;
+}
+
+.divFirst div {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+    padding: .5em .6em .3em .6em;
+    margin-right: .4em;
+    color: white;
+    background-color: #9747FF;
+    border-radius: 5px;
+}
+
+.divSecond {
+    width: 100%;
+    text-align: start;
+}
+
+.divSecond p {
+    color: #474747;
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+}
+
+.challenge > a, .challenge > .indicator {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2em;
+    background-color: #9747ff;
+    border-radius: 5px;
+    padding: .4em .4em .3em .6em;
+    outline: none;
+    border: none;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.challenge p {
+    margin: 0;
+}
+
+.challenge > .challenge-progress {
+    position: relative;
+    background-color: #dabeff;
+    outline: 2px #9747ff solid;
+}
+
+.challenge > .challenge-progress > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #9747ff;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.challenge > .challenge-progress > div:nth-child(2) {
+    padding: .4em .4em .3em .6em;
+    background-color: transparent;
+}

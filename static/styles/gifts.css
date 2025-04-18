@@ -1,0 +1,65 @@
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 0;
+    font-family: "PixelGame", sans-serif;
+    font-size: 2.8rem;
+    font-weight: 100;
+}
+
+.description {
+    width: 100%;
+    margin-top: 0.3em;
+    text-align: start;
+}
+
+.description p {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+}
+
+.redeem {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5em;
+    align-items: end;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+.redeem input {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+    width: 100%;
+    border-radius: 8px;
+    padding: 0.8em 0.5em 0.5em 1em;
+    background-color: #e6e6e6;
+    border: none;
+}
+
+.redeem button {
+    font-family: "BlockCraft", sans-serif;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #9747FF;
+    padding-left: 0.5em;
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+    padding-bottom: 0.4em;
+    border-radius: 8px;
+    border: none;
+}
+
+.redeem button:hover {
+    cursor: pointer;
+}

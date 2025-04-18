@@ -1,6 +1,5 @@
 import { disablePalette, enablePalette } from "./palette.js";
 import { playSfx } from "./sounds.js";
-import { setUserGrid } from "./canvas.js";
 
 let generationTimer = undefined;
 let maxBits = 5;
@@ -14,11 +13,9 @@ export const colorsArray = [
 ];
 
 function generatePixl(timeout=bitGenerationInterval) {
-  console.log(`setting timeout of ${timeout/1000}`)
   clearTimeout(generationTimer)
   generationTimer = setTimeout(() => {
     bitCount++;
-    console.log(`Generated Pixel ${bitCount}/${maxBits}`)
     if (bitCount<maxBits) {
       generatePixl();
     } else {
@@ -45,17 +42,17 @@ export function paintPixel(color_id, x, y, socket) {
 }
 
 export function paintPixelOnCanvas(color_id, x, y, userId) {
-  setUserGrid(userId, x, y)
   ctx.fillStyle = colorsArray[color_id];
   ctx.fillRect(x, y, 1, 1);
 }
 
 const bits_container = document.querySelector("#bits-counter");
 const bits_p = document.querySelector("#bits-display > div > p")
-function loadBits() {
-  for (let i = 0; i < bitCount; i++) {
+export function loadBits() {
+  bits_container.innerHTML = '';
+  for (let i = 0; i < maxBits; i++) {
     var bit = document.createElement('div')
-    bit.classList.add("filled")
+    if (i<bitCount) bit.classList.add("filled");
     bits_container.append(bit)
   }
   bits_p.innerHTML = "<span>0</span>Bits Left"
@@ -82,8 +79,13 @@ updateBits()
 
 export function syncCooldown(data) {
   bitCount = data.current_bits;
+  if (maxBits !== data.maxBits) {
+    maxBits = data.maxBits;
+    loadBits()
+  };
+  bitGenerationInterval = data.bitGenerationInterval;
   updateBits();
   if (bitCount < data.maxBits) {
-    generatePixl(bitGenerationInterval-(data.extra_time*1000));
+    generatePixl(bitGenerationInterval-data.extra_time);
   }
 }

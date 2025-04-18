@@ -1,0 +1,74 @@
+[
+    {
+        "id": "fb-share",
+        "name": "Social Butterfly",
+        "description": "Share the event announcement post on Facebook.",
+        "type": "link",
+        "button": "Go to Facebook!",
+        "link": "https://facebook.com"
+    },
+    {
+        "id": "twitter-share",
+        "name": "Tweet Master",
+        "description": "Share the event link on X/Twitter",
+        "type": "link",
+        "button": "Go to Twitter!",
+        "link": "https://twitter.com"
+    },
+    {
+        "id": "fb-follow",
+        "name": "#1 Fan",
+        "description": "Follow the User Experience Society Facebook Page.",
+        "type": "link",
+        "button": "Go to Facebook!",
+        "link": "https://facebook.com"
+    },
+    {
+        "id": "lunch-placer",
+        "name": "Tara Gonz",
+        "description": "Place 120 total pixels during lunch. (between 11:00am-2:00pm)",
+        "type": "progress",
+        "field": "placedBreak",
+        "required": 120
+    },
+    {
+        "id": "replace",
+        "name": "Excuse me",
+        "description": "Replace 150 pixels placed by a junior or senior user.",
+        "type": "progress",
+        "field": "replaced",
+        "required": 150
+    },
+    {
+        "id": "starter-sketcher",
+        "name": "Starter Sketcher",
+        "description": "Place 200 pixels.",
+        "type": "progress",
+        "field": "placeCount",
+        "required": 200
+    },
+    {
+        "id": "master-painter",
+        "name": "Master Painter",
+        "description": "Place 500 pixels.",
+        "type": "progress",
+        "field": "placeCount",
+        "required": 500
+    },
+    {
+        "id": "artistic-virtuoso",
+        "name": "Artistic Virtuoso",
+        "description": "Place 1000 pixels.",
+        "type": "progress",
+        "field": "placeCount",
+        "required": 1000
+    },
+    {
+        "id": "grandmaster-artisan",
+        "name": "Grandmaster Artisan",
+        "description": "Place 5000 pixels.",
+        "type": "progress",
+        "field": "placeCount",
+        "required": 5000
+    }
+]

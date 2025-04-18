@@ -16,10 +16,10 @@ export async function loadUserGrid() {
 }
 
 export function setUserGrid(id, x, y) {
-  user_grid[y][x] = id;
+  if (id) user_grid[y][x] = id;
 }
 
-export function getUserGrid(id, x, y) {
+export function getUserGrid() {
   return user_grid;
 }
 

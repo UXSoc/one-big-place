@@ -25,12 +25,13 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
     header.innerText = heading;
     p.innerText = message;
     closeButton.innerText = "Ok";
-    closeButton.style.margin = "0 auto";
+    closeButton.style.margin = "1rem auto";
     closeButton.addEventListener('click', (e) => {
         e.target.parentElement.remove()
         onclose();
     })
     modal.className = "modal";
+    modal.style.padding = '2rem';
     modal.append(header, p, closeButton);
     CONTAINER.appendChild(modal);
 }

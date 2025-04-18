@@ -3,7 +3,7 @@ import { loadCanvas } from "./canvas.js";
 import { PixelSelector, getPixelId } from "./selector.js";
 import { showPalette, hidePalette, loadPalette } from "./palette.js";
 import { connectToServer } from "./socket.js";
-import { setupTabs } from "./nav.js";
+import { closeTabs, setupTabs } from "./nav.js";
 import { handleURLParams } from "./auth.js";
 import { loadSfx, playSfx } from "./sounds.js";
 
@@ -20,19 +20,24 @@ pannerInit(target, {
       getPixelId(target, x, y)
       playSfx('select', 1);
       showPalette();
+      closeTabs();
     },
     onDrag: () => {
-      hidePalette();
+        hidePalette();
+        closeTabs();
     },
     onDragEnd: () => {
     },
     onZoom: (pixelSize, zoomValue) => {
+      closeTabs();
       hidePalette();
       pixelSelectorDisplay.style.width = `${pixelSize}px`;
       if (zoomValue < ZOOM_THRESHOLD) {
         pixelSelectorDisplay.style.display = "none";
+        pixelSelectorDisplay.isDisplayNone = true;
       } else {
         pixelSelectorDisplay.style.display = "block";
+        pixelSelectorDisplay.isDisplayNone = false;
       }
       getPixelId(target, pixelSelector.coordinatesX, pixelSelector.coordinatesY)
     },

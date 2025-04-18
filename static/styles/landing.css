@@ -285,7 +285,8 @@ header img {
 }
 
 .info ul {
-    padding-left: 1rem;
+    padding-left: 2rem;
+    width: 100%;
 }
 
 .info__heading-line {

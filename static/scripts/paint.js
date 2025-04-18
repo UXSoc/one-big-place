@@ -80,6 +80,6 @@ export function syncCooldown(data) {
   bitGenerationInterval = data.bitGenerationInterval;
   updateBits();
   if (bitCount < data.maxBits) {
-    generatePixl(bitGenerationInterval-(data.extra_time*1000));
+    generatePixl(bitGenerationInterval-data.extra_time);
   }
 }

@@ -25,10 +25,30 @@ window.addEventListener("mousemove", (e) => {
     pixelArray.unshift([pixelX, pixelY]);
     if (pixelArray.length > trailLength) {
       let [prevPixelX, prevPixelY] = pixelArray.pop();
-      drawPixel(prevPixelX, prevPixelY, "#000000");
+      let prevPixel = ctx.getImageData(prevPixelX, prevPixelY, pixelSize, pixelSize);
+      window.requestAnimationFrame(() => { fadePixel(prevPixelX, prevPixelY, prevPixel) });
     }
   }
 });
+
+function fadePixel(x, y, pixel) {
+  for (let i = 0; i < pixel.data.length; i += 4) {
+    let r = pixel.data[i];
+    let g = pixel.data[i+1];
+    let b = pixel.data[i+2];
+    
+    if (r > 0) { r--; }
+    pixel.data[i] = r;
+
+    if (g > 0) { g--; }
+    pixel.data[i+1] = g;
+
+    if (b > 0) { b--; }
+    pixel.data[i+2] = b;
+  }
+  ctx.putImageData(pixel, x, y);
+  window.requestAnimationFrame(() => { fadePixel(x, y, pixel); });
+}
 
 function drawPixel(x, y, color) {
   ctx.fillStyle = color;

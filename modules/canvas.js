@@ -1,6 +1,5 @@
 const fs = require('fs');
 const { createCanvas } = require('canvas');
-const { func } = require('joi');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -75,7 +74,10 @@ function formatDate(date) {
     let seconds = String(date.getSeconds()).padStart(2, '0');
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
 }
-
+function getCurrentDate() {
+    const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
+    return new Date(manilaStr);
+}
 async function saveFrame(close_on_exit=false) {
     if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
     var width = canvas.canvas[0].length
@@ -89,7 +91,7 @@ async function saveFrame(close_on_exit=false) {
         }
     }
     var buffer = frame_canvas.toBuffer('image/png')
-    var d = new Date();
+    var d = getCurrentDate();
     var d_tz = convertTZ(d)
     await fs.writeFile(`./canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
         if(err) console.log('error', err);

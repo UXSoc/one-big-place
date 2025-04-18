@@ -1,5 +1,4 @@
 import { playSfx } from "./sounds.js";
-import { setUserGrid } from "./canvas.js";
 
 let generationTimer = undefined;
 let maxBits = 5;
@@ -44,7 +43,6 @@ export function paintPixel(color_id, x, y, socket) {
 }
 
 export function paintPixelOnCanvas(color_id, x, y, userId) {
-  setUserGrid(userId, x, y)
   ctx.fillStyle = colorsArray[color_id];
   ctx.fillRect(x, y, 1, 1);
 }

@@ -256,19 +256,28 @@ function isLunch() {
   return (timeBetw('11:00:00', '14:00:00')||timeBetw('3:30:00', '3:50:00'))
 }
 
+function getCurrentDate() {
+  const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
+  return new Date(manilaStr);
+}
+
 function timeBetw(startTime, endTime) {
-  currentDate = new Date()   
-
-  startDate = new Date(currentDate.getTime());
-  startDate.setHours(startTime.split(":")[0]);
-  startDate.setMinutes(startTime.split(":")[1]);
-  startDate.setSeconds(startTime.split(":")[2]);
-
-  endDate = new Date(currentDate.getTime());
-  endDate.setHours(endTime.split(":")[0]);
-  endDate.setMinutes(endTime.split(":")[1]);
-  endDate.setSeconds(endTime.split(":")[2]);
-  return startDate < currentDate && endDate > currentDate
+  const currentDate = getCurrentDate();
+  const [startH, startM, startS] = startTime.split(":").map(Number);
+  const [endH, endM, endS] = endTime.split(":").map(Number);
+  const startDate = new Date(currentDate.getTime());
+  startDate.setHours(startH, startM, startS, 0);
+  const endDate = new Date(currentDate.getTime());
+  endDate.setHours(endH, endM, endS, 0);
+  if (endDate <= startDate) {
+      if (currentDate >= startDate) {
+          return true;
+      } else {
+          endDate.setDate(endDate.getDate() + 1);
+          return currentDate < endDate;
+      }
+  }
+  return currentDate >= startDate && currentDate < endDate;
 }
 
 io.sockets.on('connection', async (socket) => {

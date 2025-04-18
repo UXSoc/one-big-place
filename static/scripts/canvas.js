@@ -17,7 +17,7 @@ export function setUserGrid(id, x, y) {
   if (id) user_grid[y][x] = id;
 }
 
-export function getUserGrid(id, x, y) {
+export function getUserGrid() {
   return user_grid;
 }
 

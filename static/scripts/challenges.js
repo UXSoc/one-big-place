@@ -45,7 +45,7 @@ async function loadChallenges(data) {
             const total = challenge["required"];
             const current = userData[challenge["field"]];
             if (current>=total) {
-                progressText.innerText = `${Math.min(current, total)}/${total}`;
+                progressText.innerText = `Complete`;
                 progressText.style.backgroundColor = `#711ede`;
                 indicator.style.outline = `2px solid #711ede`;
                 progressText.style.outline = `2px solid #711ede`;

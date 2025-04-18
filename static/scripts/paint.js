@@ -1,4 +1,5 @@
 import { disablePalette, enablePalette } from "./palette.js";
+import { getUserData } from "./user.js";
 import { playSfx } from "./sounds.js";
 
 let generationTimer = undefined;
@@ -29,12 +30,13 @@ function generatePixl(timeout=bitGenerationInterval) {
 const canvas = document.querySelector(".panner-container canvas");
 const ctx = canvas.getContext("2d");
 
-export function paintPixel(color_id, x, y, socket) {
+export async function paintPixel(color_id, x, y, socket) {
   // paint the pixel onto the canvas (only if timer isn't running)
   // will need to wait for the canvas to load
   if (bitCount>0) {
     paintPixelOnCanvas(color_id, x, y)
-    bitCount--;
+    const userData = await getUserData();
+    if (userData) bitCount--;
     playSfx('place', 1);
     updateBits()
     socket.emit("PaintPixel", {"x":x, "y":y, "id":color_id})

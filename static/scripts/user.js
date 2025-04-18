@@ -34,7 +34,6 @@ export async function updateUserData(field, value, userId) {
     const userData = userDataCache.get(userId);
     userData[field] = value;
     userDataCache.set(userId, {...userData});
-    console.log(userDataCache.get(userId))
     userEventTarget.dispatchEvent(new CustomEvent('userUpdated', {
         detail: { userId, field, value }
     }));

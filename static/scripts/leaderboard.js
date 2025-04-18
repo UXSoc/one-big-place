@@ -47,7 +47,6 @@ function generateUserPlacement(userData) {
 }
 
 function generateLeaderboard(leaderboard, userData) {
-    console.log(leaderboard)
     let ranks = document.querySelector(".ranks__users");
     const fragment = document.createDocumentFragment();
     for (let i = 1; i < leaderboard.length+1; i++) {

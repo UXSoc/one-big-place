@@ -11,6 +11,11 @@ admin_resize_contEl.querySelector('button').addEventListener('click', () => {
         width: parseInt(dataInputs[0].value),
         height: parseInt(dataInputs[1].value),
     }
+    if (typeof data.width !== 'number' || isNaN(data.width) || typeof data.height !== 'number' || isNaN(data.height) || data.width <= 0 || data.height <= 0 ) {
+        console.error('Invalid width or height: Must be numbers, not null/undefined, and greater than 0.');
+        return;
+    }
+    if (data.adminKey=='') { console.error("Admin key is empty."); return;};
     socket.emit("resize_canvas", data)
 })
 
@@ -40,6 +45,12 @@ admin_fill_contEl.querySelectorAll('button')[1].addEventListener('click', () => 
         color: parseInt(dataInputs[4].value),
         randomFill: dataInputs[5].checked,
     }
+    const isInvalid = (v) => v === undefined || v === null || isNaN(v);
+    if ([data.x1, data.y1, data.x2, data.y2].some(isInvalid)) {
+        console.error('Invalid coordinates: One or more values are undefined, null, or NaN.');
+        return;
+    };
+    if (data.adminKey=='') { console.error("Admin key is empty."); return;};
     socket.emit("fill_area", data)
     const highlighter = document.querySelector('.panner_interface > .selection-highlight');
     highlighter.style.display = 'none';
@@ -51,6 +62,7 @@ admin_reload_contEl.querySelectorAll('button')[0].addEventListener('click', () =
     const data = {
         adminKey: adminKey
     }
+    if (data.adminKey=='') { console.error("Admin key is empty."); return;};
     socket.emit("reload_clients", data);
 })
 
@@ -64,5 +76,6 @@ admin_broadcast_contEl.querySelectorAll('button')[0].addEventListener('click', (
         message: dataInputs[1].value,
         closable: dataInputs[2].checked,
     }
+    if (data.adminKey=='') { console.error("Admin key is empty."); return;};
     socket.emit("broadcast_message", data);
 })

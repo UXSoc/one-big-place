@@ -42,7 +42,6 @@ function setupEvents() {
         loadCanvas(document.getElementById('canvas').querySelector('.image'), false);
     })
     socket.on("fill_area", (data) => {
-        console.log(data);
         fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, data.fillSeed )
     })
     socket.on("force_reload", () => {

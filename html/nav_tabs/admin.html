@@ -20,7 +20,7 @@
             <label for="fill-color-input">Fill Color ID</label>
             <input type="number" id="fill-color-input" value="31"><br>
             <label for="random-fill-checkbox">Fill area with random colors</label>
-            <input type="checkbox" name="Random Fill" id="random-fill-checkbox">
+            <input type="checkbox" id="random-fill-checkbox">
             <button>Fill Area</button>
         </div>
         <div id="admin-tool-resize">
@@ -29,13 +29,16 @@
             <input type="number" placeholder="Height">
             <button>Resize</button>
         </div>
-        <div>
+        <div id="admin-tool-reload">
             <h3>Force Reload Clients</h3>
             <button>Broadcast Force Reload</button>
         </div>
-        <div>
+        <div id="admin-tool-broadcast">
             <h3>Broadcast Message</h3>
+            <input type="text" placeholder="Heading">
             <input type="text" placeholder="Message">
+            <label for="closable-checkbox">Closable?</label>
+            <input type="checkbox" id="closable-checkbox" checked>
             <button>Broadcast</button>
         </div>
     </div>

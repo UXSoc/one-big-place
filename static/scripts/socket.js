@@ -1,5 +1,5 @@
 import { paintPixelOnCanvas, syncCooldown } from "./paint.js";
-import { setLoadingProgress, openModal } from "./modals.js"
+import { setLoadingProgress, openModal, openCustomModal } from "./modals.js"
 import { fillArea, getUserGrid, loadCanvas, setUserGrid } from "./canvas.js";
 import { getUserData, updateUserData } from "./user.js";
 
@@ -44,6 +44,12 @@ function setupEvents() {
     socket.on("fill_area", (data) => {
         console.log(data);
         fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, data.fillSeed )
+    })
+    socket.on("force_reload", () => {
+        location.reload(true);
+    })
+    socket.on("broadcast_message", (data) => {
+        openCustomModal(data.heading, data.message, data.closable)
     })
 }
 

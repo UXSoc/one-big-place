@@ -27,6 +27,7 @@ admin_fill_contEl.querySelectorAll('button')[0].addEventListener('click', () => 
         posInputs[3].value = y2;
     })
 })
+
 admin_fill_contEl.querySelectorAll('button')[1].addEventListener('click', () => {
     const dataInputs = admin_fill_contEl.querySelectorAll('input');
     const adminKey = document.getElementById('admin-key').value;
@@ -39,8 +40,29 @@ admin_fill_contEl.querySelectorAll('button')[1].addEventListener('click', () => 
         color: parseInt(dataInputs[4].value),
         randomFill: dataInputs[5].checked,
     }
-    console.log(data)
     socket.emit("fill_area", data)
     const highlighter = document.querySelector('.panner_interface > .selection-highlight');
     highlighter.style.display = 'none';
+})
+
+const admin_reload_contEl = document.getElementById('admin-tool-reload');
+admin_reload_contEl.querySelectorAll('button')[0].addEventListener('click', () => {
+    const adminKey = document.getElementById('admin-key').value;
+    const data = {
+        adminKey: adminKey
+    }
+    socket.emit("reload_clients", data);
+})
+
+const admin_broadcast_contEl = document.getElementById('admin-tool-broadcast');
+admin_broadcast_contEl.querySelectorAll('button')[0].addEventListener('click', () => {
+    const adminKey = document.getElementById('admin-key').value;
+    const dataInputs = admin_broadcast_contEl.querySelectorAll('input');
+    const data = {
+        adminKey: adminKey,
+        heading: dataInputs[0].value,
+        message: dataInputs[1].value,
+        closable: dataInputs[2].checked,
+    }
+    socket.emit("broadcast_message", data);
 })

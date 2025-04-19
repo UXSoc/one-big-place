@@ -24,8 +24,6 @@ h3 {
     font-family: "BlockCraft", sans-serif;
     font-weight: 100;
 }
-#admin-tools-dashboard input[type=color] {
-}
 #admin-tools-dashboard label {
     font-family: "BlockCraft", sans-serif;
     display: inline;
@@ -49,6 +47,10 @@ h3 {
     margin: .4rem .1rem;
     border-radius: 10px;
     width: 30%;
+}
+#admin-tools-dashboard input[type=text] {
+    padding: 1rem 1rem .6rem 1rem;
+    margin: .4rem .1rem;
 }
 #admin-tools-dashboard button {
     display: block;

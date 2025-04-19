@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { createCanvas } = require('canvas');
+const { getCurrentDate, convertTZ } = require('./ess');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -61,10 +62,6 @@ function get_user_grid_json() {
     return canvas.user_grid
 }
 
-function convertTZ(date) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: "Asia/Taipei"}));   
-}
-
 function formatDate(date) {
     let month = String(date.getMonth() + 1).padStart(2, '0');
     let day = String(date.getDate()).padStart(2, '0');
@@ -73,10 +70,6 @@ function formatDate(date) {
     let minutes = String(date.getMinutes()).padStart(2, '0');
     let seconds = String(date.getSeconds()).padStart(2, '0');
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
-}
-function getCurrentDate() {
-    const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
-    return new Date(manilaStr);
 }
 async function saveFrame(close_on_exit=false) {
     if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
@@ -122,11 +115,26 @@ setInterval(() => {
     saveFrame(false);
 }, saveFrame_interval)
 
+
+function fillArea(x1, y1, x2, y2, randomFill, color ) {
+    const max = colorsArray.length;
+    const startX = Math.min(x1, x2);
+    const endX = Math.max(x1, x2);
+    const startY = Math.min(y1, y2);
+    const endY = Math.max(y1, y2);
+    for (let y = startY; y <= endY; y++) {
+      for (let x = startX; x <= endX; x++) {
+        canvas.canvas[y][x] = (randomFill)?(Math.floor(Math.random()*(max+1))):color;
+      }
+    }
+}
+
 module.exports = {
     load_canvas: load_canvas,
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
     paintPixel: paintPixel,
+    fillArea: fillArea,
     getPixelColorId: getPixelColorId,
     saveFrame: saveFrame,
     saveCanvasData: saveCanvasData,

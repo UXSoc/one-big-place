@@ -294,6 +294,7 @@ io.use(sharedSession(sessionMiddleware, {
 const canvas = require('./modules/canvas');
 const { calculateBits, getCooldown } = require('./modules/bits');
 const { isChallenge, isChallengeCompleted } = require('./modules/challenges');
+const { timeBetw } = require('./modules/ess');
 startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {
@@ -305,30 +306,6 @@ async function sync_cooldown(userId, socket) {
 
 function isLunch() {
   return timeBetw('11:00:00', '14:00:00')
-}
-
-function getCurrentDate() {
-  const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
-  return new Date(manilaStr);
-}
-
-function timeBetw(startTime, endTime) {
-  const currentDate = getCurrentDate();
-  const [startH, startM, startS] = startTime.split(":").map(Number);
-  const [endH, endM, endS] = endTime.split(":").map(Number);
-  const startDate = new Date(currentDate.getTime());
-  startDate.setHours(startH, startM, startS, 0);
-  const endDate = new Date(currentDate.getTime());
-  endDate.setHours(endH, endM, endS, 0);
-  if (endDate <= startDate) {
-      if (currentDate >= startDate) {
-          return true;
-      } else {
-          endDate.setDate(endDate.getDate() + 1);
-          return currentDate < endDate;
-      }
-  }
-  return currentDate >= startDate && currentDate < endDate;
 }
 
 io.sockets.on('connection', async (socket) => {
@@ -371,6 +348,24 @@ io.sockets.on('connection', async (socket) => {
     sync_cooldown(userId, socket);
     io.emit("PaintPixel", { ...data, userId: userId });
   });
+
+  // admin tools
+  socket.on("fill_area", (data) => {
+    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color);
+  })
+  socket.on("resize_canvas", (data) => {
+    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    
+  })
+  socket.on("reload_clients", () => {
+    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    io.emit("force_reload");
+  })
+  socket.on("broadcast", (data) => {
+    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    io.emit("broadcast", data);
+  })
 });
 
 canvas.load_canvas()

@@ -30,7 +30,7 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
         e.target.parentElement.remove()
         onclose();
     })
-    modal.className = "modal";
+    modal.classList.add("modal", "scroller");
     modal.style.padding = '2rem';
     modal.append(header, p, closeButton);
     CONTAINER.appendChild(modal);
@@ -38,7 +38,7 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
 
 export function openModal(name) {
     var modal = document.createElement('div');
-    modal.className = "modal";
+    modal.classList.add("modal", "scroller");
     fetch(`html/${MODALS[name]}.html`)
         .then(response => response.text()) 
         .then(html => { 

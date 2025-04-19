@@ -52,7 +52,7 @@ const bits_container = document.querySelector("#bits-counter");
 const bits_p = document.querySelector("#bits-display > div > p")
 export function loadBits() {
   bits_container.innerHTML = '';
-  for (let i = 0; i < maxBits; i++) {
+  for (let i = 0; i < Math.min(maxBits, 8); i++) {
     var bit = document.createElement('div')
     if (i<bitCount) bit.classList.add("filled");
     bits_container.append(bit)
@@ -63,6 +63,15 @@ loadBits()
 
 function updateBits() {
   var bits = bits_container.querySelectorAll("div");
+  console.log(bits.length<maxBits, Math.max(0,bitCount-8), bitCount)
+  if (bits.length<maxBits) {
+    const label_p = document.createElement('p');
+    label_p.innerText = (Math.max(0,bitCount-8)==0)?"":`+${Math.max(0,bitCount-8)+1}`
+    bits[bits.length-1].querySelectorAll('p').forEach((item) => {
+      item.remove();
+    })
+    bits[bits.length-1].append(label_p) 
+  };
   for (let i = 0; i < bits.length; i++) {
     if (i > bitCount-1) {
       bits[i].classList.remove("filled");

@@ -21,7 +21,7 @@
     transition: width 0.3s ease-in-out;
 }
 #bits-display > div > p > span {
-    font-size: 6rem;
+    font-size: 4rem;
     font-weight: bold;
 }
 #bits-display > div:last-child {
@@ -41,6 +41,7 @@
     margin: 0;
     font-size: 1.5rem;
     line-height: 1rem;
+    text-align: center;
 }
 #bits-counter {
     display: flex;
@@ -55,8 +56,19 @@
     outline: 2px solid black;
 }
 #bits-counter > div.filled {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: black;
     animation: popIn .3s cubic-bezier(.04,1.7,.68,1.02);
+}
+
+#bits-counter > div.filled > p {
+    font-family: BlockCraft;
+    margin: 0;
+    text-align: center;
+    color: white;
+    translate: 0 2px;
 }
 
 @keyframes popIn {
@@ -116,9 +128,5 @@
         flex-direction: row;
         justify-content: space-evenly;
         gap: 12px;
-    }
-    #bits-counter > div.filled {
-        background-color: black;
-        animation: popIn .3s cubic-bezier(.04,1.7,.68,1.02);
     }
 }

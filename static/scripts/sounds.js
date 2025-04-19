@@ -1,16 +1,28 @@
-export function playSfx(e, vol) {
-    var audio = document.getElementById(`audio-${e}`);
-    audio.currentTime = 0;
-    audio.volume = vol;
-    audio.play();
-}
+let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let bufferCache = {};
+
 export function loadSfx() {
     const sounds = ['alarm', 'error', 'place', 'select', 'success'];
-    const container = document.getElementById('audio-container');
-    for (var sound of sounds) {
-        var audio = document.createElement('audio');
-        audio.src = `audio/${sound}.wav`;
-        audio.id = `audio-${sound}`
-        container.append(audio);
+    sounds.forEach(async (sound) => {
+        const response = await fetch(`audio/${sound}.wav`);
+        const arrayBuffer = await response.arrayBuffer();
+        audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+            bufferCache[sound] = buffer;
+        });
+    });
+}
+
+export function playSfx(e, vol) {
+    const soundBuffer = bufferCache[e];
+    if (soundBuffer) {
+        const source = audioContext.createBufferSource();
+        source.buffer = soundBuffer;
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = vol;
+
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        source.start(0);
     }
 }

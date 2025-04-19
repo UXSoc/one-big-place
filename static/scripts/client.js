@@ -52,7 +52,7 @@ pannerInit(target, {
 loadPalette(pixelSelector);
 loadCanvas(target.querySelector('.image'));
 getPixelId(0, 0)
-connectToServer("localhost:3000");
+connectToServer("192.168.0.105:3000");
 loadSfx();
 setupTabs();
 handleURLParams();

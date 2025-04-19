@@ -1,6 +1,6 @@
 import { hidePalette } from "./palette.js";
+import { getUserData } from "./user.js";
 
-const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
 const NAV = document.querySelector("nav")
 const NAV_TABS = [
     "leaderboard",
@@ -8,9 +8,11 @@ const NAV_TABS = [
     "coverage",
     "gifts",
     "credits",
+    "admin"
 ]
 
 export function closeTabs() {
+    const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
     document.querySelectorAll(".nav-tab").forEach((item) => {
         item.style.display = 'none';
     })
@@ -19,12 +21,24 @@ export function closeTabs() {
         item.classList.remove("active");
     })
 }
-export function setupTabs() {
+export async function setupTabs() {
     document.addEventListener("click", (e) => {
         if (!NAV.contains(e.target)) {
             closeTabs();
         }
     })
+    const userData = await getUserData();
+    if (userData?.username == "admin") {
+        const navButton = document.createElement('li');
+        const navIcon = document.createElement('img');
+        const navP = document.createElement('p');
+        navButton.className = "nav-button";
+        navIcon.src = "images/Info.svg";
+        navP.innerText = "Admin Tools";
+        navButton.append(navIcon, navP);
+        NAV.querySelector('ul').append(navButton);
+    }
+    const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
     for (let i = 0; i < NAV_ITEMS.length; i++) {
         NAV_ITEMS[i].addEventListener('click', function() {
             closeTabs();

@@ -1,0 +1,67 @@
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 0;
+    font-family: "PixelGame", sans-serif;
+    font-size: 2.8rem;
+    font-weight: 100;
+}
+
+.description {
+    font-size: 1.2rem;
+}
+
+h3 {
+    font-family: "BlockCraft", sans-serif;
+    font-weight: 100;
+}
+#admin-tools-dashboard label {
+    font-family: "BlockCraft", sans-serif;
+    display: inline;
+}
+#admin-tools-dashboard {
+    max-height: 310px;
+    box-sizing: border-box;
+    padding: 1rem;
+}
+#admin-tools-dashboard > div {
+    margin: 1rem 0;
+    border-radius: 10px;
+    outline: 1px solid #696969;
+    padding: 1rem;
+}
+#admin-tools-dashboard input[type=number] {
+    background-color: #e6e6e6;
+    outline: none;
+    border: none;
+    padding: 1rem 1rem .6rem 1rem;
+    margin: .4rem .1rem;
+    border-radius: 10px;
+    width: 30%;
+}
+#admin-tools-dashboard input[type=text] {
+    padding: 1rem 1rem .6rem 1rem;
+    margin: .4rem .1rem;
+}
+#admin-tools-dashboard button {
+    display: block;
+    font-family: "BlockCraft", sans-serif;
+    box-sizing: border-box;
+    padding: 1rem 1rem .6rem 1rem;
+    margin: 1rem 0;
+    background-color: #9747ff;
+    color: white;
+    width: 100%;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+}

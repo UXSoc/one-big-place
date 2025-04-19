@@ -1,4 +1,5 @@
 import { setLoadingProgress } from "./modals.js";
+import { paintPixelOnCanvas } from "./paint.js";
 
 const colorsArrayRGB = [
   [107, 1, 25], [189, 0, 55], [255, 69, 0], [254, 168, 0], [255, 212, 53], [254, 248, 185], [1, 162, 103], [9, 204, 118],
@@ -23,7 +24,7 @@ export function getUserGrid() {
   return user_grid;
 }
 
-export function loadCanvas(canvas) {
+export function loadCanvas(canvas, center=true) {
   fetch(`json/canvas`)
   .then(response => response.json()) 
   .then(array2D => {
@@ -50,8 +51,33 @@ export function loadCanvas(canvas) {
   
     canvas.ctx.putImageData(imageData, 0, 0);
     canvas.parentElement.updateSize();
-    canvas.parentElement.center();
+    if (center) canvas.parentElement.center();
     setLoadingProgress('canvasLoad', true);
   }) 
   loadUserGrid();
+}
+
+function createSeededRandom(seed) {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+
+  return function() {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
+export function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
+  const max = colorsArrayRGB.length;
+  const startX = Math.min(x1, x2);
+  const endX = Math.max(x1, x2);
+  const startY = Math.min(y1, y2);
+  const endY = Math.max(y1, y2);
+  const rand = (randomFill)?(seed !== null ? createSeededRandom(seed):Math.random):null;
+  for (let y = startY; y <= endY; y++) {
+    for (let x = startX; x <= endX; x++) {
+      const colorId = (randomFill)?(Math.floor(rand()*(max+1))):color;
+      paintPixelOnCanvas(colorId, x, y);
+    }
+  }
 }

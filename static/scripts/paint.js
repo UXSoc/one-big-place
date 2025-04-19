@@ -43,7 +43,7 @@ export async function paintPixel(color_id, x, y, socket) {
   }
 }
 
-export function paintPixelOnCanvas(color_id, x, y, userId) {
+export function paintPixelOnCanvas(color_id, x, y) {
   ctx.fillStyle = colorsArray[color_id];
   ctx.fillRect(x, y, 1, 1);
 }

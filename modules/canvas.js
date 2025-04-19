@@ -1,5 +1,6 @@
 const fs = require('fs');
 const { createCanvas } = require('canvas');
+const { getCurrentDate, convertTZ } = require('./ess');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -46,6 +47,8 @@ function load_canvas() {
     if (!fs.existsSync('./canvas_data')) {
         fs.mkdirSync('./canvas_data', { recursive: true });
         console.log('canvas_data directory created');
+    }
+    if (!fs.existsSync('./canvas_data/canvas.json')) {
         initialize_empty_canvas();
     }
     var parsedCanvas = parseFile("./canvas_data/canvas.json")
@@ -61,10 +64,6 @@ function get_user_grid_json() {
     return canvas.user_grid
 }
 
-function convertTZ(date) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: "Asia/Taipei"}));   
-}
-
 function formatDate(date) {
     let month = String(date.getMonth() + 1).padStart(2, '0');
     let day = String(date.getDate()).padStart(2, '0');
@@ -73,10 +72,6 @@ function formatDate(date) {
     let minutes = String(date.getMinutes()).padStart(2, '0');
     let seconds = String(date.getSeconds()).padStart(2, '0');
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
-}
-function getCurrentDate() {
-    const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
-    return new Date(manilaStr);
 }
 async function saveFrame(close_on_exit=false) {
     if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
@@ -122,11 +117,69 @@ setInterval(() => {
     saveFrame(false);
 }, saveFrame_interval)
 
+function createSeededRandom(seed) {
+    let s = seed % 2147483647;
+    if (s <= 0) s += 2147483646;
+
+    return function() {
+        s = (s * 16807) % 2147483647;
+        return (s - 1) / 2147483646;
+    };
+}
+
+function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
+    const isInvalid = (v) => v === undefined || v === null || isNaN(v);
+    if ([x1, y1, x2, y2].some(isInvalid)) throw new Error('Invalid coordinates: One or more values are undefined, null, or NaN.');
+    const max = colorsArray.length;
+    const startX = Math.min(x1, x2);
+    const endX = Math.max(x1, x2);
+    const startY = Math.min(y1, y2);
+    const endY = Math.max(y1, y2);
+    const height = canvas.canvas.length;
+    const width = canvas.canvas[0]?.length ?? 0;
+    if (
+        startX < 0 || startY < 0 ||
+        endX >= width || endY >= height
+    ) {
+        throw new Error("Coordinates are out of canvas bounds.");
+    }
+    const rand = (randomFill)?(seed !== null ? createSeededRandom(seed):Math.random):null;
+    for (let y = startY; y <= endY; y++) {
+      for (let x = startX; x <= endX; x++) {
+        const colorId = (randomFill)?(Math.floor(rand()*(max+1))):color;
+        canvas.canvas[y][x] = colorId;
+      }
+    }
+}
+
+function resize(width, height) {
+    if (typeof width !== 'number' || isNaN(width) || typeof height !== 'number' || isNaN(height) || width <= 0 || height <= 0 ) {
+        console.error('Invalid width or height: Must be numbers, not null/undefined, and greater than 0.');
+        return;
+    }
+    const resizedCanvas = [];
+    const resizedUserGrid = [];
+    for (let y = 0; y < height; y++) {
+        const rowCanvas = [];
+        const rowUserGrid = [];
+        for (let x = 0; x < width; x++) {
+            rowCanvas.push(canvas.canvas[y]?.[x] ?? colorsArray.length-1); // Preserve old value if it exists, else fill with null
+            rowUserGrid.push(canvas.user_grid[y]?.[x] ?? null);
+        }
+        resizedCanvas.push(rowCanvas);
+        resizedUserGrid.push(rowUserGrid);
+    }
+    canvas.canvas = resizedCanvas;
+    canvas.user_grid = resizedUserGrid;
+}
+
 module.exports = {
     load_canvas: load_canvas,
     get_canvas_json: get_canvas_json,
     get_user_grid_json: get_user_grid_json,
     paintPixel: paintPixel,
+    fillArea: fillArea,
+    resize: resize,
     getPixelColorId: getPixelColorId,
     saveFrame: saveFrame,
     saveCanvasData: saveCanvasData,

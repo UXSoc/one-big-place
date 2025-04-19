@@ -24,15 +24,19 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
     var closeButton = document.createElement('button');
     header.innerText = heading;
     p.innerText = message;
-    closeButton.innerText = "Ok";
-    closeButton.style.margin = "1rem auto";
-    closeButton.addEventListener('click', (e) => {
-        e.target.parentElement.remove()
-        onclose();
-    })
     modal.classList.add("modal", "scroller");
     modal.style.padding = '2rem';
-    modal.append(header, p, closeButton);
+    if (closable) {
+        closeButton.innerText = "Ok";
+        closeButton.style.margin = "1rem auto";
+        closeButton.addEventListener('click', (e) => {
+            e.target.parentElement.remove()
+            onclose();
+        })
+        modal.append(header, p, closeButton);
+    } else {
+        modal.append(header, p);
+    }
     CONTAINER.appendChild(modal);
 }
 

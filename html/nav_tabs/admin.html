@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="styles/admin.css">
+<script src="scripts/admin.js" type="module"></script>
+<div class="container" id="admin-tools-container">
+    <div class="title">
+        <img src="images/Info.svg" alt="Star Icon">
+        <h1>Admin Tools</h1>
+    </div> 
+    <div class="description">
+        <p>Admin tools to purge the nether.</p>
+    </div>
+    <div id="admin-tools-dashboard" class="scroller">
+        <input type="password" placeholder="Admin key" id="admin-key">
+        <div id="admin-tool-fill">
+            <h3>Fill Area</h3>
+            <button>Select Area</button>
+            <input type="number" placeholder="x1">
+            <input type="number" placeholder="y1">
+            <input type="number" placeholder="x2">
+            <input type="number" placeholder="y2"><br>
+            <label for="fill-color-input">Fill Color ID</label>
+            <input type="number" id="fill-color-input" value="31"><br>
+            <label for="random-fill-checkbox">Fill area with random colors</label>
+            <input type="checkbox" id="random-fill-checkbox">
+            <button>Fill Area</button>
+        </div>
+        <div id="admin-tool-resize">
+            <h3>Resize Canvas</h3>
+            <input type="number" placeholder="Width">
+            <input type="number" placeholder="Height">
+            <button>Resize</button>
+        </div>
+        <div id="admin-tool-reload">
+            <h3>Force Reload Clients</h3>
+            <button>Broadcast Force Reload</button>
+        </div>
+        <div id="admin-tool-broadcast">
+            <h3>Broadcast Message</h3>
+            <input type="text" placeholder="Heading">
+            <input type="text" placeholder="Message">
+            <label for="closable-checkbox">Closable?</label>
+            <input type="checkbox" id="closable-checkbox" checked>
+            <button>Broadcast</button>
+        </div>
+    </div>
+</div>

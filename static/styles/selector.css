@@ -46,6 +46,13 @@
   display: block;
 }
 
+.selection-highlight {
+  display: none;
+  position: absolute;
+  background-color: rgba(127, 255, 212, 0.396);
+  outline: 1px solid #00bd26;
+}
+
 @media screen and (max-device-width: 1200px) {
   .canvas-coordinates {
     display: none;

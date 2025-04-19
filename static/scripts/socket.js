@@ -31,7 +31,7 @@ function setupEvents() {
     socket.on("PaintPixel", async (data) => {
         paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
         if (data.userId) {
-            updateChallengeProgress(data);
+            await updateChallengeProgress(data);
             setUserGrid(data.userId, data.x, data.y);
         }
     })
@@ -74,5 +74,6 @@ export async function updateChallengeProgress(data) {
     if (userData) updateUserData("placeCount", userData.placeCount+1, userData.id);
     if (isLunch()) updateUserData("placedBreak", userData.placedBreak+1, userData.id);
     const currentUser = getUserGrid()[data.y][data.x];
-    if (currentUser.id !== data.userId) updateUserData("replaced", userData.replaced+1, userData.id);
+    console.log(currentUser, data.userId)
+    if (currentUser !== data.userId) updateUserData("replaced", userData.replaced+1, userData.id);
 }

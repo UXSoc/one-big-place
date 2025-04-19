@@ -26,18 +26,18 @@
     {
         "id": "lunch-placer",
         "name": "Tara Gonz",
-        "description": "Place 120 total pixels during lunch. (between 11:00am-2:00pm)",
+        "description": "Place 150 total pixels during lunch. (between 11:00am-2:00pm)",
         "type": "progress",
         "field": "placedBreak",
-        "required": 120
+        "required": 150
     },
     {
         "id": "replace",
         "name": "Excuse me",
-        "description": "Replace 150 pixels placed by a junior or senior user.",
+        "description": "Replace 200 pixels placed by someone else.",
         "type": "progress",
         "field": "replaced",
-        "required": 150
+        "required": 200
     },
     {
         "id": "starter-sketcher",

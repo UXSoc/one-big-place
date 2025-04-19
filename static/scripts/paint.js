@@ -63,7 +63,6 @@ loadBits()
 
 function updateBits() {
   var bits = bits_container.querySelectorAll("div");
-  console.log(bits.length<maxBits, Math.max(0,bitCount-8), bitCount)
   if (bits.length<maxBits) {
     const label_p = document.createElement('p');
     label_p.innerText = (Math.max(0,bitCount-8)==0)?"":`+${Math.max(0,bitCount-8)+1}`

@@ -24,6 +24,12 @@ h3 {
     font-family: "BlockCraft", sans-serif;
     font-weight: 100;
 }
+#admin-tools-dashboard input[type=color] {
+}
+#admin-tools-dashboard label {
+    font-family: "BlockCraft", sans-serif;
+    display: inline;
+}
 #admin-tools-dashboard {
     max-height: 240px;
     box-sizing: border-box;

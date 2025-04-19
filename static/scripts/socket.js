@@ -41,7 +41,7 @@ function setupEvents() {
 }
 
 function isLunch() {
-    return (timeBetw('11:00:00', '14:00:00')||timeBetw('3:30:00', '3:50:00'))
+    return timeBetw('11:00:00', '14:00:00');
 }
 
 function getCurrentDate() {

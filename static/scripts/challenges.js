@@ -49,7 +49,6 @@ async function loadChallenges(data) {
             indicator.href = challenge["link"];
             indicator.target = "_blank";
             indicator.addEventListener('click', (e) => {
-                alert("test")
                 claimLinkChallenge(challenge['id']);
                 e.target.innerText = 'Waiting.'
                 e.target.style.backgroundColor = '#b1b1b1';

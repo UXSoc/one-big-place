@@ -242,8 +242,7 @@ async function redeemCodeForUser(userId, redeemCode) {
   const redeemingUser = await user(prisma, parseInt(userId));
   if (!redeemingUser) { throw new Error("User not found") }
   if (redeemingUser.bonusSet.has(redeemCode)) { throw new Error("Redeem code already used") }
-  console.log(isChallenge(redeemCode), redeemCode)
-  if (!(promos.has(redeemCode) || isChallenge(redeemCode))) { throw new Error("Promo code not found") }
+  if (!(promos.has(redeemCode) || (isChallenge(redeemCode) && isChallengeCompleted(redeemingUser, redeemCode)))) { throw new Error("Promo code not found") }
   await updateUser(prisma, redeemingUser.id, {
     bonus: [...(redeemingUser.bonus || []), redeemCode],
     bonusSet: new Set([...(redeemingUser.bonusSet || []), redeemCode]),
@@ -284,7 +283,7 @@ io.use(sharedSession(sessionMiddleware, {
 
 const canvas = require('./modules/canvas');
 const { calculateBits, getCooldown } = require('./modules/bits');
-const { isChallenge } = require('./modules/challenges');
+const { isChallenge, isChallengeCompleted } = require('./modules/challenges');
 startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {

@@ -10,12 +10,15 @@
     </div>
     <div id="admin-tools-dashboard" class="scroller">
         <input type="password" placeholder="Admin key" id="admin-key">
-        <div>
+        <div id="admin-tool-fill">
             <h3>Fill Area</h3>
             <button>Select Area</button>
-            <p>Select area first</p>
-            <label for="fill-color-input">Fill Color</label>
-            <input type="color" name="" id="fill-color-input" value="#ffffff"><br>
+            <input type="number" placeholder="x1">
+            <input type="number" placeholder="y1">
+            <input type="number" placeholder="x2">
+            <input type="number" placeholder="y2"><br>
+            <label for="fill-color-input">Fill Color ID</label>
+            <input type="number" id="fill-color-input" value="31"><br>
             <label for="random-fill-checkbox">Fill area with random colors</label>
             <input type="checkbox" name="Random Fill" id="random-fill-checkbox">
             <button>Fill Area</button>

@@ -353,8 +353,12 @@ io.sockets.on('connection', async (socket) => {
   socket.on("fill_area", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     const fillSeed = generateRandomSeed();
-    canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, fillSeed);
-    io.emit("fill_area", {...data, fillSeed: fillSeed})
+    try {
+      canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, fillSeed);
+      io.emit("fill_area", {...data, fillSeed: fillSeed})
+    } catch (err) {
+      console.error("Caught error:", err.message);
+    }
   })
   socket.on("resize_canvas", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};

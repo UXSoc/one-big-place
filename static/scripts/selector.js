@@ -41,6 +41,9 @@ export class PixelSelector {
   }
   changeSelector(target, x, y) {
     this.selector.interfacePos = [x, y];
+    if (selectingArea) {
+      selectAreaClick(target, x, y);
+    }
     if (!this.selector.isDisplayNone && isInViewport(this.selector)) {
       this.selector.animate(
         [
@@ -73,7 +76,6 @@ export class PixelSelector {
     this.selector.isDisplayNone = false;
   }
 }
-const userDataCache = new Map();
 const pin = document.querySelector(".panner_interface > .pixel-id");
 export async function getPixelId(target, x, y) {
   pin.interfacePos = [x, y];
@@ -101,4 +103,46 @@ export function hidePixelId() {
 }
 export function showPixelId() {
   pin.style.backgroundColor = "white";
+}
+let selectingArea = false;
+let pos1, pos2;
+let selectAreaCallback;
+const highlighter = document.querySelector('.panner_interface > .selection-highlight');
+export function selectArea(callback) {
+  selectingArea = true;
+  pos1 = null;
+  pos2 = null;
+  selectAreaCallback = callback;
+  highlighter.style.display = 'none';
+}
+function selectAreaClick(target, x, y) {
+  const pixelSize = target.pixelSize;
+  highlighter.style.display = 'block';
+  if (!pos1) {
+    pos1 = [x,y];
+    highlighter.interfacePos = [x,y];
+    highlighter.style.width = `${pixelSize}px`
+    highlighter.style.height = `${pixelSize}px`
+    highlighter.naturalWidth = 1;
+    highlighter.naturalHeight = 1
+    highlighter.scaleWithZoom = true;
+    highlighter.style.translate = `${x*pixelSize}px ${y*pixelSize}px`;
+  } else if (!pos2) {
+    pos2 = [x,y]
+    const [x1, y1] = pos1;
+    const [x2, y2] = pos2;
+    const startX = Math.min(x1, x2);
+    const startY = Math.min(y1, y2);
+    highlighter.interfacePos = [startX,startY];
+    highlighter.style.translate = `${startX*pixelSize}px ${startY*pixelSize}px`;
+    highlighter.style.width = `${(Math.abs(x1-x2)+1)*pixelSize}px`
+    highlighter.style.height = `${(Math.abs(y1-y2)+1)*pixelSize}px`
+    highlighter.naturalWidth = Math.abs(x1-x2)+1;
+    highlighter.naturalHeight = Math.abs(y1-y2)+1;
+    endSelectArea();
+  }
+}
+function endSelectArea() {
+  selectingArea = false;
+  selectAreaCallback(pos1, pos2);
 }

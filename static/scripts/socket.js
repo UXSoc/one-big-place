@@ -1,6 +1,6 @@
 import { paintPixelOnCanvas, syncCooldown } from "./paint.js";
 import { setLoadingProgress, openModal } from "./modals.js"
-import { getUserGrid, loadCanvas, setUserGrid } from "./canvas.js";
+import { fillArea, getUserGrid, loadCanvas, setUserGrid } from "./canvas.js";
 import { getUserData, updateUserData } from "./user.js";
 
 export var socket;
@@ -29,7 +29,7 @@ function setupEvents() {
         syncCooldown(data);
     })
     socket.on("PaintPixel", async (data) => {
-        paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
+        paintPixelOnCanvas(data.id, data.x, data.y);
         if (data.userId) {
             await updateChallengeProgress(data);
             setUserGrid(data.userId, data.x, data.y);
@@ -40,6 +40,10 @@ function setupEvents() {
     })
     socket.on("reload_canvas", () => {
         loadCanvas(document.getElementById('canvas').querySelector('.image'), false);
+    })
+    socket.on("fill_area", (data) => {
+        console.log(data);
+        fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, data.fillSeed )
     })
 }
 

@@ -136,7 +136,10 @@ function zoom(el, zoom_value, x, y) {
     el.pixelSize = pixel_size;
     interface_elements.forEach(element => {
         element.updatePos();
-        if (element.scaleWithZoom) element.style.width = `${element.naturalWidth*zoom_value}px`;
+        if (element.scaleWithZoom) {
+            element.style.width = `${element.naturalWidth*zoom_value}px`;
+            element.style.height = `${element.naturalHeight*zoom_value}px`;
+        };
     });
     el.zoom = zoom_value;
     center(el, x, y);

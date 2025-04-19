@@ -117,17 +117,37 @@ setInterval(() => {
     saveFrame(false);
 }, saveFrame_interval)
 
+function createSeededRandom(seed) {
+    let s = seed % 2147483647;
+    if (s <= 0) s += 2147483646;
+
+    return function() {
+        s = (s * 16807) % 2147483647;
+        return (s - 1) / 2147483646;
+    };
+}
 
 function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
+    const isInvalid = (v) => v === undefined || v === null || isNaN(v);
+    if ([x1, y1, x2, y2].some(isInvalid)) throw new Error('Invalid coordinates: One or more values are undefined, null, or NaN.');
     const max = colorsArray.length;
     const startX = Math.min(x1, x2);
     const endX = Math.max(x1, x2);
     const startY = Math.min(y1, y2);
     const endY = Math.max(y1, y2);
+    const height = canvas.canvas.length;
+    const width = canvas.canvas[0]?.length ?? 0;
+    if (
+        startX < 0 || startY < 0 ||
+        endX >= width || endY >= height
+    ) {
+        throw new Error("Coordinates are out of canvas bounds.");
+    }
     const rand = (randomFill)?(seed !== null ? createSeededRandom(seed):Math.random):null;
     for (let y = startY; y <= endY; y++) {
       for (let x = startX; x <= endX; x++) {
-        canvas.canvas[y][x] = (randomFill)?(Math.floor(rand()*(max+1))):color;
+        const colorId = (randomFill)?(Math.floor(rand()*(max+1))):color;
+        canvas.canvas[y][x] = colorId;
       }
     }
 }

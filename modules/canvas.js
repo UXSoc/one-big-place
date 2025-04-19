@@ -116,17 +116,30 @@ setInterval(() => {
 }, saveFrame_interval)
 
 
-function fillArea(x1, y1, x2, y2, randomFill, color ) {
+function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
     const max = colorsArray.length;
     const startX = Math.min(x1, x2);
     const endX = Math.max(x1, x2);
     const startY = Math.min(y1, y2);
     const endY = Math.max(y1, y2);
+    const rand = (randomFill)?(seed !== null ? createSeededRandom(seed):Math.random):null;
     for (let y = startY; y <= endY; y++) {
       for (let x = startX; x <= endX; x++) {
-        canvas.canvas[y][x] = (randomFill)?(Math.floor(Math.random()*(max+1))):color;
+        canvas.canvas[y][x] = (randomFill)?(Math.floor(rand()*(max+1))):color;
       }
     }
+}
+
+function resize(width, height) {
+    const resized = [];
+    for (let y = 0; y < height; y++) {
+        const row = [];
+        for (let x = 0; x < width; x++) {
+            row.push(canvas.canvas[y]?.[x] ?? null); // Preserve old value if it exists, else fill with null
+        }
+        resized.push(row);
+    }
+    canvas.canvas = resized;
 }
 
 module.exports = {
@@ -135,6 +148,7 @@ module.exports = {
     get_user_grid_json: get_user_grid_json,
     paintPixel: paintPixel,
     fillArea: fillArea,
+    resize: resize,
     getPixelColorId: getPixelColorId,
     saveFrame: saveFrame,
     saveCanvasData: saveCanvasData,

@@ -294,7 +294,7 @@ io.use(sharedSession(sessionMiddleware, {
 const canvas = require('./modules/canvas');
 const { calculateBits, getCooldown } = require('./modules/bits');
 const { isChallenge, isChallengeCompleted } = require('./modules/challenges');
-const { timeBetw } = require('./modules/ess');
+const { timeBetw, generateRandomSeed } = require('./modules/ess');
 startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {
@@ -352,11 +352,14 @@ io.sockets.on('connection', async (socket) => {
   // admin tools
   socket.on("fill_area", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) return;
-    canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color);
+    const fillSeed = generateRandomSeed();
+    canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, fillSeed);
+    io.emit("fill_area", {...data, fillSeed: fillSeed})
   })
   socket.on("resize_canvas", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) return;
-    
+    canvas.resize(data.width, data.height);
+    io.emit("reload_canvas");
   })
   socket.on("reload_clients", () => {
     if (data.adminKey!==process.env.ADMIN_KEY) return;

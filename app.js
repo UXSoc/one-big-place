@@ -351,22 +351,22 @@ io.sockets.on('connection', async (socket) => {
 
   // admin tools
   socket.on("fill_area", (data) => {
-    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     const fillSeed = generateRandomSeed();
     canvas.fillArea(data.x1, data.y1, data.x2, data.y2, data.randomFill, data.color, fillSeed);
     io.emit("fill_area", {...data, fillSeed: fillSeed})
   })
   socket.on("resize_canvas", (data) => {
-    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     canvas.resize(data.width, data.height);
     io.emit("reload_canvas");
   })
   socket.on("reload_clients", () => {
-    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     io.emit("force_reload");
   })
   socket.on("broadcast", (data) => {
-    if (data.adminKey!==process.env.ADMIN_KEY) return;
+    if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     io.emit("broadcast", data);
   })
 });

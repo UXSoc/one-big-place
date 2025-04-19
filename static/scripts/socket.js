@@ -1,6 +1,6 @@
 import { paintPixelOnCanvas, syncCooldown } from "./paint.js";
 import { setLoadingProgress, openModal } from "./modals.js"
-import { getUserGrid, setUserGrid } from "./canvas.js";
+import { getUserGrid, loadCanvas, setUserGrid } from "./canvas.js";
 import { getUserData, updateUserData } from "./user.js";
 
 export var socket;
@@ -37,6 +37,9 @@ function setupEvents() {
     })
     socket.on("request_login", (data) => {
         openModal('register');
+    })
+    socket.on("reload_canvas", () => {
+        loadCanvas(document.getElementById('canvas').querySelector('.image'), false);
     })
 }
 

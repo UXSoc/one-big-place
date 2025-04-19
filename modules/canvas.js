@@ -47,6 +47,8 @@ function load_canvas() {
     if (!fs.existsSync('./canvas_data')) {
         fs.mkdirSync('./canvas_data', { recursive: true });
         console.log('canvas_data directory created');
+    }
+    if (!fs.existsSync('./canvas_data/canvas.json')) {
         initialize_empty_canvas();
     }
     var parsedCanvas = parseFile("./canvas_data/canvas.json")
@@ -131,15 +133,24 @@ function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
 }
 
 function resize(width, height) {
-    const resized = [];
-    for (let y = 0; y < height; y++) {
-        const row = [];
-        for (let x = 0; x < width; x++) {
-            row.push(canvas.canvas[y]?.[x] ?? null); // Preserve old value if it exists, else fill with null
-        }
-        resized.push(row);
+    if (typeof width !== 'number' || isNaN(width) || typeof height !== 'number' || isNaN(height) || width <= 0 || height <= 0 ) {
+        console.error('Invalid width or height: Must be numbers, not null/undefined, and greater than 0.');
+        return;
     }
-    canvas.canvas = resized;
+    const resizedCanvas = [];
+    const resizedUserGrid = [];
+    for (let y = 0; y < height; y++) {
+        const rowCanvas = [];
+        const rowUserGrid = [];
+        for (let x = 0; x < width; x++) {
+            rowCanvas.push(canvas.canvas[y]?.[x] ?? colorsArray.length-1); // Preserve old value if it exists, else fill with null
+            rowUserGrid.push(canvas.user_grid[y]?.[x] ?? null);
+        }
+        resizedCanvas.push(rowCanvas);
+        resizedUserGrid.push(rowUserGrid);
+    }
+    canvas.canvas = resizedCanvas;
+    canvas.user_grid = resizedUserGrid;
 }
 
 module.exports = {

@@ -23,7 +23,7 @@ export function getUserGrid() {
   return user_grid;
 }
 
-export function loadCanvas(canvas) {
+export function loadCanvas(canvas, center=true) {
   fetch(`json/canvas`)
   .then(response => response.json()) 
   .then(array2D => {
@@ -50,7 +50,7 @@ export function loadCanvas(canvas) {
   
     canvas.ctx.putImageData(imageData, 0, 0);
     canvas.parentElement.updateSize();
-    canvas.parentElement.center();
+    if (center) canvas.parentElement.center();
     setLoadingProgress('canvasLoad', true);
   }) 
   loadUserGrid();

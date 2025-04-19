@@ -15,6 +15,9 @@ var target = document.getElementById('canvas')
 var pixelSelectorDisplay = document.querySelector(".pixel-selector");
 
 pannerInit(target, {
+    onInit: (pixelSize) => {
+      target.style.boxShadow = `0px 0px ${pixelSize*3}px ${pixelSize}px rgba(0,0,0,0.4)`;
+    },
     onClick: (x, y, clientX, clientY) => {
       pixelSelector.setPixelSelector(target, x, y);
       getPixelId(target, x, y)
@@ -31,6 +34,7 @@ pannerInit(target, {
     onZoom: (pixelSize, zoomValue) => {
       closeTabs();
       hidePalette();
+      target.style.boxShadow = `0px 0px ${pixelSize*3}px ${pixelSize}px rgba(0,0,0,0.4)`;
       pixelSelectorDisplay.style.width = `${pixelSize}px`;
       if (zoomValue < ZOOM_THRESHOLD) {
         pixelSelectorDisplay.style.display = "none";

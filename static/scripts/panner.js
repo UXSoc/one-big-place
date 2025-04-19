@@ -194,4 +194,5 @@ export function pannerInit(el, options) {
         var pixelY = Math.floor(y*el.pixel_height/el.offsetHeight);
         options.onClick(pixelX, pixelY, x, y);
     }
+    options.onInit(el.pixelSize);
 }

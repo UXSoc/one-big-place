@@ -349,7 +349,7 @@ io.sockets.on('connection', async (socket) => {
       return;
     }
     const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
-    updateUser(prisma, userId, {
+    await updateUser(prisma, userId, {
       lastBitCount: current_bits-1,
       placeCount: user_data.placeCount+1,
       replaced: (pos_current_userId&&pos_current_userId!==userId)?user_data.replaced+1:user_data.replaced,

@@ -48,13 +48,12 @@ async function loadChallenges(data) {
             indicator.innerText = challenge["button"]||"";
             indicator.href = challenge["link"];
             indicator.target = "_blank";
-            const waitInterval = (e) => {
+            indicator.addEventListener('click', (e) => {
+                alert("test")
                 claimLinkChallenge(challenge['id']);
                 e.target.innerText = 'Waiting.'
                 e.target.style.backgroundColor = '#b1b1b1';
-                e.target.removeEventListener('click', waitInterval);
-            }
-            indicator.addEventListener('click', waitInterval)
+            }, { once: true })
         } else if (challenge["type"] == "progress") {
             const total = challenge["required"];
             const current = userData[challenge["field"]];

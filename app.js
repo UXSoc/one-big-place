@@ -289,6 +289,7 @@ startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {
   const user_data = await user(prisma, userId);
+  if (!user_data) return;
   const [current_bits, extraTime] = calculateBits(user_data.lastBitCount, user_data.maxBits, user_data.lastPlacedDate, user_data.extraTime)
   socket.emit("sync_cooldown", { current_bits: current_bits, extra_time: extraTime, maxBits: user_data.maxBits, bitGenerationInterval: getCooldown() })
 }

@@ -26,10 +26,10 @@
     {
         "id": "lunch-placer",
         "name": "Tara Gonz",
-        "description": "Place 150 total pixels during lunch. (between 11:00am-2:00pm)",
+        "description": "Place 120 total pixels during lunch. (between 11:00am-2:00pm)",
         "type": "progress",
         "field": "placedBreak",
-        "required": 150
+        "required": 120
     },
     {
         "id": "replace",

@@ -94,8 +94,18 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.sendFile("html/index.html", {root: path.join(__dirname)});
-})
+  const openingDate = new Date(process.env.OPENING_DATE);
+  const now = new Date();
+  if (now < openingDate) {
+    res.sendFile("html/landing.html", {root: path.join(__dirname)});
+  } else {
+    res.sendFile("html/index.html", {root: path.join(__dirname)});
+  }
+});
+
+app.get("/json/opening-date", (req, res) => {
+  res.json({ openingDate: process.env.OPENING_DATE });
+});
 
 app.get("/register", (req, res) => {
   res.sendFile("html/auth/register.html", {root: path.join(__dirname)});

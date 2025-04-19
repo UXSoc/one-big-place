@@ -51,6 +51,10 @@ admin_fill_contEl.querySelectorAll('button')[1].addEventListener('click', () => 
         return;
     };
     if (data.adminKey=='') { console.error("Admin key is empty."); return;};
+    if (data.color<0 || data.color>=32) {
+        console.error('Invalid color id.');
+        return;
+    }
     socket.emit("fill_area", data)
     const highlighter = document.querySelector('.panner_interface > .selection-highlight');
     highlighter.style.display = 'none';

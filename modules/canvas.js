@@ -130,6 +130,7 @@ function createSeededRandom(seed) {
 function fillArea(x1, y1, x2, y2, randomFill, color, seed ) {
     const isInvalid = (v) => v === undefined || v === null || isNaN(v);
     if ([x1, y1, x2, y2].some(isInvalid)) throw new Error('Invalid coordinates: One or more values are undefined, null, or NaN.');
+    if (color<0 || color>=colorsArray.length) throw new Error('Invalid color id.');
     const max = colorsArray.length;
     const startX = Math.min(x1, x2);
     const endX = Math.max(x1, x2);

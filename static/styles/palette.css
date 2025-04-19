@@ -60,7 +60,18 @@
     background-color: rgba(255,255,255,1);
 }
 
-
+@media (min-width: 620px) and (max-width: 1200px) {
+    #color-container {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(16, calc((100vw - 40px - 16vw) / 16));
+        grid-template-rows: repeat(2, calc((100vw - 40px - 16vw) / 16));
+        grid-gap: 1vw;
+        justify-content: center; /* Centers the grid when it's not full width */
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(.2,.93,.71,.96);
+    }
+}
 @media only screen and (min-width: 1200px) {
     #color-palette {
         position: fixed;

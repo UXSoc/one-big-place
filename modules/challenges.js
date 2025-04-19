@@ -26,7 +26,7 @@ function isChallengeCompleted(user, code) {
     if (!isChallenge(code)) throw new Error(`${code} is not a challenge.`);
     code = code.slice(10);
     const challenge = challenges.find(ch => ch.id === code);
-    if (challenge["type"] !== "progress") throw new Error(`${challenge.id} is not a progress challenge.`)
+    if (challenge["type"] !== "progress") return true;
     const total = challenge["required"];
     const current = user[challenge["field"]];
     return (current>=total);

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 414 423">
+  <defs>
+    <style>
+      .cls-1 {
+        mix-blend-mode: hue;
+        opacity: .5;
+      }
+
+      .cls-2 {
+        fill: #005793;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5 {
+        stroke-width: 0px;
+      }
+
+      .cls-6 {
+        isolation: isolate;
+      }
+
+      .cls-3 {
+        fill: none;
+      }
+
+      .cls-4 {
+        fill: #0d3c4c;
+      }
+
+      .cls-7 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-5 {
+        fill: #002b61;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-3" width="414" height="423"/>
+    </clipPath>
+  </defs>
+  <g class="cls-6">
+    <g id="Layer_1-2" data-name="Layer 1">
+      <g class="cls-7">
+        <g>
+          <path class="cls-2" d="M171,198v-18h-9v-72h-9v-45h-9v-9h-9v-9h-9v-9h-9v-9h-18v-9h-18v-9h-45v36h27v9h18v9h9v9h9v9h9v9h9v81h9v9h9v9h9v9h9v27h-9v9h-9v9h-9v9h-9v81h-9v9h-9v9h-9v9h-9v9h-18v9h-27v36h45v-9h18v-9h18v-9h9v-9h9v-9h9v-9h9v-45h9v-72h9v-18h18v-27h-18Z"/>
+          <path class="cls-5" d="M171,108h-9v63.16h9v-63.16Z"/>
+          <path class="cls-5" d="M162,63h-9v45h9v-45Z"/>
+          <path class="cls-5" d="M117,90h-9v-9h-9v-9h-9v-9h-9v-9h-18v-9h-27V9h45v9h18v9h18v9h9v9h9v9h9v9h9v-18h-9v-9h-9v-9h-9v-9h-18v-9h-18V0H27v54h27v9h18v9h9v9h9v9h9v9h9v72h9v-81Z"/>
+          <path class="cls-5" d="M144,369h-9v9h-9v9h-9v9h-18v9h-18v9h-45v-36h27v-9h18v-9h9v-9h9v-9h9v-9h9v-81h-9v72h-9v9h-9v9h-9v9h-9v9h-18v9h-27v54h63v-9h18v-9h18v-9h9v-9h9v-9h9v-18h-9v9Z"/>
+          <path class="cls-5" d="M171,251.77h-9v63.23h9v-63.23Z"/>
+          <path class="cls-5" d="M162,315h-9v45h9v-45Z"/>
+          <g class="cls-1">
+            <path class="cls-4" d="M171,197.9v-18h-9v-72h-9v-45h-9v-9h-9v-9h-9v-9h-9v-9h-18v-9h-18v-9h-45v36h27v9h18v9h9v9h9v9h9v9h9v81h9v9h9v9h9v9h9v27h-9v9h-9v9h-9v9h-9v81h-9v9h-9v9h-9v9h-9v9h-18v9h-27v36h45v-9h18v-9h18v-9h9v-9h9v-9h9v-9h9v-45h9v-72h9v-18h18v-27h-18Z"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -47,10 +47,6 @@ header {
     width: 100%;
 }
 
-.header__logo {
-    filter: drop-shadow(0 0 80px rgba(1, 197, 255, 0.8));
-}
-
 header h1 {
     font-size: 7.5rem;
     font-weight: 500;
@@ -106,6 +102,50 @@ header img {
     width: 100%;
     box-shadow: rgba(1, 197, 255, 0.73) 0 0 80px 12px;
 }
+.header__logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 12rem;
+    filter: drop-shadow(0 0 80px rgba(1, 197, 255, 0.8));
+    animation: title-flicker-soft 15s infinite;
+}
+.header__logoContainer > img {
+    position: absolute;
+}
+.header__logoContainer > img:nth-child(1) {
+    animation: floating-left infinite 7s alternate-reverse cubic-bezier(.29,.02,.73,.98);
+}
+.header__logoContainer > img:nth-child(3) {
+    animation-delay: -1s;
+    animation: floating-right infinite 8s alternate-reverse cubic-bezier(.29,.02,.73,.98);
+}
+@keyframes floating-left {
+    0% {transform: scale(1)}
+    50% {transform: scale(.98)}
+    100% {transform: scale(1)}
+}
+@keyframes floating-right {
+    0% {transform: scale(1)}
+    50% {transform: scale(1.02)}
+    100% {transform: scale(1)}
+}
+
+@keyframes title-flicker-soft {
+    0%, 19%, 21%, 29%, 31%, 82%, 84%, 100% {
+      filter: drop-shadow(0 0 80px rgba(1, 197, 255, 0.6));
+      opacity: 1;
+    }
+  
+    20%, 30%, 83% {
+      filter: 
+        drop-shadow(0 0 80px rgba(1, 197, 255, 0.6))
+        drop-shadow(0 0 20px rgba(255, 255, 255, 0.08));
+      opacity: 0.9;
+    }
+  }
+
 
 @keyframes title-flicker {
     0% {
@@ -250,6 +290,7 @@ header img {
 
     header h1 {
         font-size: 5rem;
+        line-height: 4rem;
     }
 
     .header__timer__text {
@@ -285,7 +326,8 @@ header img {
 }
 
 .info ul {
-    padding-left: 1rem;
+    padding-left: 2rem;
+    width: 100%;
 }
 
 .info__heading-line {

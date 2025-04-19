@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 414 423">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+
+      .cls-2 {
+        fill: none;
+      }
+
+      .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-5 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-3 {
+        fill: #2a9dd9;
+      }
+
+      .cls-4 {
+        fill: #0a71a7;
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-2" width="414" height="423"/>
+    </clipPath>
+  </defs>
+  <g class="cls-1">
+    <g id="Layer_1-2" data-name="Layer 1">
+      <g class="cls-5">
+        <g>
+          <path class="cls-4" d="M297,171h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M288,180h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M279,189h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M270,198h-9v27h9v-27Z"/>
+          <path class="cls-4" d="M252,108h-9v72h9v-72Z"/>
+          <path class="cls-4" d="M261,63h-9v45h9v-45Z"/>
+          <path class="cls-4" d="M243,189v-9h-9v9h-9v9h18v-9Z"/>
+          <path class="cls-4" d="M324,0v9h-18v9h-18v9h-9v9h-9v9h-9v18h9v-9h9v-9h9v-9h9v-9h18v-9h18v-9h45v36h-27v9h-18v9h-9v9h-9v9h-9v9h-9v81h9v-72h9v-9h9v-9h9v-9h9v-9h18v-9h27V0h-63Z"/>
+          <path class="cls-4" d="M225,198h-9v27h9v-27Z"/>
+          <path class="cls-4" d="M297,243h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M288,234h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M279,225h-9v9h9v-9Z"/>
+          <path class="cls-4" d="M252,243h-9v72h9v-72Z"/>
+          <path class="cls-4" d="M261,315h-9v45h9v-45Z"/>
+          <path class="cls-4" d="M243,225h-18v9h9v9h9v-18Z"/>
+          <path class="cls-4" d="M297,333h9v9h9v9h9v9h9v9h18v9h27v36h-45v-9h-18v-9h-18v-9h-9v-9h-9v-9h-9v-9h-9v18h9v9h9v9h9v9h18v9h18v9h63v-54h-27v-9h-18v-9h-9v-9h-9v-9h-9v-9h-9v-72h-9v81Z"/>
+          <path class="cls-3" d="M297,90h9v-9h9v-9h9v-9h9v-9h18v-9h27V9h-45v9h-18v9h-18v9h-9v9h-9v9h-9v9h-9v45h-9v72h-9v18h-18v27h18v18h9v72h9v45h9v9h9v9h9v9h9v9h18v9h18v9h45v-36h-27v-9h-18v-9h-9v-9h-9v-9h-9v-9h-9v-81h-9v-9h-9v-9h-9v-9h-9v-27h9v-9h9v-9h9v-9h9v-81Z"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

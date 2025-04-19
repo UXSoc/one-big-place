@@ -365,13 +365,17 @@ io.sockets.on('connection', async (socket) => {
     canvas.resize(data.width, data.height);
     io.emit("reload_canvas");
   })
-  socket.on("reload_clients", () => {
+  socket.on("reload_clients", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
     io.emit("force_reload");
   })
-  socket.on("broadcast", (data) => {
+  socket.on("broadcast_message", (data) => {
     if (data.adminKey!==process.env.ADMIN_KEY) { console.error("Incorrect admin key."); return;};
-    io.emit("broadcast", data);
+    if (!data.heading || !data.message || typeof data.heading !== 'string' || data.heading == '' || typeof data.message !== 'string' || data.message == '') {
+      console.error('Invalid heading or message: Must be non-empty strings.');
+      return;
+    }
+    io.emit("broadcast_message", data);
   })
 });
 

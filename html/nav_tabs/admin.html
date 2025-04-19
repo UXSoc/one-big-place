@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="styles/admin.css">
 <script src="scripts/admin.js" type="module"></script>
-<div class="container">
+<div class="container" id="admin-tools-container">
     <div class="title">
         <img src="images/Info.svg" alt="Star Icon">
         <h1>Admin Tools</h1>
@@ -8,7 +8,7 @@
     <div class="description">
         <p>Admin tools to purge the nether.</p>
     </div>
-    <div>
+    <div id="admin-tools-dashboard" class="scroller">
         <input type="password" placeholder="Admin key" id="admin-key">
         <div>
             <h3>Fill Area</h3>
@@ -16,9 +16,18 @@
         </div>
         <div>
             <h3>Resize Canvas</h3>
-            <input type="number" placeholder="width">
-            <input type="number" placeholder="height">
+            <input type="number" placeholder="Width">
+            <input type="number" placeholder="Height">
             <button>Resize</button>
+        </div>
+        <div>
+            <h3>Force Reload Clients</h3>
+            <button>Broadcast Force Reload</button>
+        </div>
+        <div>
+            <h3>Broadcast Message</h3>
+            <input type="text" placeholder="Message">
+            <button>Broadcast</button>
         </div>
     </div>
 </div>

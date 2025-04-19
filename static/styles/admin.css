@@ -1,0 +1,49 @@
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em;
+    width: 100%;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 0;
+    font-family: "PixelGame", sans-serif;
+    font-size: 2.8rem;
+    font-weight: 100;
+}
+
+.description {
+    font-size: 1.2rem;
+}
+
+.pie-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin: 1.5rem 0 0 0;
+}
+
+.pie-container > .pie {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    aspect-ratio: 1;
+    border-radius: 50%
+}
+.pie-container > .pie > .label {
+    position: absolute;
+    font-family: BlockCraft;
+    font-size: 1.5rem;
+    transform-origin: center;
+    text-align: center;
+}
+.pie-container > .pie > .label > span {
+    color: #767676;
+    font-size: .8rem;
+}

@@ -19,10 +19,11 @@ export function setLeaderboardData(leaderboardData) {
 }
 
 function setupEvents() {
-    socket.on("connect", (data) => {
+    socket.on("connect", () => {
         setLoadingProgress('socketConnect', true);
+        loadCanvas(document.getElementById('canvas').querySelector('.image'), false);
     })
-    socket.on("disconnect", (data) => {
+    socket.on("disconnect", () => {
         setLoadingProgress('socketConnect', false);
     })
     socket.on("sync_cooldown", (data) => {

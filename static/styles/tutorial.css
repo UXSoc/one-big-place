@@ -1,0 +1,75 @@
+.tutorial-backdrop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 49;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.tutorial-window {
+    position: absolute;
+    background-color: #cba3ff;
+    border: #cba3ff 10px solid;
+    border-radius: 25px;
+    z-index: 50;
+    min-width: 50vw;
+    max-width: 90vw;
+    filter: drop-shadow(0 0 0.6rem rgba(51, 51, 51, 0.6));
+}
+.tutorial-window > div {
+    background-color: white;
+    outline: #9747ff dashed 4px;
+    border-radius: 15px;
+    padding: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+.tutorial-window p {
+    font-family: BlockCraft, sans-serif;
+    margin: 0;
+    line-height: 1em;
+}
+.tutorial-window h3 {
+    font-family: PixelGame, sans-serif;
+    font-weight: 100;
+    font-size: 2em;
+    line-height: .6em;
+    margin: 0;
+    margin-top: .3em;
+    margin-bottom: .6em;
+}
+.tutorial-window > div > div {
+    margin-top: 1em;
+}
+.tutorial-window > div > div {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .2em;
+}
+.tutorial-window button {
+    display: block;
+    outline: none;
+    border: none;
+    font-family: BlockCraft, sans-serif;
+    background-color: #9747ff;
+    color: white;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.tutorial-window > div > div > button:nth-child(1) {
+    background-color: #e6e6e6;
+    color: black;
+}
+@media only screen and (min-width: 1200px) {
+    .tutorial-window {
+        min-width: auto;
+    }
+    .tutorial-window > div {
+        max-width: 20vw;
+    }
+}

@@ -1,5 +1,5 @@
 #modals-container {
-    z-index: 99;
+    z-index: 89;
     display: flex;
     position: fixed;
     top: 0;
@@ -90,7 +90,7 @@ input[type=text], input[type=password] {
     padding: 1.2rem;
     border-radius: 15px;
     filter: drop-shadow(0 0 0.6rem rgba(51, 51, 51, 0.6));
-    z-index: 9999;
+    z-index: 99;
     position: absolute;
 }
 #loader > h2 {

@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    z-index: 99;
+    z-index: 40;
     top: 12rem;
     left: 0;
     height: auto;

@@ -22,5 +22,6 @@ model User {
   replaced       Int       @default(0)
   placedBreak    Int       @default(0)
   bonus          String[]  @default([])
+  firstLogin     Boolean   @default(true)
   lastUpdated    DateTime  @updatedAt @default(now())
 }

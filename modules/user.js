@@ -20,6 +20,7 @@ function startDBSyncing(prisma) {
                 replaced: userData.replaced,
                 placedBreak: userData.placedBreak,
                 bonus: userData.bonus,
+                firstLogin: userData.firstLogin,
                 lastUpdated: new Date(userData.lastUpdated),
               }
             }).catch(console.error)

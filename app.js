@@ -20,7 +20,7 @@ const saltRounds = 10;
 
 const schema = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
-  idNumber: Joi.string().pattern(/^\d{6}$/).required(),
+  idNumber: Joi.string().pattern(/^\d{6}$|^\d{9}$/).required(),
   password: Joi.string().pattern(/^\d{6}$/).required(),
   confirmPassword: Joi.ref("password"),
 }).with("password", "confirmPassword");

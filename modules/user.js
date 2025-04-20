@@ -112,7 +112,8 @@ async function getUserPlaceCountByYear(prisma) {
     });
 
     const yearCount = users.reduce((acc, user) => {
-      const year = user.idNumber.toString().slice(0, 2);
+      const userIdNumber = user.idNumber.toString();
+      const year = (userIdNumber.length==6)?userIdNumber.slice(0, 2):userIdNumber.slice(2, 4);
       const placed = user.placeCount || 0;
       acc[year] = (acc[year] || 0) + placed;
       return acc;

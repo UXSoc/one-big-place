@@ -6,7 +6,6 @@ import { connectToServer } from "./socket.js";
 import { closeTabs, setupTabs } from "./nav.js";
 import { handleURLParams } from "./auth.js";
 import { loadSfx, playSfx } from "./sounds.js";
-import { startTutorial } from "./tutorial.js";
 
 const ZOOM_THRESHOLD = 15;
 
@@ -57,4 +56,3 @@ connectToServer("localhost:3000");
 loadSfx();
 setupTabs();
 handleURLParams();
-startTutorial();

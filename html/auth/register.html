@@ -23,7 +23,6 @@
   const password_inputs = document.querySelectorAll('#registerPassword, #confirmRegisterPassword')
   const inputs = document.querySelectorAll('.digits-input')
   function validatePasswords() {
-    console.log('validating')
     const pw = document.getElementById("registerPassword").value;
     const confirm = document.getElementById("confirmRegisterPassword").value;
     if (pw !== confirm) {
@@ -38,7 +37,6 @@
     return true;
   }
   for (var input of password_inputs) {
-    console.log(input)
     input.addEventListener('input', (e) => {
       validatePasswords();
     })

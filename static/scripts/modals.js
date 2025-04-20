@@ -7,7 +7,7 @@ const MODALS = {
 export function closeModal(name) {
     const modal = document.getElementById(`modal-${name}`);
     if (!!modal) {
-        modal.remove()
+        modal.style.display = 'none';
     };
 }
 
@@ -43,6 +43,11 @@ export function openCustomModal(heading, message, closable=true, onclose=()=>{})
 export function openModal(name) {
     var modal = document.createElement('div');
     modal.classList.add("modal", "scroller");
+    const OPENED_MODAL = document.querySelector(`#modal-${name}`);
+    if (OPENED_MODAL) {
+        OPENED_MODAL.style.display = 'block';
+        return;
+    }
     fetch(`html/${MODALS[name]}.html`)
         .then(response => response.text()) 
         .then(html => { 

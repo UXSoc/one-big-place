@@ -116,18 +116,15 @@ async function fetchData() {
 fetchData();
 
 async function updateLeaderboard() {
-    console.log(leaderboardUserIDs)
     const users = await Promise.all(
         Array.from(leaderboardUserIDs).map(id => getUserData(id))
     );
-    console.log(users)
     const sorted = users.sort((a, b) => b.placeCount - a.placeCount);
     return sorted;
 }
 
 paintEventTarget.addEventListener('pixelPainted', async (event) => {
     const { color_id, x, y, userId } = event.detail;
-    console.log(`Pixel Painted: ${userId}`)
     if (leaderboardUserIDs.size<10 && userId && !leaderboardUserIDs.has(userId)) leaderboardUserIDs.add(userId);
     generateLeaderboard(await updateLeaderboard(), await getUserData())
 });

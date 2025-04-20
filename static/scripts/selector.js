@@ -94,10 +94,14 @@ export async function getPixelId(target, x, y) {
   }
   const userData = await getUserData(pixelId);
   if (userData?.id) {
-    pin.innerText = `${userData.username} | ${String(userData.idNumber).slice(0, 2)}'` || "";
+    pin.innerText = `${userData.username} | ${getYearId(userData.idNumber)}'` || "";
     showPixelId();
   }
 }
+function getYearId(id) {
+  const str = id.toString();
+  return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
+};
 export function hidePixelId() {
   pin.style.backgroundColor = "transparent";
 }

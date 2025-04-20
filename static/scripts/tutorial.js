@@ -10,35 +10,35 @@ const tutorialData = [
         container: document.body,
         el: document.querySelector('#canvas'),
         allowClick: false,
-        pos: ["50vw", "50vh", "auto", "auto"],
+        pos: ["10vh", "10vw", "auto", "auto"],
         heading: "Canvas",
         content: "This is the canvas. Click anywhere on the canvas to select a pixel.",
     },
     {
         el: document.querySelector('.canvas-coordinates'),
         allowClick: false,
-        pos: ["50vw", "50vh", "auto", "auto"],
+        pos: ["4vh", "7vw", "auto", "auto"],
         heading: "Coordinates",
         content: "Every pixel has a unique (X, Y) position on the canvas. Use coordinates to navigate or plan precise placements.",
     },
     {
         el: document.querySelector('#color-palette'),
         allowClick: false,
-        pos: ["50vw", "50vh", "auto", "auto"],
+        pos: ["20vh", "5vw", "auto", "auto"],
         heading: "Color Palette",
         content: "This is your palette window. \nClick on the color you want to use and the selected pixel will change to your chosen color!",
     },
     {
         el: document.querySelector('#bits-display'),
         allowClick: false,
-        pos: ["50vw", "50vh", "auto", "auto"],
+        pos: ["10vh", "auto", "auto", "8vw"],
         heading: "Bits",
         content: "These are your bits. Placing a pixel costs 1 bit, and bits regenerate over time—so spend them wisely!",
     },
     {
         el: document.querySelector('nav'),
         allowClick: false,
-        pos: ["50vw", "50vh", "auto", "auto"],
+        pos: ["15vh ", "auto", "auto", "8vw"],
         heading: "Navigation Bar",
         content: "Hover over this area to reveal the tab labels. Here, you’ll find the leaderboard, challenges, and canvas coverage. You can also redeem gift codes here and see the creators of this website!",
     },
@@ -50,6 +50,9 @@ const tutorialData = [
         content: "Good job! That concludes the tour. Collaboration is key, so have fun working with others!",
     },
 ]
+if (!window.matchMedia('only screen and (min-width: 1200px)').matches) {
+    tutorialData.splice(2,1); // remove coordinates tutorial on mobile
+}
 
 let elementHighlighted;
 let currentTutorialStep = 0;
@@ -90,6 +93,7 @@ function tutorialNext(step) {
 
 function showTutorialWindow(container, heading, content, pos, prev, next) {
     const tutorialWindow = document.createElement('div');
+    const tutorialContainer = document.createElement('div');
     const headingEl = document.createElement('h3');
     const contentEl = document.createElement('p');
     const buttonsContainer = document.createElement('div');
@@ -102,31 +106,35 @@ function showTutorialWindow(container, heading, content, pos, prev, next) {
     }
     headingEl.innerText = heading;
     contentEl.innerText = content;
+    const prevButton = document.createElement('button');
+    prevButton.innerText = "Previous"
     if (prev) {
-        const button = document.createElement('button');
-        button.innerText = "Previous"
-        button.addEventListener('click', () => {
+        prevButton.addEventListener('click', () => {
             tutorialNext(-1);
         })
-        buttonsContainer.append(button);
+    } else {
+        prevButton.style.display = 'none';
     }
-    const button = document.createElement('button');
+    buttonsContainer.append(prevButton);
+    const nextButton = document.createElement('button');
     if (next) {
-        button.innerText = "Next"
-        button.addEventListener('click', () => {
+        nextButton.innerText = "Next"
+        nextButton.addEventListener('click', () => {
             tutorialNext(1);
         })
     } else {
-        button.innerText = "Start Playing!"
-        button.addEventListener('click', () => {
+        nextButton.innerText = "Start Playing!"
+        nextButton.addEventListener('click', () => {
             stopHighlights();
         })
     }
-    buttonsContainer.append(button);
-    tutorialWindow.append(headingEl, contentEl, buttonsContainer);
+    buttonsContainer.append(nextButton);
+    tutorialContainer.append(headingEl, contentEl, buttonsContainer);
+    tutorialWindow.append(tutorialContainer);
     if (!container) {
         document.querySelector('.tutorial-backdrop').append(tutorialWindow);
     } else {
+        tutorialWindow.style.position = 'fixed';
         container.append(tutorialWindow);
     };
 }

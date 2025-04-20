@@ -12,8 +12,53 @@
 }
 .tutorial-window {
     position: absolute;
+    background-color: #cba3ff;
+    border: #cba3ff 10px solid;
+    border-radius: 25px;
+    z-index: 50;
+}
+.tutorial-window > div {
     background-color: white;
+    outline: #9747ff dashed 4px;
     border-radius: 15px;
     padding: 1rem;
-    z-index: 50;
+    max-width: 80vw;
+}
+.tutorial-window p {
+    font-family: BlockCraft, sans-serif;
+    margin: 0;
+}
+.tutorial-window h3 {
+    font-family: PixelGame, sans-serif;
+    font-weight: 100;
+    font-size: 2em;
+    margin: 0;
+}
+.tutorial-window > div > div {
+    margin-top: 1em;
+}
+.tutorial-window > div > div {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: .2em;
+}
+.tutorial-window button {
+    display: block;
+    outline: none;
+    border: none;
+    font-family: BlockCraft, sans-serif;
+    background-color: #9747ff;
+    color: white;
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.tutorial-window > div > div > button:nth-child(1) {
+    background-color: #e6e6e6;
+    color: black;
+}
+@media only screen and (min-width: 1200px) {
+    .tutorial-window > div {
+        max-width: 20vw;
+    }
 }

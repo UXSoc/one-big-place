@@ -20,7 +20,6 @@ async function updatePieChart() {
   let gradientParts = [];
 
   entries.forEach(([label, value], i) => {
-    console.log(value.pixelCount, total)
     const percentage = (value.pixelCount / total) * 100;
     const angle = (percentage / 100) * 360;
     const midAngle = currentAngle + angle / 2;

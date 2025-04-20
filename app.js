@@ -364,12 +364,18 @@ io.sockets.on('connection', async (socket) => {
     if (pos_current_userId) {
       // replacing pixel
       const current_userData = await user(prisma, pos_current_userId);
-      const current_yearId = getYearId(current_userData.idNumber);
-      const current_yearData = await getYearStats(prisma, current_yearId);
-      if (current_yearId!==placer_yearId) {
-        await updateYearStats(prisma, current_yearId, {
-          pixelCount: current_yearData.pixelCount-1,
-        })
+      if (current_userData) {
+        const current_yearId = getYearId(current_userData.idNumber);
+        const current_yearData = await getYearStats(prisma, current_yearId);
+        if (current_yearId!==placer_yearId) {
+          await updateYearStats(prisma, current_yearId, {
+            pixelCount: Math.max(0, current_yearData.pixelCount-1),
+          })
+          await updateYearStats(prisma, placer_yearId, {
+            pixelCount: placer_yearData.pixelCount+1,
+          })
+        }
+      } else {
         await updateYearStats(prisma, placer_yearId, {
           pixelCount: placer_yearData.pixelCount+1,
         })

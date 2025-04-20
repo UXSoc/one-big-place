@@ -266,7 +266,7 @@ async function redeemCodeForUser(userId, redeemCode) {
     bonusSet: new Set([...(redeemingUser.bonusSet || []), redeemCode]),
     maxBits: redeemingUser.maxBits + 1
   });
-  return "Bonus code redeemed successfully!";
+  return "Redeem code redeemed successfully!";
 }
 
 // Setup Socket.io

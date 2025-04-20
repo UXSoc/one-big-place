@@ -345,6 +345,14 @@ io.sockets.on('connection', async (socket) => {
       socket.emit("PaintPixel", { ...data, id: canvas.getPixelColorId(data.x, data.y) })
       return;
     }
+    const canvasWidth = canvas.get_user_grid_json()[0].length;
+    const canvasHeight = canvas.get_user_grid_json().length;
+    
+    if (!(data.x >= 0 && data.x < canvasWidth && data.y >= 0 && data.y < canvasHeight)) {
+      socket.emit("PaintPixel", { ...data, id: canvas.getPixelColorId(data.x, data.y) })
+      console.error("Invalid position. Attempted to place pixel outside of canvas.");
+      return;
+    }
     const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
     await updateUser(prisma, userId, {
       lastBitCount: current_bits-1,

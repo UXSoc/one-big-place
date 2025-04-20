@@ -29,7 +29,7 @@ function setupEvents() {
         syncCooldown(data);
     })
     socket.on("PaintPixel", async (data) => {
-        paintPixelOnCanvas(data.id, data.x, data.y);
+        paintPixelOnCanvas(data.id, data.x, data.y, data.userId);
         if (data.userId) {
             await updateChallengeProgress(data);
             setUserGrid(data.userId, data.x, data.y);

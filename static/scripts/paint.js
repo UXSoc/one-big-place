@@ -1,6 +1,7 @@
 import { disablePalette, enablePalette } from "./palette.js";
 import { getUserData } from "./user.js";
 import { playSfx } from "./sounds.js";
+export const paintEventTarget = new EventTarget();
 
 let generationTimer = undefined;
 let maxBits = 5;
@@ -43,9 +44,12 @@ export async function paintPixel(color_id, x, y, socket) {
   }
 }
 
-export function paintPixelOnCanvas(color_id, x, y) {
+export function paintPixelOnCanvas(color_id, x, y, userId) {
   ctx.fillStyle = colorsArray[color_id];
   ctx.fillRect(x, y, 1, 1);
+  paintEventTarget.dispatchEvent(new CustomEvent('pixelPainted', {
+      detail: { color_id, x, y, userId  }
+  }));  
 }
 
 const bits_container = document.querySelector("#bits-counter");

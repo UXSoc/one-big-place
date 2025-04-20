@@ -1,5 +1,6 @@
-import { getLeaderboardData, setLeaderboardData } from "./socket.js";
-import { getUserData, setUserData, userEventTarget } from "./user.js";
+import { paintEventTarget } from "./paint.js";
+import { setLeaderboardData } from "./socket.js";
+import { getUserData, setUserData } from "./user.js";
 
 function generateUserPlacement(userData) {
     let currentUser = document.querySelector(".ranks__currentUser")
@@ -49,8 +50,17 @@ function generateUserPlacement(userData) {
 function generateLeaderboard(leaderboard, userData) {
     let ranks = document.querySelector(".ranks__users");
     const fragment = document.createDocumentFragment();
-    for (let i = 1; i < leaderboard.length+1; i++) {
-        const user = leaderboard[i-1]; 
+    for (let i = 1; i < 10+1; i++) {
+        let user;
+        if (i-1<leaderboard.length) {
+            user = leaderboard[i-1];
+        } else {
+            user = {
+                id: -1,
+                username: "EMPTY",
+                placeCount: -1,
+            }
+        }
         let div = document.createElement("div");
         let divLeft = document.createElement("div");
         let divMid = document.createElement("div");
@@ -62,7 +72,7 @@ function generateLeaderboard(leaderboard, userData) {
 
         currentRank.textContent = `#${i}`;
         userName.textContent = `${(userData && userData.id == user.id)?"[You] ":""}${user["username"]}`;
-        userPlaced.textContent = `${user["placeCount"]}`;
+        userPlaced.textContent = `${Math.max(0, user["placeCount"])}`;
 
         if (userData && userData.id == user.id) { div.style.backgroundColor = '#f0e4ff' }
 
@@ -81,7 +91,7 @@ function generateLeaderboard(leaderboard, userData) {
     ranks.replaceChildren(fragment);
 }
 
-var leaderboardUserIDs = [];
+var leaderboardUserIDs = new Set();
 async function fetchData() {
     try {
         let fetchRes = await fetch("json/statistics/leaderboard").then((res) => res.json());
@@ -92,7 +102,7 @@ async function fetchData() {
         const userData = await getUserData();
         for (const user of leaderboard) {
             setUserData(user.id, user);
-            leaderboardUserIDs.push(user.id);
+            leaderboardUserIDs.add(user.id);
         }
 
         generateLeaderboard(leaderboard, userData);
@@ -106,14 +116,18 @@ async function fetchData() {
 fetchData();
 
 async function updateLeaderboard() {
+    console.log(leaderboardUserIDs)
     const users = await Promise.all(
-      leaderboardUserIDs.map(id => getUserData(id))
+        Array.from(leaderboardUserIDs).map(id => getUserData(id))
     );
+    console.log(users)
     const sorted = users.sort((a, b) => b.placeCount - a.placeCount);
     return sorted;
 }
 
-userEventTarget.addEventListener('userUpdated', async (event) => {
-    const { userId, field, value } = event.detail;
+paintEventTarget.addEventListener('pixelPainted', async (event) => {
+    const { color_id, x, y, userId } = event.detail;
+    console.log(`Pixel Painted: ${userId}`)
+    if (leaderboardUserIDs.size<10 && userId && !leaderboardUserIDs.has(userId)) leaderboardUserIDs.add(userId);
     generateLeaderboard(await updateLeaderboard(), await getUserData())
 });

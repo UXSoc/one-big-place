@@ -86,5 +86,5 @@ export async function updateChallengeProgress(data) {
     if (userData) updateUserData("placeCount", userData.placeCount+1, userData.id);
     if (isLunch()) updateUserData("placedBreak", userData.placedBreak+1, userData.id);
     const currentUser = getUserGrid()[data.y][data.x];
-    if (currentUser !== data.userId) updateUserData("replaced", userData.replaced+1, userData.id);
+    if (currentUser && currentUser !== data.userId) updateUserData("replaced", userData.replaced+1, userData.id);
 }

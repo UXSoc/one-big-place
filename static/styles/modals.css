@@ -14,7 +14,7 @@
     -moz-box-shadow: inset 0px 0px 183px 0px rgba(255, 255, 255, 0.75);
     box-shadow: inset 0px 0px 183px 0px rgba(255, 255, 255, 0.75);
 }
-#modals-container:not(:has(.modal, #loader:not(.hidden))) {
+#modals-container:not(:has(.modal:not(.hidden), #loader:not(.hidden))) {
     display: none;
 }
 .modal {
@@ -104,7 +104,7 @@ input[type=text], input[type=password] {
     --cut-corner-size: 4px;
 }
 .hidden {
-    display: none;
+    display: none !important;
 }
 #loader > div {
     display: grid;

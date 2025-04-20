@@ -7,7 +7,7 @@ const MODALS = {
 export function closeModal(name) {
     const modal = document.getElementById(`modal-${name}`);
     if (!!modal) {
-        modal.style.display = 'none';
+        modal.classList.add('hidden');
     };
 }
 
@@ -45,7 +45,7 @@ export function openModal(name) {
     modal.classList.add("modal", "scroller");
     const OPENED_MODAL = document.querySelector(`#modal-${name}`);
     if (OPENED_MODAL) {
-        OPENED_MODAL.style.display = 'block';
+        OPENED_MODAL.classList.remove('hidden');
         return;
     }
     fetch(`html/${MODALS[name]}.html`)
@@ -57,7 +57,7 @@ export function openModal(name) {
             closeButton.className = 'close-modal-button';
             closeButton.innerText = '✖';
             closeButton.addEventListener('click', (e) => {
-                e.target.parentElement.remove()
+                e.target.parentElement.classList.add('hidden');
             })
             modal.append(closeButton);
             CONTAINER.appendChild(modal);

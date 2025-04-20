@@ -14,13 +14,14 @@ async function updatePieChart() {
   pieContainer.querySelectorAll('.label').forEach(el => el.remove());
 
   const entries = Object.entries(data);
-  const total = entries.reduce((sum, [, val]) => sum + val, 0);
+  const total = entries.reduce((sum, [, entry]) => sum + entry.pixelCount, 0);
 
   let currentAngle = 0;
   let gradientParts = [];
 
   entries.forEach(([label, value], i) => {
-    const percentage = (value / total) * 100;
+    console.log(value.pixelCount, total)
+    const percentage = (value.pixelCount / total) * 100;
     const angle = (percentage / 100) * 360;
     const midAngle = currentAngle + angle / 2;
 

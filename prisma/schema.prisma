@@ -25,3 +25,9 @@ model User {
   firstLogin     Boolean   @default(true)
   lastUpdated    DateTime  @updatedAt @default(now())
 }
+
+model year_statistics {
+  year           Int       @id
+  pixelCount     Int       @default(0)
+  lastUpdated    DateTime  @updatedAt @default(now())
+}

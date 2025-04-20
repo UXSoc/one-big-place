@@ -11,7 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard, getUserPlaceCountByYear } = require('./modules/user');
+const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard, getUserPlaceCountByYear, cacheYearStats, updateYearStats, getYearStats } = require('./modules/user');
 
 const app = express();
 const prisma = new PrismaClient();
@@ -227,7 +227,7 @@ app.get('/json/statistics/leaderboard', async (req, res) => {
 });
 
 app.get('/json/statistics/yr_dist', async (req, res) => {
-  res.json(await getUserPlaceCountByYear(prisma));
+  res.json(await getUserPlaceCountByYear());
 });
 
 let promos;
@@ -268,6 +268,8 @@ async function redeemCodeForUser(userId, redeemCode) {
   });
   return "Redeem code redeemed successfully!";
 }
+
+cacheYearStats(prisma);
 
 // Setup Socket.io
 
@@ -352,6 +354,33 @@ io.sockets.on('connection', async (socket) => {
       lastPlacedDate: Date.now(),
       extraTime: extraTime,
     })
+    
+    const getYearId = (id) => {
+      const str = id.toString();
+      return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
+    };
+    const placer_yearId = getYearId(user_data.idNumber);
+    const placer_yearData = await getYearStats(prisma, placer_yearId);
+    if (pos_current_userId) {
+      // replacing pixel
+      const current_userData = await user(prisma, pos_current_userId);
+      const current_yearId = getYearId(current_userData.idNumber);
+      const current_yearData = await getYearStats(prisma, current_yearId);
+      if (current_yearId!==placer_yearId) {
+        await updateYearStats(prisma, current_yearId, {
+          pixelCount: current_yearData.pixelCount-1,
+        })
+        await updateYearStats(prisma, placer_yearId, {
+          pixelCount: placer_yearData.pixelCount+1,
+        })
+      }
+    } else {
+      // Placing on empty pixel
+      await updateYearStats(prisma, placer_yearId, {
+        pixelCount: placer_yearData.pixelCount+1,
+      })
+    }
+
     canvas.paintPixel(data.x, data.y, data.id, userId);
     sync_cooldown(userId, socket);
     io.emit("PaintPixel", { ...data, userId: userId });

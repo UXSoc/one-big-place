@@ -13,7 +13,7 @@ async function updatePieChart() {
   const data = await response.json();
   pieContainer.querySelectorAll('.label').forEach(el => el.remove());
 
-  const entries = Object.entries(data);
+  const entries = Object.entries(data).sort((a, b) => b[1].pixelCount - a[1].pixelCount).slice(0, 5);;
   const total = entries.reduce((sum, [, entry]) => sum + entry.pixelCount, 0);
 
   let currentAngle = 0;

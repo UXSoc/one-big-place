@@ -30,9 +30,28 @@ function convertTZ(date) {
     return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: "Asia/Taipei"}));   
 }
 
+const schedule = require('node-schedule');
+require('dotenv').config()
+
+const closingDate = new Date(process.env.CLOSING_DATE);
+function isEventClosed() {
+  const now = new Date();
+  return (now > closingDate);
+}
+
+let eventClosed = isEventClosed();
+const closeSchedule = schedule.scheduleJob(closingDate, () => {
+    const canvas = require('./canvas');
+    eventClosed = true;
+    console.log("Closing Event... Saving Data...")
+    canvas.saveFrame();
+    canvas.saveCanvasData();
+});
+
 module.exports = {
     generateRandomSeed: generateRandomSeed,
     getCurrentDate: getCurrentDate,
     timeBetw: timeBetw,
     convertTZ: convertTZ,
+    isEventClosed: isEventClosed,
 }

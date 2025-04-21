@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { createCanvas } = require('canvas');
-const { getCurrentDate, convertTZ } = require('./ess');
+const { getCurrentDate, convertTZ, isEventClosed } = require('./ess');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -106,11 +106,12 @@ function getPixelColorId(x, y) {
 }
 
 function saveCanvasData() {
+    console.log('\x1b[32m', 'Canvas data saved', '\x1b[0m')
     writeJSONFile("canvas", canvas)
 }
 
 setInterval(() => {
-    saveCanvasData()
+    if (!isEventClosed()) saveCanvasData();
 }, saveCanvas_interval)
 
 setInterval(() => {

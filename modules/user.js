@@ -129,7 +129,6 @@ async function cacheYearStats(prisma) {
 async function updateYearStats(prisma, year, newData) {
   const cachedYearData = await getYearStats(prisma, year);
   if (!cachedYearData) throw new Error("Trying to update undefined Year");
-  console.log(newData, { ...cachedYearData, ...newData })
   yearDataCache.set(year, { ...cachedYearData, ...newData });
 }
 

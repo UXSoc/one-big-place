@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
+const schedule = require('node-schedule');
 const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard, getUserPlaceCountByYear, cacheYearStats, updateYearStats, getYearStats } = require('./modules/user');
 
 const app = express();
@@ -96,9 +97,13 @@ app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
   const openingDate = new Date(process.env.OPENING_DATE);
+  const closingDate = new Date(process.env.CLOSING_DATE);
+  const stopAccessClosingDate = new Date(closingDate.getTime() + 30 * 60 * 1000);
   const now = new Date();
   if (now < openingDate) {
     res.sendFile("html/landing.html", {root: path.join(__dirname)});
+  } else if (now > stopAccessClosingDate) {
+    res.sendFile("html/closed.html", {root: path.join(__dirname)});
   } else {
     res.sendFile("html/index.html", {root: path.join(__dirname)});
   }
@@ -106,6 +111,10 @@ app.get("/", (req, res) => {
 
 app.get("/json/opening-date", (req, res) => {
   res.json({ openingDate: process.env.OPENING_DATE });
+});
+
+app.get("/json/closing-date", (req, res) => {
+  res.json({ closingDate: process.env.CLOSING_DATE });
 });
 
 app.get("/register", (req, res) => {
@@ -304,7 +313,7 @@ io.use(sharedSession(sessionMiddleware, {
 const canvas = require('./modules/canvas');
 const { calculateBits, getCooldown } = require('./modules/bits');
 const { isChallenge, isChallengeCompleted } = require('./modules/challenges');
-const { timeBetw, generateRandomSeed } = require('./modules/ess');
+const { timeBetw, generateRandomSeed, isEventClosed } = require('./modules/ess');
 startDBSyncing(prisma);
 
 async function sync_cooldown(userId, socket) {
@@ -353,48 +362,55 @@ io.sockets.on('connection', async (socket) => {
       console.error("Invalid position. Attempted to place pixel outside of canvas.");
       return;
     }
-    const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
-    await updateUser(prisma, userId, {
-      lastBitCount: current_bits-1,
-      placeCount: user_data.placeCount+1,
-      replaced: (pos_current_userId&&pos_current_userId!==userId)?user_data.replaced+1:user_data.replaced,
-      placedBreak: (isLunch())?user_data.placedBreak+1:user_data.placedBreak,
-      lastPlacedDate: Date.now(),
-      extraTime: extraTime,
-    })
-    
-    const getYearId = (id) => {
-      const str = id.toString();
-      return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
-    };
-    const placer_yearId = getYearId(user_data.idNumber);
-    const placer_yearData = await getYearStats(prisma, placer_yearId);
-    if (pos_current_userId) {
-      // replacing pixel
-      const current_userData = await user(prisma, pos_current_userId);
-      if (current_userData) {
-        const current_yearId = getYearId(current_userData.idNumber);
-        const current_yearData = await getYearStats(prisma, current_yearId);
-        if (current_yearId!==placer_yearId) {
-          await updateYearStats(prisma, current_yearId, {
-            pixelCount: Math.max(0, current_yearData.pixelCount-1),
-          })
+    if (!isEventClosed()) {
+      const pos_current_userId = canvas.get_user_grid_json()[data.y][data.x];
+      await updateUser(prisma, userId, {
+        lastBitCount: current_bits-1,
+        placeCount: user_data.placeCount+1,
+        replaced: (pos_current_userId&&pos_current_userId!==userId)?user_data.replaced+1:user_data.replaced,
+        placedBreak: (isLunch())?user_data.placedBreak+1:user_data.placedBreak,
+        lastPlacedDate: Date.now(),
+        extraTime: extraTime,
+      })
+      
+      const getYearId = (id) => {
+        const str = id.toString();
+        return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
+      };
+      const placer_yearId = getYearId(user_data.idNumber);
+      const placer_yearData = await getYearStats(prisma, placer_yearId);
+      if (pos_current_userId) {
+        // replacing pixel
+        const current_userData = await user(prisma, pos_current_userId);
+        if (current_userData) {
+          const current_yearId = getYearId(current_userData.idNumber);
+          const current_yearData = await getYearStats(prisma, current_yearId);
+          if (current_yearId!==placer_yearId) {
+            await updateYearStats(prisma, current_yearId, {
+              pixelCount: Math.max(0, current_yearData.pixelCount-1),
+            })
+            await updateYearStats(prisma, placer_yearId, {
+              pixelCount: placer_yearData.pixelCount+1,
+            })
+          }
+        } else {
           await updateYearStats(prisma, placer_yearId, {
             pixelCount: placer_yearData.pixelCount+1,
           })
         }
       } else {
+        // Placing on empty pixel
         await updateYearStats(prisma, placer_yearId, {
           pixelCount: placer_yearData.pixelCount+1,
         })
       }
     } else {
-      // Placing on empty pixel
-      await updateYearStats(prisma, placer_yearId, {
-        pixelCount: placer_yearData.pixelCount+1,
-      })
+      data.id = 31;
+      canvas.paintPixel(data.x, data.y, data.id, userId);
+      sync_cooldown(userId, socket);
+      io.emit("PaintPixel", { ...data, userId: null });
+      return;
     }
-
     canvas.paintPixel(data.x, data.y, data.id, userId);
     sync_cooldown(userId, socket);
     io.emit("PaintPixel", { ...data, userId: userId });
@@ -434,9 +450,12 @@ canvas.load_canvas()
 canvas.saveFrame();
 
 function cleanup() {
-  console.log("Saving Data...")
-  canvas.saveCanvasData();
-  canvas.saveFrame(true);
+  if (!isEventClosed()) {
+    console.log("Saving Data...")
+    canvas.saveCanvasData();
+  }
+  // canvas.saveFrame(true);
+  process.exit(0);
 }
 
 process.on("SIGINT", () => {

@@ -4,7 +4,6 @@ export async function startEndingCountdown() {
     const res = await fetch("/json/closing-date");
     const data = await res.json();
     const targetTime = new Date(data.closingDate);
-    console.log(data.closingDate)
     let timerFunc = setInterval(() => {
       let currentTime = new Date().getTime();
       let timeDistance = targetTime - currentTime;

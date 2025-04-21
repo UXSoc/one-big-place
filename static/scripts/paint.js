@@ -16,14 +16,23 @@ export const colorsArray = [
 
 function generatePixl(timeout=bitGenerationInterval) {
   clearTimeout(generationTimer)
+  document.querySelectorAll('#bits-counter > div > div').forEach((item) => { item.remove(); })
+  const fillingBit = document.querySelector('#bits-counter > div:not(.filled)')
+  if (fillingBit) {
+    const bitFiller = document.createElement('div');
+    bitFiller.style.animationDuration = `${bitGenerationInterval/1000}s`;
+    bitFiller.style.animationDelay = `-${(bitGenerationInterval/1000)-(timeout/1000)}s`;
+    fillingBit.append(bitFiller);
+  }
   generationTimer = setTimeout(() => {
     bitCount++;
+    updateBits()
     if (bitCount<maxBits) {
       generatePixl();
     } else {
       generationTimer = undefined
+      document.querySelectorAll('#bits-counter > div > div').forEach((item) => { item.remove(); })
     }
-    updateBits()
   }, timeout)
 }
 

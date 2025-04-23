@@ -5,7 +5,11 @@ import { getUserData, updateUserData } from "./user.js";
 
 export var socket;
 export function connectToServer(ip) {
-    socket = io(ip)
+    if (ip) {
+        socket = io(ip)
+    } else {
+        socket = io()
+    }
     setupEvents();
 }
 

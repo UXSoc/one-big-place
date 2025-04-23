@@ -36,9 +36,12 @@ passport.use(
       // const value = await schema.validateAsync({ username: username, password: password, confirmPassword: password });
       // const validatedUsername = value["username"];
       // const validatedPassword = value["password"];
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
-          username: username.toLowerCase(),
+          username: {
+            equals: username,
+            mode: "insensitive"
+          }
         }
       })
       if (user !== null) {
@@ -123,7 +126,7 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const username = req.body.username.toLowerCase();
+    const username = req.body.username;
     const value = await schema.validateAsync({ username: username, idNumber: req.body.id_number, password: req.body.password, confirmPassword: req.body.confirmPassword });
     const validatedUsername = value["username"];
     const validatedPassword = value["password"];

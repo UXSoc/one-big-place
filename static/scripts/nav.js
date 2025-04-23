@@ -41,6 +41,10 @@ export async function setupTabs() {
     const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
     for (let i = 0; i < NAV_ITEMS.length; i++) {
         NAV_ITEMS[i].addEventListener('click', function() {
+            if (NAV_ITEMS[i].classList.contains("active")) {
+                closeTabs();
+                return;
+            };
             closeTabs();
             hidePalette();
             NAV.classList.add("active")

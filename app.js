@@ -331,6 +331,13 @@ function isLunch() {
 
 io.sockets.on('connection', async (socket) => {
   let userId;
+  console.log("Connected clients:", io.engine.clientsCount);
+
+  io.emit('connected_clients', io.engine.clientsCount);
+
+  socket.on('disconnect', () => {
+    io.emit('connected_clients', io.engine.clientsCount);
+  })
 
   if (socket.handshake.session.passport?.user) {
     userId = socket.handshake.session.passport.user;

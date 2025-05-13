@@ -83,5 +83,12 @@
     <footer>
       <p>Powered by the User Experience Society</p>
     </footer>
+    <script src="scripts/socket.io.min.js"></script>
+    <script>
+      let socket = io()
+      socket.on('connected_clients', (data) => {
+        document.querySelector('.header__queue').innerText = `${data} on standby...`;
+      })
+    </script>
 </body>
 </html>

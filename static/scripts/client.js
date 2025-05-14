@@ -57,7 +57,7 @@ pannerInit(target, {
 loadPalette(pixelSelector);
 loadCanvas(target.querySelector('.image'));
 getPixelId(0, 0)
-connectToServer("localhost:3000");
+connectToServer("atenean-one-big-place.fly.dev");
 loadSfx();
 setupTabs();
 handleURLParams();

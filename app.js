@@ -1,6 +1,6 @@
 require('dotenv').config()
 const fs = require('fs');
-const { PrismaClient } = require("./data/generated/prisma");
+const { PrismaClient } = require("./generated/prisma");
 const express = require("express");
 const session = require("express-session");
 const PgSession = require("connect-pg-simple")(session);

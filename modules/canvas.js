@@ -19,7 +19,7 @@ function parseFile(path) {
 }
 
 function writeJSONFile(filename, data) {
-    fs.writeFileSync(`./data/canvas_data/${filename}.json`, JSON.stringify(data), function(err, result) {
+    fs.writeFileSync(`./canvas_data/${filename}.json`, JSON.stringify(data), function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', `File Saved: ${filename}.json`, '\x1b[0m')
     });
@@ -44,14 +44,14 @@ function initialize_empty_canvas() {
 
 var canvas = {"canvas": [],"user_grid": []}
 function load_canvas() {
-    if (!fs.existsSync('./data/canvas_data')) {
-        fs.mkdirSync('./data/canvas_data', { recursive: true });
+    if (!fs.existsSync('./canvas_data')) {
+        fs.mkdirSync('./canvas_data', { recursive: true });
         console.log('data/canvas_data directory created');
     }
-    if (!fs.existsSync('./data/canvas_data/canvas.json')) {
+    if (!fs.existsSync('./canvas_data/canvas.json')) {
         initialize_empty_canvas();
     }
-    var parsedCanvas = parseFile("./data/canvas_data/canvas.json")
+    var parsedCanvas = parseFile("./canvas_data/canvas.json")
     canvas.canvas = parsedCanvas["canvas"]
     canvas.user_grid = parsedCanvas["user_grid"]
 }
@@ -74,7 +74,7 @@ function formatDate(date) {
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
 }
 async function saveFrame(close_on_exit=false) {
-    if (!fs.existsSync('./data/canvas_data/timelapse'))  fs.mkdirSync('./data/canvas_data/timelapse', { recursive: true });
+    if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
     var width = canvas.canvas[0].length
     var height = canvas.canvas.length
     var frame_canvas = createCanvas(width, height)
@@ -88,7 +88,7 @@ async function saveFrame(close_on_exit=false) {
     var buffer = frame_canvas.toBuffer('image/png')
     var d = getCurrentDate();
     var d_tz = convertTZ(d)
-    await fs.writeFile(`./data/canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
+    await fs.writeFile(`./canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
         if(err) console.log('error', err);
         console.log('\x1b[32m', 'Frame saved', '\x1b[0m')
         if (close_on_exit) process.exit(0);

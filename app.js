@@ -11,7 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const schedule = require('node-schedule');
+const { DateTime } = require("luxon");
 const { cacheUserFromDB, startDBSyncing, user, updateUser, getLeaderboard, getUserPlaceCountByYear, cacheYearStats, updateYearStats, getYearStats } = require('./modules/user');
 
 const app = express();
@@ -36,9 +36,12 @@ passport.use(
       // const value = await schema.validateAsync({ username: username, password: password, confirmPassword: password });
       // const validatedUsername = value["username"];
       // const validatedPassword = value["password"];
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findFirst({
         where: {
-          username: username.toLowerCase(),
+          username: {
+            equals: username,
+            mode: "insensitive"
+          }
         }
       })
       if (user !== null) {
@@ -89,17 +92,16 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false
 });
-
 app.use(express.static("static"));
 app.use(sessionMiddleware);
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  const openingDate = new Date(process.env.OPENING_DATE);
-  const closingDate = new Date(process.env.CLOSING_DATE);
-  const stopAccessClosingDate = new Date(closingDate.getTime() + 30 * 60 * 1000);
-  const now = new Date();
+  const openingDate = DateTime.fromFormat(process.env.OPENING_DATE, "LLL d, yyyy HH:mm:ss", { zone: "Asia/Manila" });
+  const closingDate = DateTime.fromFormat(process.env.CLOSING_DATE, "LLL d, yyyy HH:mm:ss", { zone: "Asia/Manila" });
+  const stopAccessClosingDate = closingDate.plus({ minutes: 30 });
+  const now = DateTime.now().setZone("Asia/Manila");
   if (now < openingDate) {
     res.sendFile("html/landing.html", {root: path.join(__dirname)});
   } else if (now > stopAccessClosingDate) {
@@ -123,7 +125,7 @@ app.get("/register", (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const username = req.body.username.toLowerCase();
+    const username = req.body.username;
     const value = await schema.validateAsync({ username: username, idNumber: req.body.id_number, password: req.body.password, confirmPassword: req.body.confirmPassword });
     const validatedUsername = value["username"];
     const validatedPassword = value["password"];
@@ -329,6 +331,13 @@ function isLunch() {
 
 io.sockets.on('connection', async (socket) => {
   let userId;
+  console.log("Connected clients:", io.engine.clientsCount);
+
+  io.emit('connected_clients', io.engine.clientsCount);
+
+  socket.on('disconnect', () => {
+    io.emit('connected_clients', io.engine.clientsCount);
+  })
 
   if (socket.handshake.session.passport?.user) {
     userId = socket.handshake.session.passport.user;

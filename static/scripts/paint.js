@@ -20,6 +20,7 @@ function generatePixl(timeout=bitGenerationInterval) {
   const fillingBit = document.querySelector('#bits-counter > div:not(.filled)')
   if (fillingBit) {
     const bitFiller = document.createElement('div');
+    bitFiller.className = "bit-filler";
     bitFiller.style.animationDuration = `${bitGenerationInterval/1000}s`;
     bitFiller.style.animationDelay = `-${(bitGenerationInterval/1000)-(timeout/1000)}s`;
     fillingBit.append(bitFiller);
@@ -75,7 +76,7 @@ export function loadBits() {
 loadBits()
 
 function updateBits() {
-  var bits = bits_container.querySelectorAll("div");
+  var bits = bits_container.querySelectorAll("div:not(.bit-filler)");
   if (bits.length<maxBits) {
     const label_p = document.createElement('p');
     label_p.innerText = (Math.max(0,bitCount-8)==0)?"":`+${Math.max(0,bitCount-8)+1}`
@@ -90,6 +91,11 @@ function updateBits() {
     } else {
       bits[i].classList.add("filled");
     }
+  }
+  const bitFiller = bits_container.querySelector('.bit-filler');
+  if (bitFiller) {
+    const fillingBit = document.querySelector('#bits-counter > div:not(.filled)')
+    fillingBit.append(bitFiller);
   }
   bits_p.innerHTML = `<span>${bitCount}</span> Bits Left`
   if (bitCount<=0) {

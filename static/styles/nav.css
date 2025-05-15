@@ -38,6 +38,7 @@ nav > ul > li:hover, nav > ul > li.active {
     background-color: #f0e4ff;
 }
 .nav-tab {
+    min-height: 10vh;
     box-sizing: border-box;
     position: fixed;
     background-color: white;

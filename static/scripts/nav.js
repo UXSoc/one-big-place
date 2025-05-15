@@ -50,12 +50,26 @@ export async function setupTabs() {
                 NAV_TAB.style.display = 'block';
                 return;
             }
+            var tab = document.createElement("div");
+            tab.className = "nav-tab";
+            tab.id = `nav-tab-${NAV_TABS[i]}`;
+            var loader = document.createElement('div');
+            loader.className = 'loader-bar';
+            loader.style.width = '230px';
+            loader.style.margin = 'auto';
+            for (let i=0;i<10;i++) {
+                loader.append(document.createElement('div'))
+            }
+            for (let i=0;i<10;i++) {
+                let corner = document.createElement('div');
+                corner.className = 'cut-corners';
+                loader.append(corner);
+            }
+            tab.append(loader);
+            NAV.appendChild(tab);
             fetch(`html/nav_tabs/${NAV_TABS[i]}.html`) 
             .then(response => response.text()) 
             .then(html => { 
-                var tab = document.createElement("div")
-                tab.className = "nav-tab"
-                tab.id = `nav-tab-${NAV_TABS[i]}`
                 if (window.matchMedia('only screen and (min-width: 1200px)').matches) {
                     tab.style.maxHeight = `${NAV.offsetHeight}px`;
                 }
@@ -71,7 +85,6 @@ export async function setupTabs() {
                     oldScript.replaceWith(newScript);
                 });
 
-                NAV.appendChild(tab);
             }) 
             .catch(error => console.error('Error loading HTML:', error)); 
         });

@@ -106,7 +106,7 @@ input[type=text], input[type=password] {
 .hidden {
     display: none !important;
 }
-#loader > div {
+.loader-bar {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: calc(var(--cut-corner-size)/2);
@@ -114,46 +114,46 @@ input[type=text], input[type=password] {
     border: var(--cut-corner-size) solid black;
     position: relative;
 }
-#loader > div > div:not(.cut-corners) {
+.loader-bar > div:not(.cut-corners) {
     background-color: black;
     width: calc(var(--cut-corner-size)*5);
     aspect-ratio: 1;
     opacity: 0;
     animation: appear 2s steps(1, start) infinite;
 }
-#loader > div > .cut-corners {
+.loader-bar > .cut-corners {
     position: absolute;
     background-color: white;
     width: var(--cut-corner-size);
     aspect-ratio: 1;
 }
-#loader > div > .cut-corners:nth-child(11) {
+.loader-bar > .cut-corners:nth-child(11) {
     left: var(--corner-offset);
     top: var(--corner-offset);
 }
-#loader > div > .cut-corners:nth-child(12) {
+.loader-bar > .cut-corners:nth-child(12) {
     right: var(--corner-offset);
     top: var(--corner-offset);
 }
-#loader > div > .cut-corners:nth-child(13) {
+.loader-bar > .cut-corners:nth-child(13) {
     left: var(--corner-offset);
     bottom: var(--corner-offset);
 }
-#loader > div > .cut-corners:nth-child(14) {
+.loader-bar > .cut-corners:nth-child(14) {
     right: var(--corner-offset);
     bottom: var(--corner-offset);
 }
 
-#loader > div > div:nth-child(1) { animation-delay: 0s; }
-#loader > div > div:nth-child(2) { animation-delay: .2s; }
-#loader > div > div:nth-child(3) { animation-delay: .4s; }
-#loader > div > div:nth-child(4) { animation-delay: .6s; }
-#loader > div > div:nth-child(5) { animation-delay: .8s; }
-#loader > div > div:nth-child(6) { animation-delay: 1s; }
-#loader > div > div:nth-child(7) { animation-delay: 1.2s; }
-#loader > div > div:nth-child(8) { animation-delay: 1.4s; }
-#loader > div > div:nth-child(9) { animation-delay: 1.6s; }
-#loader > div > div:nth-child(10) { animation-delay: 1.8s; }
+.loader-bar > div:nth-child(1) { animation-delay: 0s; }
+.loader-bar > div:nth-child(2) { animation-delay: .2s; }
+.loader-bar > div:nth-child(3) { animation-delay: .4s; }
+.loader-bar > div:nth-child(4) { animation-delay: .6s; }
+.loader-bar > div:nth-child(5) { animation-delay: .8s; }
+.loader-bar > div:nth-child(6) { animation-delay: 1s; }
+.loader-bar > div:nth-child(7) { animation-delay: 1.2s; }
+.loader-bar > div:nth-child(8) { animation-delay: 1.4s; }
+.loader-bar > div:nth-child(9) { animation-delay: 1.6s; }
+.loader-bar > div:nth-child(10) { animation-delay: 1.8s; }
 
 @keyframes appear {
     0% { opacity: 0; }

@@ -67,7 +67,7 @@ export function openModal(name) {
                     link.addEventListener("click", (e) => {
                         e.preventDefault();
                         closeOthers();
-                        openModal(link.dataset.openmodal)
+                        openModal(link.dataset.openmodal);
                     })
                 }
             }
@@ -80,6 +80,11 @@ export function openModal(name) {
                 newScript.text = oldScript.text;
                 oldScript.replaceWith(newScript);
             });
+            setTimeout(() => {
+                CONTAINER.style.display = 'none';
+                void CONTAINER.offsetHeight; // reflow
+                CONTAINER.style.display = '';
+            }, 0);
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
 }

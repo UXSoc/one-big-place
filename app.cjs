@@ -455,8 +455,7 @@ io.sockets.on('connection', async (socket) => {
   })
 });
 
-canvas.load_canvas()
-canvas.saveFrame();
+canvas.load_canvas().then(() => canvas.saveFrame());
 
 function cleanup() {
   if (!isEventClosed()) {

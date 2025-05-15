@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { createClient } = require("@supabase/supabase-js");
 const { createCanvas } = require('canvas');
 const { getCurrentDate, convertTZ, isEventClosed } = require('./ess');
 const init_canvas_size = [64,64]
@@ -11,21 +12,42 @@ const colorsArray = [
 const saveFrame_interval = 5*60*1000; // save frame every 5 minutes (for timelapse)
 const saveCanvas_interval = 60*1000; // save canvas to JSON every minute
 
-function parseFile(path) {
-    if (!fs.existsSync(path)) {
-        fs.writeFileSync(path, JSON.stringify({}, null, 2), 'utf8');
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+
+async function parseFile(filename) {
+    const { data, error } = await supabase
+        .storage
+        .from('data')
+        .download(filename);
+
+    if (error) {
+        console.log('File not found, initializing new:', filename);
+        await writeJSONFile(filename, {}); // create empty file if not found
+        return {};
     }
-    return JSON.parse(fs.readFileSync(path, 'utf8'));
+
+    const text = await data.text();
+    return JSON.parse(text);
 }
 
-function writeJSONFile(filename, data) {
-    fs.writeFileSync(`./canvas_data/${filename}.json`, JSON.stringify(data), function(err, result) {
-        if(err) console.log('error', err);
-        console.log('\x1b[32m', `File Saved: ${filename}.json`, '\x1b[0m')
-    });
+async function writeJSONFile(filename, data) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+
+    const { error } = await supabase
+        .storage
+        .from('data')
+        .upload(filename, blob, {
+            upsert: true
+        });
+
+    if (error) {
+        console.error('Upload failed:', error.message);
+    } else {
+        console.log('\x1b[32m', `File Saved: ${filename}`, '\x1b[0m');
+    }
 }
 
-function initialize_empty_canvas() {
+async function initialize_empty_canvas() {
     var [width, height] = init_canvas_size
     console.log(`Initializing empty ${width} x ${height} canvas`)
     var canvas = {"width": width, "height": height, "canvas": [], "user_grid": []}
@@ -39,29 +61,31 @@ function initialize_empty_canvas() {
         canvas["canvas"].push(row)
         canvas["user_grid"].push(user_row)
     }
-    writeJSONFile("canvas", canvas)
+    await writeJSONFile("canvas.json", canvas)
 }
 
 var canvas = {"canvas": [],"user_grid": []}
-function load_canvas() {
-    if (!fs.existsSync('./canvas_data')) {
-        fs.mkdirSync('./canvas_data', { recursive: true });
-        console.log('data/canvas_data directory created');
+async function load_canvas() {
+    const { data, error } = await supabase
+        .storage
+        .from('data')
+        .download("canvas.json");
+
+    if (error) {
+        await initialize_empty_canvas();
     }
-    if (!fs.existsSync('./canvas_data/canvas.json')) {
-        initialize_empty_canvas();
-    }
-    var parsedCanvas = parseFile("./canvas_data/canvas.json")
-    canvas.canvas = parsedCanvas["canvas"]
-    canvas.user_grid = parsedCanvas["user_grid"]
+
+    var parsedCanvas = await parseFile("canvas.json");
+    canvas.canvas = parsedCanvas["canvas"];
+    canvas.user_grid = parsedCanvas["user_grid"];
 }
 
 function get_canvas_json() {
-    return canvas.canvas
+    return canvas.canvas;
 }
 
 function get_user_grid_json() {
-    return canvas.user_grid
+    return canvas.user_grid;
 }
 
 function formatDate(date) {
@@ -74,25 +98,34 @@ function formatDate(date) {
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
 }
 async function saveFrame(close_on_exit=false) {
-    if (!fs.existsSync('./canvas_data/timelapse'))  fs.mkdirSync('./canvas_data/timelapse', { recursive: true });
-    var width = canvas.canvas[0].length
-    var height = canvas.canvas.length
-    var frame_canvas = createCanvas(width, height)
-    var ctx = frame_canvas.getContext('2d')
+    var width = canvas.canvas[0].length;
+    var height = canvas.canvas.length;
+    var frame_canvas = createCanvas(width, height);
+    var ctx = frame_canvas.getContext('2d');
     for (i=0;i<height;i++) {
         for (j=0;j<width;j++) {
             ctx.fillStyle = colorsArray[canvas.canvas[i][j]];
-            ctx.fillRect(j, i, 1, 1)
+            ctx.fillRect(j, i, 1, 1);
         }
     }
-    var buffer = frame_canvas.toBuffer('image/png')
+    var buffer = frame_canvas.toBuffer('image/png');
     var d = getCurrentDate();
-    var d_tz = convertTZ(d)
-    await fs.writeFile(`./canvas_data/timelapse/${formatDate(d_tz)}.png`, buffer, function(err, result) {
-        if(err) console.log('error', err);
-        console.log('\x1b[32m', 'Frame saved', '\x1b[0m')
-        if (close_on_exit) process.exit(0);
-    })
+    var d_tz = convertTZ(d);
+
+    const { error } = await supabase
+        .storage
+        .from('data')
+        .upload(`/timelapse/${formatDate(d_tz)}.png`, buffer, {
+            contentType: 'image/png',
+            upsert: true,
+        });
+
+    if (error) {
+        console.error('Failed to save frame:', error.message);
+    } else {
+        console.log('\x1b[32m', 'Frame saved to Supabase', '\x1b[0m');
+    }
+    if (close_on_exit) process.exit(0);
 }
 
 function paintPixel(x, y, id, userId) {
@@ -107,7 +140,7 @@ function getPixelColorId(x, y) {
 
 function saveCanvasData() {
     console.log('\x1b[32m', 'Canvas data saved', '\x1b[0m')
-    writeJSONFile("canvas", canvas)
+    writeJSONFile("canvas.json", canvas)
 }
 
 setInterval(() => {

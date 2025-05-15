@@ -1,9 +1,9 @@
 {
   "name": "one-big-place",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app.cjs",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.cjs"
   },
   "author": "",
   "license": "ISC",

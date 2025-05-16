@@ -3,6 +3,7 @@ const MODALS = {
     'login': 'auth/login',
     'register': 'auth/register',
 }
+let loading_modals = new Set();
 
 export function closeModal(name) {
     const modal = document.getElementById(`modal-${name}`);
@@ -44,10 +45,12 @@ export function openModal(name) {
     var modal = document.createElement('div');
     modal.classList.add("modal", "scroller");
     const OPENED_MODAL = document.querySelector(`#modal-${name}`);
-    if (OPENED_MODAL) {
+    if (OPENED_MODAL)  {
         OPENED_MODAL.classList.remove('hidden');
         return;
     }
+    if (loading_modals.has(name)) return;
+    loading_modals.add(name);
     fetch(`html/${MODALS[name]}.html`)
         .then(response => response.text()) 
         .then(html => { 
@@ -85,6 +88,7 @@ export function openModal(name) {
                 void CONTAINER.offsetHeight; // reflow
                 CONTAINER.style.display = '';
             }, 0);
+            loading_modals.remove(name);
         }) 
         .catch(error => console.error('Error loading HTML:', error)); 
 }

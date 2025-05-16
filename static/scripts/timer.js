@@ -18,20 +18,22 @@ async function init() {
     if (timeDistance < 0) {
       clearInterval(timerFunc);
       webTimer.innerText = "00:00:00";
-      location.reload(true);
+      setTimeout(() => {
+        location.reload(true);
+      }, 3*1000);
+    } else {
+      // multiply seconds, minutes, and hours to milliseconds to get all milliseconds in a day
+      let totalSeconds = Math.floor(timeDistance / 1000);
+      let hours = Math.floor(totalSeconds / 3600);
+      let minutes = Math.floor((totalSeconds % 3600) / 60);
+      let seconds = totalSeconds % 60;
+    
+      let timerHours = hours < 10 ? "0" + hours : hours;
+      let timerMinutes = minutes < 10 ? "0" + minutes : minutes;
+      let timerSeconds = seconds < 10 ? "0" + seconds : seconds;
+    
+      webTimer.innerText = `${timerHours}:${timerMinutes}:${timerSeconds}`;
     }
-  
-    // multiply seconds, minutes, and hours to milliseconds to get all milliseconds in a day
-    let totalSeconds = Math.floor(timeDistance / 1000);
-    let hours = Math.floor(totalSeconds / 3600);
-    let minutes = Math.floor((totalSeconds % 3600) / 60);
-    let seconds = totalSeconds % 60;
-  
-    let timerHours = hours < 10 ? "0" + hours : hours;
-    let timerMinutes = minutes < 10 ? "0" + minutes : minutes;
-    let timerSeconds = seconds < 10 ? "0" + seconds : seconds;
-  
-    webTimer.innerText = `${timerHours}:${timerMinutes}:${timerSeconds}`;
   });
 }
 

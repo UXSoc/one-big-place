@@ -45,4 +45,4 @@ COPY --from=build / /
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
-CMD [ "node", "app.js" ]
+CMD [ "node", "app.cjs" ]

@@ -90,7 +90,10 @@ export function openModal(name) {
             }, 0);
             loading_modals.remove(name);
         }) 
-        .catch(error => console.error('Error loading HTML:', error)); 
+        .catch(error => {
+            console.error('Error loading HTML:', error);
+            loading_modals.remove(name);
+        }); 
 }
 function updateContainerVisibility() {
     const modalExists = CONTAINER.querySelector('.modal');

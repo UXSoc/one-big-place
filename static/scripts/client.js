@@ -62,3 +62,7 @@ loadSfx();
 setupTabs();
 handleURLParams();
 startEndingCountdown();
+
+setInterval(() => {
+  loadCanvas(document.getElementById('canvas').querySelector('.image'), false);
+}, 5*60*1000);

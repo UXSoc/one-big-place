@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { createClient } = require("@supabase/supabase-js");
 const { createCanvas } = require('canvas');
-const { getCurrentDate, convertTZ, isEventClosed } = require('./ess');
+const { getCurrentDate, isEventClosed } = require('./ess');
 const init_canvas_size = [64,64]
 const colorsArray = [
     '#6B0119', '#BD0037', '#FF4500', '#FEA800', '#FFD435', '#FEF8B9', '#01A267', '#09CC76',
@@ -88,13 +88,13 @@ function get_user_grid_json() {
     return canvas.user_grid;
 }
 
-function formatDate(date) {
-    let month = String(date.getMonth() + 1).padStart(2, '0');
-    let day = String(date.getDate()).padStart(2, '0');
-    let year = String(date.getFullYear()).slice(-2);
-    let hours = String(date.getHours()).padStart(2, '0');
-    let minutes = String(date.getMinutes()).padStart(2, '0');
-    let seconds = String(date.getSeconds()).padStart(2, '0');
+function formatDate(dateTime) {
+    let month = String(dateTime.month).padStart(2, '0');
+    let day = String(dateTime.day).padStart(2, '0');
+    let year = String(dateTime.year).slice(-2);
+    let hours = String(dateTime.hour).padStart(2, '0');
+    let minutes = String(dateTime.minute).padStart(2, '0');
+    let seconds = String(dateTime.second).padStart(2, '0');
     return `${month}${day}${year}-${hours}${minutes}${seconds}`;
 }
 async function saveFrame(close_on_exit=false) {
@@ -110,12 +110,11 @@ async function saveFrame(close_on_exit=false) {
     }
     var buffer = frame_canvas.toBuffer('image/png');
     var d = getCurrentDate();
-    var d_tz = convertTZ(d);
 
     const { error } = await supabase
         .storage
         .from('data')
-        .upload(`/timelapse/${formatDate(d_tz)}.png`, buffer, {
+        .upload(`/timelapse/${formatDate(d)}.png`, buffer, {
             contentType: 'image/png',
             upsert: true,
         });

@@ -1,46 +1,44 @@
+const { DateTime } = require('luxon');
+
 function generateRandomSeed() {
     return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
 }
 
 function getCurrentDate() {
-    const manilaStr = new Date().toLocaleString("en-PH", { timeZone: "Asia/Manila" });
-    return new Date(manilaStr);
-  }
+    return DateTime.now().setZone("Asia/Manila");
+}
   
 function timeBetw(startTime, endTime) {
     const currentDate = getCurrentDate();
+
     const [startH, startM, startS] = startTime.split(":").map(Number);
     const [endH, endM, endS] = endTime.split(":").map(Number);
-    const startDate = new Date(currentDate.getTime());
-    startDate.setHours(startH, startM, startS, 0);
-    const endDate = new Date(currentDate.getTime());
-    endDate.setHours(endH, endM, endS, 0);
+
+    let startDate = currentDate.set({ hour: startH, minute: startM, second: startS, millisecond: 0 });
+    let endDate = currentDate.set({ hour: endH, minute: endM, second: endS, millisecond: 0 });
+
     if (endDate <= startDate) {
-        if (currentDate >= startDate) {
-            return true;
+        if (currentDate < endDate) {
+            startDate = startDate.minus({ days: 1 });
         } else {
-            endDate.setDate(endDate.getDate() + 1);
-            return currentDate < endDate;
+            endDate = endDate.plus({ days: 1 });
         }
     }
-    return currentDate >= startDate && currentDate < endDate;
-}
 
-function convertTZ(date) {
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: "Asia/Taipei"}));   
+    return currentDate >= startDate && currentDate < endDate;
 }
 
 const schedule = require('node-schedule');
 require('dotenv').config()
 
-const closingDate = new Date(process.env.CLOSING_DATE);
+const closingDate = DateTime.fromFormat(process.env.CLOSING_DATE, "LLL d, yyyy HH:mm:ss", { zone: "Asia/Manila" });
 function isEventClosed() {
-  const now = new Date();
+  const now = getCurrentDate();
   return (now > closingDate);
 }
 
 let eventClosed = isEventClosed();
-const closeSchedule = schedule.scheduleJob(closingDate, () => {
+const closeSchedule = schedule.scheduleJob(closingDate.toJSDate(), () => {
     const canvas = require('./canvas');
     eventClosed = true;
     console.log("Closing Event... Saving Data...")
@@ -52,6 +50,5 @@ module.exports = {
     generateRandomSeed: generateRandomSeed,
     getCurrentDate: getCurrentDate,
     timeBetw: timeBetw,
-    convertTZ: convertTZ,
     isEventClosed: isEventClosed,
 }

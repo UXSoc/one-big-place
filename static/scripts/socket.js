@@ -55,6 +55,11 @@ function setupEvents() {
     socket.on("broadcast_message", (data) => {
         openCustomModal(data.heading, data.message, data.closable)
     })
+    socket.on('connected_clients', (data) => {
+        window.clientCount = data;
+        const clientCount_p = document.querySelector('#admin-clientCount > p');
+        if (clientCount_p) clientCount_p.innerText = `${data} Clients Connected`;
+    })
 }
 
 function isLunch() {

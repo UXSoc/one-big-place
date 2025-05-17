@@ -93,8 +93,8 @@ function updateBits() {
     }
   }
   const bitFiller = bits_container.querySelector('.bit-filler');
-  if (bitFiller) {
-    const fillingBit = document.querySelector('#bits-counter > div:not(.filled)')
+  const fillingBit = document.querySelector('#bits-counter > div:not(.filled)')
+  if (bitFiller && fillingBit) {
     fillingBit.append(bitFiller);
   }
   bits_p.innerHTML = `<span>${bitCount}</span> Bits Left`

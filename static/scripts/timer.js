@@ -8,7 +8,7 @@ and January 1 1970 00:00:00 in milliseconds
 const webTimer = document.querySelector("#js-landing-timer");
 
 async function init() {
-  const res = await fetch("/json/opening-date");
+  const res = await fetch(`/json/opening-date?ts=${Date.now()}`);
   const data = await res.json();
   const targetTime = new Date(data.openingDate);
   let timerFunc = setInterval(() => {

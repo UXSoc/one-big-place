@@ -10,7 +10,7 @@ const colorsArrayRGB = [
 
 let user_grid;
 export async function loadUserGrid() {
-  const response = await fetch('json/user_grid');
+  const response = await fetch(`json/user_grid?ts=${Date.now()}`);
   const array2D = await response.json();
   user_grid = array2D;
   return user_grid;
@@ -25,7 +25,7 @@ export function getUserGrid() {
 }
 
 export function loadCanvas(canvas, center=true) {
-  fetch(`json/canvas`)
+  fetch(`json/canvas?ts=${Date.now()}`)
   .then(response => response.json()) 
   .then(array2D => {
     const rows = array2D.length;

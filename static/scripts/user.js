@@ -16,13 +16,13 @@ export async function getUserData(userId=null) {
     if (userId) {
         let userData = userDataCache.get(userId);
         if (userData) return userData;
-        const response = await fetch(`json/user/${userId}`);
+        const response = await fetch(`json/user/${userId}?ts=${Date.now()}`);
         userData = await response.json();
         if (userData.id) userDataCache.set(userData.id, userData);
         return userDataCache.get(userId);
     }
     if (userDataSelfId) return getUserData(userDataSelfId);
-    const response = await fetch(`json/user`);
+    const response = await fetch(`json/user?ts=${Date.now()}`);
     const userDataRes = await response.json();
     if (userDataRes.error) return null;
     userDataSelfId = userDataRes.id;

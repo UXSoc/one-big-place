@@ -5,7 +5,7 @@ import { getUserData, updateUserData, userEventTarget } from "./user.js";
 let challengeData;
 async function fetchData() {
     try {
-        let fetchRes = await fetch("json/challenges").then((res) => res.json());
+        let fetchRes = await fetch(`json/challenges?ts=${Date.now()}`).then((res) => res.json());
         challengeData = fetchRes;
         await loadChallenges(fetchRes);
     } catch (err) {

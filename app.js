@@ -112,10 +112,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/json/opening-date", (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json({ openingDate: process.env.OPENING_DATE });
 });
 
 app.get("/json/closing-date", (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json({ closingDate: process.env.CLOSING_DATE });
 });
 
@@ -207,15 +209,18 @@ app.get("/html/:dir/:filename", (req, res) => {
 });
 
 app.get('/json/canvas', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json(canvas.get_canvas_json());
 });
 
 app.get('/json/user_grid', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json(canvas.get_user_grid_json());
 });
 
 app.get('/json/challenges', (req, res) => {
   const filePath = path.join(__dirname, "server_json", "challenges.json");
+  res.setHeader('Cache-Control', 'no-store');
   res.sendFile(filePath, (err) => {
     if (err) {
       res.status(404).send(`File not found: ${filePath}`);
@@ -225,19 +230,23 @@ app.get('/json/challenges', (req, res) => {
 
 app.get('/json/user', async (req, res) => {
   if (!req.isAuthenticated()) return res.status(401).json({ error: "Not authenticated" });
+  res.setHeader('Cache-Control', 'no-store');
   res.json(await user(prisma, parseInt(req.user.id)));
 });
 
 app.get('/json/user/:userId', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   const userId = req.params.userId;
   res.json(await user(prisma, parseInt(userId)));
 });
 
 app.get('/json/statistics/leaderboard', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json(await getLeaderboard(prisma));
 });
 
 app.get('/json/statistics/yr_dist', async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.json(await getUserPlaceCountByYear());
 });
 

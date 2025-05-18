@@ -1,7 +1,7 @@
 const closingTimer = document.querySelector('.panner_interface > .closing-timer');
 
 export async function startEndingCountdown() {
-    const res = await fetch("/json/closing-date");
+    const res = await fetch(`/json/closing-date?ts=${Date.now()}`);
     const data = await res.json();
     const targetTime = new Date(data.closingDate);
     let timerFunc = setInterval(() => {

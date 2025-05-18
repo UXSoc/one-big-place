@@ -9,7 +9,7 @@ function adjustColor(hex, factor) {
 }
 
 async function updatePieChart() {
-  const response = await fetch('json/statistics/yr_dist');
+  const response = await fetch(`json/statistics/yr_dist?ts=${Date.now()}`);
   const data = await response.json();
   pieContainer.querySelectorAll('.label').forEach(el => el.remove());
 

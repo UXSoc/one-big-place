@@ -4,7 +4,7 @@ let bufferCache = {};
 export function loadSfx() {
     const sounds = ['alarm', 'error', 'place', 'select', 'success'];
     sounds.forEach(async (sound) => {
-        const response = await fetch(`audio/${sound}.wav`);
+        const response = await fetch(`audio/${sound}.wav?ts=${Date.now()}`);
         const arrayBuffer = await response.arrayBuffer();
         audioContext.decodeAudioData(arrayBuffer, (buffer) => {
             bufferCache[sound] = buffer;

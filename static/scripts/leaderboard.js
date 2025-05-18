@@ -94,7 +94,7 @@ function generateLeaderboard(leaderboard, userData) {
 var leaderboardUserIDs = new Set();
 async function fetchData() {
     try {
-        let fetchRes = await fetch("json/statistics/leaderboard").then((res) => res.json());
+        let fetchRes = await fetch(`json/statistics/leaderboard?ts=${Date.now()}`).then((res) => res.json());
 
         setLeaderboardData(fetchRes);        
 

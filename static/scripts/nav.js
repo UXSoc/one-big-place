@@ -99,7 +99,7 @@ export async function loadTab(tab_name, show) {
 
     NAV.appendChild(tab);
     try {
-        const response = await fetch(`html/nav_tabs/${tab_name}.html`);
+        const response = await fetch(`html/nav_tabs/${tab_name}.html?ts=${Date.now()}`);
         const html = await response.text();
         tab.innerHTML = html
         const scripts = tab.querySelectorAll("script");

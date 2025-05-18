@@ -1,3 +1,4 @@
+import { openModal } from "./modals.js";
 import { paintEventTarget } from "./paint.js";
 import { setLeaderboardData } from "./socket.js";
 import { getUserData, setUserData } from "./user.js";
@@ -8,7 +9,11 @@ function generateUserPlacement(userData) {
     if (!userData) {
         let div = document.createElement("div");
         let p = document.createElement("p");
-        p.textContent = "Login to see your placement!";
+        p.innerHTML = "<span>Login</span> to see your placement!";
+        p.classList.add('login-message')
+        p.querySelector('span').addEventListener('click', () => {
+            openModal('login')
+        })
         div.appendChild(p);
         div.style = `
             display: flex;

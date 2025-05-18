@@ -1,3 +1,4 @@
+import { openModal } from "./modals.js";
 import { badge } from "./nav.js";
 import { redeem } from "./redeem.js";
 import { getUserData, updateUserData, userEventTarget } from "./user.js";
@@ -22,7 +23,11 @@ async function loadChallenges(data) {
     const userData = await getUserData();
     if (!userData) {
         const message = document.createElement('p');
-        message.innerText = "Login to complete challenges!";
+        message.innerHTML = "<span>Login</span> to complete challenges!";
+        message.classList.add('login-message')
+        message.querySelector('span').addEventListener('click', () => {
+            openModal('login')
+        })
         challenges.parentElement.append(message);
         return;
     }

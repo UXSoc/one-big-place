@@ -82,6 +82,10 @@ nav > ul > li:hover, nav > ul > li.active {
     font-family: BlockCraft;
     font-size: 1.2rem;
 }
+.login-message > span {
+    text-decoration: underline;
+    cursor: pointer;
+}
 body:has(nav.active) #bits-display {
     opacity: 0;
     visibility: hidden;

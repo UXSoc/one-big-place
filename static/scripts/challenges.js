@@ -1,3 +1,4 @@
+import { badge } from "./nav.js";
 import { redeem } from "./redeem.js";
 import { getUserData, updateUserData, userEventTarget } from "./user.js";
 
@@ -15,6 +16,7 @@ async function fetchData() {
 fetchData();
 
 async function loadChallenges(data) {
+    badge('challenges', false);
     let challenges = document.querySelector(".challenges");
     const fragment = document.createDocumentFragment();
     const userData = await getUserData();
@@ -58,12 +60,14 @@ async function loadChallenges(data) {
             const current = userData[challenge["field"]];
             if (current>=total) {
                 indicator = document.createElement('div');
-                indicator.className = 'indicator';
+                indicator.classList.add('indicator');
+                indicator.classList.add('to-claim');
                 indicator.innerText = `Claim!`;
                 indicator.style.cursor = 'pointer';
                 indicator.addEventListener('click', () => {
                     claimChallenge(challenge['id']);
                 })
+                badge('challenges', true);
             } else {
                 indicator = document.createElement('a');
                 indicator.className = "challenge-progress";
@@ -94,7 +98,9 @@ async function loadChallenges(data) {
 
 userEventTarget.addEventListener('userUpdated', async (event) => {
     const { userId, field, value } = event.detail;
-    if (challengeData) loadChallenges(challengeData);
+    setTimeout(() => {
+        if (challengeData) loadChallenges(challengeData);
+    }, 0);
 });
 
 const linkTimeout = 25*1000;

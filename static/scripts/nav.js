@@ -21,6 +21,11 @@ export function closeTabs() {
         item.classList.remove("active");
     })
 }
+export async function badge(id, active) {
+    const navTab = document.getElementById(`nav-button-${id}`);
+    if (active) navTab.classList.add("badge");
+    else navTab.classList.remove("badge");
+}
 export async function setupTabs() {
     document.addEventListener("click", (e) => {
         if (!NAV.contains(e.target)) {
@@ -40,7 +45,7 @@ export async function setupTabs() {
     }
     const NAV_ITEMS = document.querySelectorAll("nav > ul > li")
     for (let i = 0; i < NAV_ITEMS.length; i++) {
-        NAV_ITEMS[i].addEventListener('click', function() {
+        NAV_ITEMS[i].addEventListener('click', async function() {
             if (NAV_ITEMS[i].classList.contains("active")) {
                 closeTabs();
                 return;
@@ -49,48 +54,66 @@ export async function setupTabs() {
             hidePalette();
             NAV.classList.add("active")
             NAV_ITEMS[i].classList.add("active")
-            const NAV_TAB = document.querySelector(`#nav-tab-${NAV_TABS[i]}`);
-            if (NAV_TAB) {
-                NAV_TAB.style.display = 'block';
-                return;
-            }
-            var tab = document.createElement("div");
-            tab.className = "nav-tab";
-            tab.id = `nav-tab-${NAV_TABS[i]}`;
-            var loader = document.createElement('div');
-            loader.className = 'loader-bar';
-            loader.style.width = '230px';
-            loader.style.margin = 'auto';
-            for (let i=0;i<10;i++) {
-                loader.append(document.createElement('div'))
-            }
-            for (let i=0;i<10;i++) {
-                let corner = document.createElement('div');
-                corner.className = 'cut-corners';
-                loader.append(corner);
-            }
-            tab.append(loader);
-            NAV.appendChild(tab);
-            fetch(`html/nav_tabs/${NAV_TABS[i]}.html`) 
-            .then(response => response.text()) 
-            .then(html => { 
-                if (window.matchMedia('only screen and (min-width: 1200px)').matches) {
-                    tab.style.maxHeight = `${NAV.offsetHeight}px`;
-                }
-                tab.innerHTML = html
+            const tab = await loadTab(NAV_TABS[i], true);
+            if (NAV_TABS[i] == 'challenges') {
+                const challengeContainer = tab.querySelector('.challenges.scroller');
+                const challengeToClaim = challengeContainer.querySelector('.indicator.to-claim');
 
-                const scripts = tab.querySelectorAll("script");
-                scripts.forEach((oldScript) => {
-                    const newScript = document.createElement("script");
-                    [...oldScript.attributes].forEach((attr) =>
-                        newScript.setAttribute(attr.name, attr.value)
-                    );
-                    newScript.text = oldScript.text;
-                    oldScript.replaceWith(newScript);
-                });
+                const containerRect = challengeContainer.getBoundingClientRect();
+                const targetRect = challengeToClaim.getBoundingClientRect();
 
-            }) 
-            .catch(error => console.error('Error loading HTML:', error)); 
+                const offset = targetRect.top - containerRect.top;
+                const scroll = offset - challengeContainer.clientHeight / 2 + challengeToClaim.clientHeight / 2;
+                challengeContainer.scrollBy({ top: scroll, behavior: 'smooth' });
+            }
         });
     }
 }
+export async function loadTab(tab_name, show) {
+    const NAV_TAB = document.querySelector(`#nav-tab-${tab_name}`);
+    if (NAV_TAB) {
+        if (show) NAV_TAB.style.display = 'block';
+        return NAV_TAB;
+    }
+    var tab = document.createElement("div");
+    tab.style.display = show?'block':'none';
+    tab.className = "nav-tab";
+    tab.id = `nav-tab-${tab_name}`;
+    if (window.matchMedia('only screen and (min-width: 1200px)').matches) tab.style.maxHeight = `${NAV.offsetHeight}px`;
+
+    if (show) {
+        var loader = document.createElement('div');
+        loader.className = 'loader-bar';
+        loader.style.width = '230px';
+        loader.style.margin = 'auto';
+        for (let i=0;i<10;i++) {
+            loader.append(document.createElement('div'))
+        }
+        for (let i=0;i<10;i++) {
+            let corner = document.createElement('div');
+            corner.className = 'cut-corners';
+            loader.append(corner);
+        }
+        tab.append(loader);
+    }
+
+    NAV.appendChild(tab);
+    try {
+        const response = await fetch(`html/nav_tabs/${tab_name}.html`);
+        const html = await response.text();
+        tab.innerHTML = html
+        const scripts = tab.querySelectorAll("script");
+        scripts.forEach((oldScript) => {
+            const newScript = document.createElement("script");
+            [...oldScript.attributes].forEach((attr) =>
+                newScript.setAttribute(attr.name, attr.value)
+            );
+            newScript.text = oldScript.text;
+            oldScript.replaceWith(newScript);
+        });
+    } catch (error) {
+        console.error('Error loading HTML:', error)
+    }
+    return tab;
+}
+loadTab('challenges', false);

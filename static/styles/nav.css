@@ -20,11 +20,34 @@ nav > ul {
 nav > ul > li > p {
     display: none;
 }
-nav > ul > li > img {
+nav > ul > li > div {
+    position: relative;
+}
+nav > ul > li > div > img {
     filter: brightness(0);
     height: 100%;
 }
-nav > ul > li:hover > img, nav > ul > li.active > img {
+nav > ul > li.badge > div::after {
+    content: "!";
+    background-color: #9747ff;
+    border-radius: 50%;
+    padding: 3px;
+    text-align: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 15px;
+    height: 15px;
+    aspect-ratio: 1;
+    position: absolute;
+    font-size: 10px;
+    top: -8px;
+    right: -6px;
+    display: block;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+nav > ul > li:hover > div > img, nav > ul > li.active > div > img {
     filter: brightness(1);
 }
 nav > ul > li {
@@ -36,6 +59,9 @@ nav > ul > li {
 }
 nav > ul > li:hover, nav > ul > li.active {
     background-color: #f0e4ff;
+}
+.nav-tab .title img {
+    filter: brightness(0);
 }
 .nav-tab {
     min-height: 10vh;
@@ -91,7 +117,7 @@ body:has(nav.active) #bits-display {
     nav > ul > li:hover > p, nav > ul > li.active > p {
         color: #9747FF;
     }
-    nav > ul > li > img {
+    nav > ul > li > div > img {
         vertical-align: middle;
         object-fit: contain;
         aspect-ratio: 1 !important;

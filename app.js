@@ -21,7 +21,7 @@ const saltRounds = 10;
 
 const schema = Joi.object({
   username: Joi.string().alphanum().min(3).max(30).required(),
-  idNumber: Joi.string().pattern(/^\d{6}$|^\d{9}$/).required(),
+  idNumber: Joi.string().pattern(/^(?:\d{4}|\d{6}|\d{9})$/).required(),
   password: Joi.string().pattern(/^\d{6}$/).required(),
   confirmPassword: Joi.ref("password"),
 }).with("password", "confirmPassword");
@@ -393,7 +393,7 @@ io.sockets.on('connection', async (socket) => {
       
       const getYearId = (id) => {
         const str = id.toString();
-        return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
+        return parseInt((str.length>=4&&str.length!==6)?str.slice(2,4):((str.length>=2)?str.slice(0, 2):null));
       };
       const placer_yearId = getYearId(user_data.idNumber);
       const placer_yearData = await getYearStats(prisma, placer_yearId);

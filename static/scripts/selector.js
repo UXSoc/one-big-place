@@ -100,7 +100,7 @@ export async function getPixelId(target, x, y) {
 }
 function getYearId(id) {
   const str = id.toString();
-  return parseInt((str.length===6)?str.slice(0,2):((str.length===9)?str.slice(2, 4):null));
+  return parseInt((str.length>=4&&str.length!==6)?str.slice(2,4):((str.length>=2)?str.slice(0, 2):null));
 };
 export function hidePixelId() {
   pin.style.backgroundColor = "transparent";

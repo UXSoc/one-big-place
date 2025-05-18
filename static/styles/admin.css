@@ -59,6 +59,7 @@ h3 {
     padding: 1rem 1rem .6rem 1rem;
     margin: 1rem 0;
     background-color: #9747ff;
+    cursor: pointer;
     color: white;
     width: 100%;
     outline: none;
